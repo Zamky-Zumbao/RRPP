@@ -236,7 +236,7 @@
     <div class="field" id="sol-busqueda-wrap" style="display:none;">
       <label class="required">Buscar producto</label>
       <div class="custom-dropdown">
-        <input type="text" id="sol-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownMiSolicitud(this.value)">
+        <input type="text" id="sol-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownMiSolicitud(this.value)" onclick="filtrarDropdownMiSolicitud(this.value)" onfocus="filtrarDropdownMiSolicitud(this.value)">
         <div class="dropdown-list" id="sol-prod-list"></div>
       </div>
     </div>
@@ -317,7 +317,7 @@
   <div class="field" id="rec-wrap-busqueda">
     <label class="required">Buscar producto</label>
     <div class="custom-dropdown">
-      <input type="text" id="rec-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownRecepcion(this.value)">
+      <input type="text" id="rec-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownRecepcion(this.value)" onclick="filtrarDropdownRecepcion(this.value)" onfocus="filtrarDropdownRecepcion(this.value)">
       <div class="dropdown-list" id="rec-prod-list"></div>
     </div>
   </div>
@@ -355,7 +355,7 @@
   <div class="field">
     <label class="required">Buscar producto</label>
     <div class="custom-dropdown">
-      <input type="text" id="sal-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownSalida(this.value)">
+      <input type="text" id="sal-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownSalida(this.value)" onclick="filtrarDropdownSalida(this.value)" onfocus="filtrarDropdownSalida(this.value)">
       <div class="dropdown-list" id="sal-prod-list"></div>
     </div>
   </div>

@@ -1194,19 +1194,31 @@ document.addEventListener('change', e => {
 function alVincularSolicitud() {
   const id = document.getElementById('rec-solicitud-vinculo').value;
   const info = document.getElementById('rec-vinculo-info');
-  const wrapDepto = document.getElementById('rec-depto').parentElement;
-  const wrapSub = document.getElementById('rec-subdepto').parentElement;
-  const wrapCuenta = document.getElementById('rec-cuenta').parentElement;
-  const wrapCuentaInfo = document.getElementById('rec-cuenta-info');
-  const wrapBusqueda = document.querySelector('#rec-prod-trigger').parentElement.parentElement;
+
+  // Elementos a ocultar cuando hay vínculo
+  const elCuenta = document.getElementById('rec-cuenta');
+  const elDepto = document.getElementById('rec-depto');
+  const elSub = document.getElementById('rec-subdepto');
+  const elCuentaInfo = document.getElementById('rec-cuenta-info');
+
+  // Encontrar el .field contenedor de cada uno (subiendo hasta el div.field)
+  const fieldCuenta = elCuenta.closest('.field');
+  const fieldDepto = elDepto.closest('.field');
+  const fieldSub = elSub.closest('.field');
+
+  // El buscador de productos está dentro de un .field
+  const fieldBusqueda = document.getElementById('rec-prod-trigger').closest('.field');
+  const fieldProdSel = document.getElementById('rec-prod-sel');
 
   if (!id) {
+    // Sin vínculo: mostrar todo
     info.style.display = 'none';
-    // Mostrar todos los campos
-    wrapDepto.style.display = 'block';
-    wrapSub.style.display = 'block';
-    wrapCuenta.style.display = 'block';
-    wrapBusqueda.style.display = 'block';
+    if (fieldDepto) fieldDepto.style.display = 'block';
+    if (fieldSub) fieldSub.style.display = 'block';
+    if (fieldCuenta) fieldCuenta.style.display = 'block';
+    if (elCuentaInfo) elCuentaInfo.style.display = 'none';
+    if (fieldBusqueda) fieldBusqueda.style.display = 'block';
+    if (fieldProdSel) fieldProdSel.style.display = 'none';
     carritoRecepcion = [];
     renderCarritoRecepcion();
     return;
@@ -1214,17 +1226,19 @@ function alVincularSolicitud() {
 
   const s = solicitudes.find(x => x.id === id);
   if (!s) return;
+
   info.style.display = 'block';
   info.innerHTML = `✅ <strong>${escaparHtml(s.codigo)}</strong> · ${escaparHtml(s.departamento_padre)} / ${escaparHtml(s.subdepartamento)}`;
 
-  // Ocultar depto/subdepto/cuenta/busqueda porque vienen de la solicitud
-  wrapDepto.style.display = 'none';
-  wrapSub.style.display = 'none';
-  wrapCuenta.style.display = 'none';
-  wrapCuentaInfo.style.display = 'none';
-  wrapBusqueda.style.display = 'none';
+  // Ocultar todos los campos que vienen de la solicitud
+  if (fieldDepto) fieldDepto.style.display = 'none';
+  if (fieldSub) fieldSub.style.display = 'none';
+  if (fieldCuenta) fieldCuenta.style.display = 'none';
+  if (elCuentaInfo) elCuentaInfo.style.display = 'none';
+  if (fieldBusqueda) fieldBusqueda.style.display = 'none';
+  if (fieldProdSel) fieldProdSel.style.display = 'none';
 
-  // Cargar items de la solicitud (sin poder modificar)
+  // Cargar items de la solicitud (bloqueados)
   const items = solicitudItems.filter(i => i.solicitud_id === id);
   carritoRecepcion = items.map(it => {
     const p = productos.find(x => x.id === it.producto_id);
@@ -1234,10 +1248,12 @@ function alVincularSolicitud() {
       linea: it.linea || p?.linea || 1,
       precio_neto: Number(it.precio_estimado),
       cantidad: Number(it.cantidad),
-      cuenta_id: it.linea === 2 ? s.cuenta_l2_id : s.cuenta_l1_id,
       bloqueado: true
     };
   });
+
+  renderCarritoRecepcion();
+}
 
   // Guardar los IDs de las cuentas para usar al registrar
   window._recCuentaL1 = s.cuenta_l1_id;

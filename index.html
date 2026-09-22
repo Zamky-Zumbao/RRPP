@@ -51,11 +51,9 @@
   .field { margin-bottom:12px; }
   .row-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .btn-primario { background:var(--azul); border:none; padding:12px; width:100%; border-radius:50px; font-weight:700; color:white; font-size:15px; cursor:pointer; }
-  .btn-primario:hover { opacity:0.85; }
   .btn-primario:disabled { opacity:0.6; cursor:not-allowed; }
   .btn-secundario { background:#eef2f8; border:none; padding:10px; width:100%; border-radius:50px; font-weight:600; color:var(--texto-gris); font-size:12px; cursor:pointer; }
   .btn-verde { background:var(--verde); border:none; padding:10px; width:100%; border-radius:50px; font-weight:700; color:white; font-size:14px; cursor:pointer; }
-  .btn-verde:disabled { opacity:0.5; cursor:not-allowed; }
   .btn-pequeno { padding:5px 12px; border-radius:30px; border:none; font-weight:600; font-size:10px; cursor:pointer; }
   .btn-pequeno.azul { background:var(--azul); color:white; }
   .btn-pequeno.verde { background:var(--verde); color:white; }
@@ -110,7 +108,6 @@
   .badge-estado.recibida { background:#d1fae5; color:#065f46; }
   .badge-estado.rechazada { background:#fee2e2; color:#991b1b; }
   .badge-estado.cancelada { background:#e5e7eb; color:#4b5563; }
-  .badge-estado.parcial { background:#fed7aa; color:#9a3412; }
   .urgencia-grupo { display:flex; gap:8px; flex-wrap:wrap; }
   .urgencia-opcion { flex:1; min-width:90px; padding:10px 8px; border:2px solid var(--borde); border-radius:12px; text-align:center; cursor:pointer; font-size:11px; font-weight:600; color:var(--texto-gris); background:white; }
   .urgencia-opcion.activo { border-color:var(--azul); background:#eff6ff; color:var(--azul); }
@@ -129,6 +126,7 @@
   .linea-tab:disabled { opacity:0.35; cursor:not-allowed; }
   .linea-tab .sub { font-size:10px; font-weight:500; opacity:0.7; display:block; margin-top:2px; }
   .aviso-info { background:#fffbeb; border-left:4px solid var(--naranja); padding:10px 14px; border-radius:10px; font-size:11.5px; color:#78350f; margin-bottom:12px; line-height:1.5; }
+  .aviso-info strong { color:#92400e; }
   .aviso-error { background:#fef2f2; border-left:4px solid var(--rojo); padding:10px 14px; border-radius:10px; font-size:11.5px; color:#991b1b; margin-bottom:12px; line-height:1.5; }
   .solicitud-card { background:white; border:1px solid var(--borde); border-radius:14px; padding:12px 14px; margin-bottom:8px; }
   .solicitud-card .fila-top { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
@@ -215,14 +213,8 @@
   <div class="aviso-info">ℹ️ <strong>Paso 1:</strong> Selecciona departamento y subdepartamento. El sistema validará el tope de cada línea según el presupuesto asignado.</div>
 
   <div class="row-2">
-    <div class="field">
-      <label class="required">Departamento</label>
-      <select id="sol-depto-padre" onchange="alCambiarDeptoPadre()"><option value="">— Selecciona —</option></select>
-    </div>
-    <div class="field">
-      <label class="required">Subdepartamento</label>
-      <select id="sol-subdepto" onchange="alCambiarSubdepto()"><option value="">— Primero elige depto —</option></select>
-    </div>
+    <div class="field"><label class="required">Departamento</label><select id="sol-depto-padre" onchange="alCambiarDeptoPadre()"><option value="">— Selecciona —</option></select></div>
+    <div class="field"><label class="required">Subdepartamento</label><select id="sol-subdepto" onchange="alCambiarSubdepto()"><option value="">— Primero elige depto —</option></select></div>
   </div>
 
   <div id="sol-info-panel" class="info-panel" style="display:none;">
@@ -258,19 +250,9 @@
       </div>
     </div>
 
-    <div class="field">
-      <label>Carrito — L1 (<span id="sol-cart-l1-count">0</span>) · Total: <strong id="sol-cart-l1-total">$0</strong></label>
-      <div id="sol-cart-l1"></div>
-    </div>
-
-    <div class="field">
-      <label>Carrito — L2 (<span id="sol-cart-l2-count">0</span>) · Total: <strong id="sol-cart-l2-total">$0</strong></label>
-      <div id="sol-cart-l2"></div>
-    </div>
-
-    <div class="field">
-      <label>Total solicitud: <strong id="sol-total-general" style="color:var(--verde); font-size:14px;">$0</strong></label>
-    </div>
+    <div class="field"><label>Carrito — L1 (<span id="sol-cart-l1-count">0</span>) · Total: <strong id="sol-cart-l1-total">$0</strong></label><div id="sol-cart-l1"></div></div>
+    <div class="field"><label>Carrito — L2 (<span id="sol-cart-l2-count">0</span>) · Total: <strong id="sol-cart-l2-total">$0</strong></label><div id="sol-cart-l2"></div></div>
+    <div class="field"><label>Total solicitud: <strong id="sol-total-general" style="color:var(--verde); font-size:14px;">$0</strong></label></div>
 
     <div class="field">
       <label class="required">Urgencia</label>
@@ -291,7 +273,6 @@
     </div>
 
     <button class="btn-primario" onclick="enviarSolicitud()">📨 ENVIAR SOLICITUD</button>
-
     <div id="sol-mensaje" class="aviso-info" style="display:none; margin-top:14px;"></div>
   </div>
 
@@ -304,7 +285,6 @@
 <!-- RECEPCIÓN -->
 <div class="section solo-operador solo-admin" id="tab-recepcion">
   <div class="section-label">📥 RECEPCIÓN DE PRODUCTOS</div>
-
   <div class="resumen-grid">
     <div class="resumen-card"><div class="num" id="res-rec-hoy">0</div><div class="lbl">Recepciones hoy</div></div>
     <div class="resumen-card verde"><div class="num" id="res-rec-unidades">0</div><div class="lbl">Unidades</div></div>
@@ -327,12 +307,14 @@
     <div id="rec-vinculo-info" style="display:none; font-size:11px; background:#f0fdf4; border-left:3px solid var(--verde); padding:8px 12px; border-radius:8px; margin-top:6px;"></div>
   </div>
 
-  <div class="field"><label class="required">Departamento</label><select id="rec-depto"><option value="">— Selecciona —</option></select></div>
-  <div class="field"><label class="required">Subdepartamento</label><select id="rec-subdepto"><option value="">— Primero elige depto —</option></select></div>
-  <div class="field"><label class="required">Cuenta (L1 / L2)</label><select id="rec-cuenta"><option value="">— Primero elige subdepto —</option></select></div>
-  <div id="rec-cuenta-info" style="display:none; font-size:11px; background:#f0f5ff; padding:8px 12px; border-radius:10px; margin-bottom:12px;"></div>
+  <div id="rec-wrap-campos">
+    <div class="field"><label class="required">Departamento</label><select id="rec-depto"><option value="">— Selecciona —</option></select></div>
+    <div class="field"><label class="required">Subdepartamento</label><select id="rec-subdepto"><option value="">— Primero elige depto —</option></select></div>
+    <div class="field"><label class="required">Cuenta (L1 / L2)</label><select id="rec-cuenta"><option value="">— Primero elige subdepto —</option></select></div>
+    <div id="rec-cuenta-info" style="display:none; font-size:11px; background:#f0f5ff; padding:8px 12px; border-radius:10px; margin-bottom:12px;"></div>
+  </div>
 
-  <div class="field">
+  <div class="field" id="rec-wrap-busqueda">
     <label class="required">Buscar producto</label>
     <div class="custom-dropdown">
       <input type="text" id="rec-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownRecepcion(this.value)">
@@ -407,7 +389,7 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="stock-total"></div>
 </div>
 
-<!-- SOLICITUDES (ADMIN) -->
+<!-- SOLICITUDES -->
 <div class="section solo-admin" id="tab-solicitudes">
   <div class="section-label">📋 SOLICITUDES</div>
   <div class="filtros">
@@ -434,7 +416,8 @@
 <!-- AUDITORÍA -->
 <div class="section solo-admin" id="tab-auditoria">
   <div class="section-label">🔍 AUDITORÍA</div>
-  <div class="filtros"><input type="text" id="aud-filtro" placeholder="🔍 Buscar..." oninput="renderAuditoria()">
+  <div class="filtros">
+    <input type="text" id="aud-filtro" placeholder="🔍 Buscar..." oninput="renderAuditoria()">
     <select id="aud-tipo" onchange="renderAuditoria()"><option value="">Todos</option><option value="recepcion">📥 Recepciones</option><option value="salida">📤 Salidas</option><option value="solicitud">📋 Solicitudes</option></select>
   </div>
   <div class="tabla-container"><table><thead><tr><th>Tipo</th><th>Código</th><th>Fecha</th><th>Detalle</th><th>Responsable</th><th style="text-align:right;">Monto</th></tr></thead><tbody id="aud-tbody"></tbody></table></div>
@@ -462,14 +445,6 @@
 </div>
 
 <!-- MODALES -->
-<div class="modal-overlay" id="modal-comprobante">
-  <div class="modal">
-    <div class="modal-header"><h2 id="modal-titulo">🧾 Comprobante</h2><button class="btn-cerrar-modal" onclick="cerrarModalComprobante()">✕</button></div>
-    <div id="modal-ticket" class="ticket"></div>
-    <button class="btn-secundario" onclick="cerrarModalComprobante()" style="margin-top:12px;">Cerrar</button>
-  </div>
-</div>
-
 <div class="modal-overlay" id="modal-detalle-solicitud">
   <div class="modal modal-ancho">
     <div class="modal-header"><h2 id="modal-sol-titulo">📋 Solicitud</h2><button class="btn-cerrar-modal" onclick="cerrarModalSolicitud()">✕</button></div>
@@ -486,9 +461,6 @@
 </footer>
 
 <script>
-// ============================================================
-// CONFIGURACIÓN
-// ============================================================
 const SUPABASE_URL = 'https://wxgboogoygogxrftsire.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_TMSNvBHNfonWB8kfEkiZDg_LvGpcYdG';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -505,15 +477,12 @@ const PROVEEDOR_OFICIAL = {
 };
 
 const FIRMAS_OFICIALES = {
-  'nvera@lascondes.cl': { nombre: 'Nelson Vera G.', cargo: 'Supervisor del Contrato', cargo_largo: 'Supervisor del Contrato' },
-  'pureta@lascondes.cl': { nombre: 'Pablo Ureta M.', cargo: 'Supervisor del Contrato', cargo_largo: 'Supervisor del Contrato' },
+  'nvera@lascondes.cl': { nombre: 'Nelson Vera G.', cargo: 'Supervisor del Contrato' },
+  'pureta@lascondes.cl': { nombre: 'Pablo Ureta M.', cargo: 'Supervisor del Contrato' },
   'usuario@lascondes.cl': { nombre: 'Usuario de Prueba', cargo: 'Funcionario' },
   'operador@lascondes.cl': { nombre: 'Operador de Bodega', cargo: 'Funcionario' }
 };
 
-// ============================================================
-// ESTADO GLOBAL
-// ============================================================
 let rolActual = null;
 let nombreUsuario = '';
 let nombreCompleto = '';
@@ -543,9 +512,6 @@ let ultimaSalida = null;
 let solicitudActual = null;
 let logoImageData = null;
 
-// ============================================================
-// HELPERS
-// ============================================================
 function formatearFecha(iso) {
   if (!iso) return '—';
   const d = new Date(iso);
@@ -575,9 +541,7 @@ function precargarLogoPDF() {
   img.src = 'https://i.ibb.co/Z6qxBJQZ/Logo-general-1.png';
 }
 
-// ============================================================
 // LOGIN
-// ============================================================
 async function aplicarSesion(session) {
   const email = (session.user.email || '').toLowerCase();
   const { data: perfil } = await sb.from('lc_perfiles').select('nombre, rol, departamento_padre, subdepartamento').eq('id', session.user.id).single();
@@ -586,12 +550,9 @@ async function aplicarSesion(session) {
     nombreCompleto = perfil.nombre || email;
     departamentoPadreUsuario = perfil.departamento_padre || null;
     subdepartamentoUsuario = perfil.subdepartamento || null;
-  } else {
-    rolActual = 'OPERADOR'; nombreCompleto = email;
-  }
+  } else { rolActual = 'OPERADOR'; nombreCompleto = email; }
   nombreUsuario = email;
 }
-
 async function intentarLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-password').value;
@@ -606,48 +567,33 @@ async function intentarLogin() {
   document.getElementById('login-overlay').style.display = 'none';
   iniciarApp();
 }
-
 async function cerrarSesion() { if (!confirm('¿Cerrar sesión?')) return; await sb.auth.signOut(); location.reload(); }
 document.getElementById('login-password').addEventListener('keypress', e => { if (e.key === 'Enter') intentarLogin(); });
-
 (async function restaurarSesion() {
   const { data } = await sb.auth.getSession();
-  if (data.session) {
-    await aplicarSesion(data.session);
-    document.getElementById('login-overlay').style.display = 'none';
-    iniciarApp();
-  }
+  if (data.session) { await aplicarSesion(data.session); document.getElementById('login-overlay').style.display = 'none'; iniciarApp(); }
 })();
 
-// ============================================================
-// INICIAR
-// ============================================================
 async function iniciarApp() {
   document.body.classList.remove('rol-admin','rol-operador','rol-solicitante');
   if (esAdmin()) document.body.classList.add('rol-admin');
   else if (esOperador()) document.body.classList.add('rol-operador');
   else document.body.classList.add('rol-solicitante');
-
   const badge = document.getElementById('badge-rol');
   if (esAdmin()) { badge.className = 'badge-rol admin'; badge.textContent = '👑 ADMIN'; }
   else if (esOperador()) { badge.className = 'badge-rol operador'; badge.textContent = '👤 OPERADOR'; }
   else { badge.className = 'badge-rol solicitante'; badge.textContent = '📝 SOLICITANTE'; }
   document.getElementById('bienvenida-texto').textContent = `Bienvenido, ${nombreCompleto}`;
-
-  mostrarToast('⏳ Cargando datos...');
+  mostrarToast('⏳ Cargando...');
   precargarLogoPDF();
-
   const ok = await cargarTodo();
-  if (!ok) { mostrarToast('❌ Error de conexión'); return; }
+  if (!ok) { mostrarToast('❌ Error'); return; }
   poblarSelects();
-
   if (esSolicitante() || esAdmin()) cambiarTab('tab-mi-solicitud');
   else cambiarTab('tab-recepcion');
-
   document.addEventListener('click', e => {
     if (!e.target.closest('.custom-dropdown')) document.querySelectorAll('.dropdown-list').forEach(l => l.style.display = 'none');
   });
-
   mostrarToast(`✅ ${productos.length} productos · ${cuentas.length} cuentas`);
 }
 
@@ -680,84 +626,59 @@ async function cargarTodo() {
 
 function poblarSelects() {
   const deptosUnicos = [...new Set(cuentas.map(c => c.departamento_padre))].sort();
-  ['rec-depto','sal-depto'].forEach(id => {
-    const sel = document.getElementById(id);
-    if (sel) sel.innerHTML = '<option value="">— Selecciona —</option>' + deptosUnicos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
-  });
-  const solDepto = document.getElementById('sol-depto-padre');
-  if (solDepto) solDepto.innerHTML = '<option value="">— Selecciona —</option>' + deptosUnicos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
-  const solAdminDepto = document.getElementById('soladmin-depto');
-  if (solAdminDepto) solAdminDepto.innerHTML = '<option value="">Todos deptos</option>' + deptosUnicos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+  const optD = '<option value="">— Selecciona —</option>' + deptosUnicos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+  ['rec-depto','sal-depto','sol-depto-padre'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = optD; });
+  const sd = document.getElementById('soladmin-depto');
+  if (sd) sd.innerHTML = '<option value="">Todos deptos</option>' + deptosUnicos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
 }
 
-// ============================================================
-// CÁLCULOS DE CUENTAS
-// ============================================================
 function calcularConsumidoCuenta(cuentaId) {
-  const itemsCuenta = recepcionItems.filter(ri => ri.cuenta_id === cuentaId);
-  const totalNeto = itemsCuenta.reduce((s, ri) => s + Number(ri.subtotal || 0), 0);
+  const items = recepcionItems.filter(ri => ri.cuenta_id === cuentaId);
+  const totalNeto = items.reduce((s, ri) => s + Number(ri.subtotal || 0), 0);
   return precioBruto(totalNeto);
 }
-
 function calcularReservadoCuenta(cuentaId) {
-  const sols = solicitudes.filter(s => (s.cuenta_l1_id === cuentaId || s.cuenta_l2_id === cuentaId) && ['PENDIENTE','APROBADA','ENVIADA'].includes(s.estado));
-  return sols.reduce((s, x) => s + Number(x.monto_estimado_bruto || 0), 0);
+  const ss = solicitudes.filter(s => (s.cuenta_l1_id === cuentaId || s.cuenta_l2_id === cuentaId) && ['PENDIENTE','APROBADA','ENVIADA'].includes(s.estado));
+  return ss.reduce((s, x) => s + Number(x.monto_estimado_bruto || 0), 0);
 }
-
 function calcularDisponibleCuenta(cuentaId) {
   const c = cuentas.find(x => x.id === cuentaId);
   if (!c) return 0;
   return Number(c.monto_asignado) - calcularConsumidoCuenta(cuentaId) - calcularReservadoCuenta(cuentaId);
 }
 
-// ============================================================
 // MI SOLICITUD
-// ============================================================
 function alCambiarDeptoPadre() {
   const depto = document.getElementById('sol-depto-padre').value;
   const sel = document.getElementById('sol-subdepto');
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
   if (!depto) { sel.innerHTML = '<option value="">— Primero elige depto —</option>'; return; }
-  const subdeptos = [...new Set(cuentas.filter(c => c.departamento_padre === depto).map(c => c.subdepartamento))].sort();
-  sel.innerHTML = '<option value="">— Selecciona subdepto —</option>' + subdeptos.map(s => `<option value="${escaparHtml(s)}">${escaparHtml(s)}</option>`).join('');
+  const subs = [...new Set(cuentas.filter(c => c.departamento_padre === depto).map(c => c.subdepartamento))].sort();
+  sel.innerHTML = '<option value="">— Selecciona subdepto —</option>' + subs.map(s => `<option value="${escaparHtml(s)}">${escaparHtml(s)}</option>`).join('');
 }
-
 function alCambiarSubdepto() {
   const depto = document.getElementById('sol-depto-padre').value;
   const sub = document.getElementById('sol-subdepto').value;
-  const panel = document.getElementById('sol-info-panel');
-  const trabajo = document.getElementById('sol-trabajo');
-  if (!depto || !sub) { panel.style.display = 'none'; trabajo.style.display = 'none'; return; }
-
+  if (!depto || !sub) { document.getElementById('sol-info-panel').style.display = 'none'; document.getElementById('sol-trabajo').style.display = 'none'; return; }
   const cL1 = cuentas.find(c => c.departamento_padre === depto && c.subdepartamento === sub && c.linea === 1);
   const cL2 = cuentas.find(c => c.departamento_padre === depto && c.subdepartamento === sub && c.linea === 2);
   subdeptoActualCuentas = { l1: cL1, l2: cL2 };
-
   document.getElementById('sol-info-nombre').textContent = `${depto} · ${sub}`;
-  const dispL1 = cL1 ? calcularDisponibleCuenta(cL1.id) : 0;
-  const dispL2 = cL2 ? calcularDisponibleCuenta(cL2.id) : 0;
-
+  const dL1 = cL1 ? calcularDisponibleCuenta(cL1.id) : 0;
+  const dL2 = cL2 ? calcularDisponibleCuenta(cL2.id) : 0;
   document.getElementById('sol-info-l1').style.display = cL1 ? 'flex' : 'none';
   document.getElementById('sol-info-l2').style.display = cL2 ? 'flex' : 'none';
-  if (cL1) document.getElementById('sol-disponible-l1').textContent = formatearCLP(dispL1);
-  if (cL2) document.getElementById('sol-disponible-l2').textContent = formatearCLP(dispL2);
-
-  panel.style.display = 'block';
-  trabajo.style.display = 'block';
-
-  const tabL1 = document.getElementById('sol-linea-l1');
-  const tabL2 = document.getElementById('sol-linea-l2');
-  tabL1.disabled = !cL1;
-  tabL2.disabled = !cL2;
-  document.getElementById('sol-l1-sub').textContent = cL1 ? formatearCLP(dispL1) : 'No disponible';
-  document.getElementById('sol-l2-sub').textContent = cL2 ? formatearCLP(dispL2) : 'No disponible';
-
-  // Auto-seleccionar L1 si existe
-  if (cL1) elegirLinea(1);
-  else if (cL2) elegirLinea(2);
+  if (cL1) document.getElementById('sol-disponible-l1').textContent = formatearCLP(dL1);
+  if (cL2) document.getElementById('sol-disponible-l2').textContent = formatearCLP(dL2);
+  document.getElementById('sol-info-panel').style.display = 'block';
+  document.getElementById('sol-trabajo').style.display = 'block';
+  document.getElementById('sol-linea-l1').disabled = !cL1;
+  document.getElementById('sol-linea-l2').disabled = !cL2;
+  document.getElementById('sol-l1-sub').textContent = cL1 ? formatearCLP(dL1) : 'No disponible';
+  document.getElementById('sol-l2-sub').textContent = cL2 ? formatearCLP(dL2) : 'No disponible';
+  if (cL1) elegirLinea(1); else if (cL2) elegirLinea(2);
 }
-
 function elegirLinea(linea) {
   lineaSeleccionada = linea;
   document.querySelectorAll('.linea-tab').forEach(t => t.classList.toggle('activo', parseInt(t.dataset.linea) === linea));
@@ -765,7 +686,6 @@ function elegirLinea(linea) {
   document.getElementById('sol-prod-sel').style.display = 'none';
   document.getElementById('sol-prod-trigger').value = '';
 }
-
 function filtrarDropdownMiSolicitud(texto) {
   const list = document.getElementById('sol-prod-list');
   list.style.display = 'block';
@@ -777,15 +697,10 @@ function filtrarDropdownMiSolicitud(texto) {
     const div = document.createElement('div');
     div.className = 'dropdown-item';
     div.innerHTML = `<span>${escaparHtml(p.nombre)}</span><span class="precio">${formatearCLP(precioBruto(p.precio_neto))}</span>`;
-    div.onclick = () => {
-      document.getElementById('sol-prod-trigger').value = p.nombre;
-      list.style.display = 'none';
-      seleccionarProductoMiSolicitud(p);
-    };
+    div.onclick = () => { document.getElementById('sol-prod-trigger').value = p.nombre; list.style.display = 'none'; seleccionarProductoMiSolicitud(p); };
     list.appendChild(div);
   });
 }
-
 function seleccionarProductoMiSolicitud(p) {
   productoSeleccionadoSol = p;
   document.getElementById('sol-prod-sel').style.display = 'block';
@@ -794,60 +709,36 @@ function seleccionarProductoMiSolicitud(p) {
   document.getElementById('sol-cantidad').value = '';
   document.getElementById('sol-cantidad').focus();
 }
-
 function agregarAlCarritoMiSolicitud() {
   if (!productoSeleccionadoSol) { mostrarToast('❌ Selecciona un producto'); return; }
-  const cantidad = parseInt(document.getElementById('sol-cantidad').value);
-  if (isNaN(cantidad) || cantidad <= 0) { mostrarToast('❌ Cantidad inválida'); return; }
-
-  // Verificar tope
+  const cant = parseInt(document.getElementById('sol-cantidad').value);
+  if (isNaN(cant) || cant <= 0) { mostrarToast('❌ Cantidad inválida'); return; }
   const cuenta = productoSeleccionadoSol.linea === 1 ? subdeptoActualCuentas.l1 : subdeptoActualCuentas.l2;
-  if (!cuenta) { mostrarToast('❌ No hay cuenta para esta línea'); return; }
-
-  const disponible = calcularDisponibleCuenta(cuenta.id);
-  const totalCarritoLinea = carritoSolicitud.filter(x => x.linea === productoSeleccionadoSol.linea).reduce((s, x) => s + precioBruto(x.precio_neto) * x.cantidad, 0);
-  const nuevoSubtotal = precioBruto(productoSeleccionadoSol.precio_neto) * cantidad;
-
-  if (totalCarritoLinea + nuevoSubtotal > disponible) {
-    mostrarToast(`⛔ Excede el disponible. L${productoSeleccionadoSol.linea}: ${formatearCLP(disponible)}`, 6000);
-    return;
-  }
-
-  const existe = carritoSolicitud.find(p => p.producto_id === productoSeleccionadoSol.id);
-  if (existe) existe.cantidad += cantidad;
-  else carritoSolicitud.push({
-    producto_id: productoSeleccionadoSol.id,
-    nombre: productoSeleccionadoSol.nombre,
-    linea: productoSeleccionadoSol.linea,
-    precio_neto: Number(productoSeleccionadoSol.precio_neto),
-    cantidad: cantidad
-  });
+  if (!cuenta) { mostrarToast('❌ No hay cuenta'); return; }
+  const disp = calcularDisponibleCuenta(cuenta.id);
+  const totalL = carritoSolicitud.filter(x => x.linea === productoSeleccionadoSol.linea).reduce((s, x) => s + precioBruto(x.precio_neto) * x.cantidad, 0);
+  const nSub = precioBruto(productoSeleccionadoSol.precio_neto) * cant;
+  if (totalL + nSub > disp) { mostrarToast(`⛔ Excede disponible L${productoSeleccionadoSol.linea}: ${formatearCLP(disp)}`, 6000); return; }
+  const ex = carritoSolicitud.find(p => p.producto_id === productoSeleccionadoSol.id);
+  if (ex) ex.cantidad += cant;
+  else carritoSolicitud.push({ producto_id: productoSeleccionadoSol.id, nombre: productoSeleccionadoSol.nombre, linea: productoSeleccionadoSol.linea, precio_neto: Number(productoSeleccionadoSol.precio_neto), cantidad: cant });
   renderCarritoMiSolicitud();
-  limpiarSeleccionMiSolicitud();
-  mostrarToast(`✅ ${cantidad} × ${productoSeleccionadoSol.nombre}`);
-}
-
-function limpiarSeleccionMiSolicitud() {
   productoSeleccionadoSol = null;
   document.getElementById('sol-prod-trigger').value = '';
   document.getElementById('sol-cantidad').value = '';
   document.getElementById('sol-prod-sel').style.display = 'none';
+  mostrarToast(`✅ ${cant} agregado`);
 }
-
 function eliminarDelCarritoMiSolicitud(idx) {
-  if (!confirm('¿Eliminar producto?')) return;
+  if (!confirm('¿Eliminar?')) return;
   carritoSolicitud.splice(idx, 1);
   renderCarritoMiSolicitud();
 }
-
 function renderCarritoMiSolicitud() {
   const l1 = carritoSolicitud.filter(p => p.linea === 1);
   const l2 = carritoSolicitud.filter(p => p.linea === 2);
-  const contL1 = document.getElementById('sol-cart-l1');
-  const contL2 = document.getElementById('sol-cart-l2');
   document.getElementById('sol-cart-l1-count').textContent = l1.length;
   document.getElementById('sol-cart-l2-count').textContent = l2.length;
-
   const renderItems = (items) => items.length ? items.map(p => {
     const idx = carritoSolicitud.indexOf(p);
     const sub = precioBruto(p.precio_neto) * p.cantidad;
@@ -857,30 +748,24 @@ function renderCarritoMiSolicitud() {
       <button class="btn-eliminar-prod" onclick="eliminarDelCarritoMiSolicitud(${idx})">✕</button>
     </div>`;
   }).join('') : '<div class="empty-state">Sin productos</div>';
-
-  contL1.innerHTML = renderItems(l1);
-  contL2.innerHTML = renderItems(l2);
-
-  const totalL1 = l1.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
-  const totalL2 = l2.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
-  document.getElementById('sol-cart-l1-total').textContent = formatearCLP(totalL1);
-  document.getElementById('sol-cart-l2-total').textContent = formatearCLP(totalL2);
-  document.getElementById('sol-total-general').textContent = formatearCLP(totalL1 + totalL2);
+  document.getElementById('sol-cart-l1').innerHTML = renderItems(l1);
+  document.getElementById('sol-cart-l2').innerHTML = renderItems(l2);
+  const tL1 = l1.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  const tL2 = l2.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  document.getElementById('sol-cart-l1-total').textContent = formatearCLP(tL1);
+  document.getElementById('sol-cart-l2-total').textContent = formatearCLP(tL2);
+  document.getElementById('sol-total-general').textContent = formatearCLP(tL1 + tL2);
 }
-
 function elegirUrgencia(u) {
   urgenciaSolicitud = u;
   document.querySelectorAll('.urgencia-opcion').forEach(o => o.classList.toggle('activo', o.dataset.urg === u));
 }
 
-// ============================================================
-// ADJUNTOS
-// ============================================================
 async function subirAdjuntoSolicitud(event) {
   const files = event.target.files;
   if (!files || !files.length) return;
   for (const file of files) {
-    if (file.size > 5*1024*1024) { mostrarToast(`❌ ${file.name} excede 5 MB`); continue; }
+    if (file.size > 5*1024*1024) { mostrarToast(`❌ ${file.name} > 5 MB`); continue; }
     try {
       const ext = file.name.split('.').pop();
       const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
@@ -890,11 +775,10 @@ async function subirAdjuntoSolicitud(event) {
       const { data: urlData } = sb.storage.from('lc-adjuntos').getPublicUrl(path);
       adjuntosTemporales.push({ url: urlData.publicUrl, nombre: file.name, tipo: file.type, size: file.size });
       renderAdjuntosSolicitud();
-    } catch(e) { mostrarToast('❌ ' + (e.message || 'Error')); }
+    } catch(e) { mostrarToast('❌ ' + (e.message||'Error')); }
   }
   event.target.value = '';
 }
-
 function renderAdjuntosSolicitud() {
   const grid = document.getElementById('sol-adjuntos-grid');
   if (!adjuntosTemporales.length) { grid.innerHTML = ''; return; }
@@ -907,55 +791,35 @@ function renderAdjuntosSolicitud() {
     </div>`;
   }).join('');
 }
-
 function eliminarAdjuntoTemporal(idx) { adjuntosTemporales.splice(idx, 1); renderAdjuntosSolicitud(); }
 
-// ============================================================
-// ENVIAR SOLICITUD
-// ============================================================
 async function enviarSolicitud() {
   const depto = document.getElementById('sol-depto-padre').value;
   const sub = document.getElementById('sol-subdepto').value;
   if (!depto || !sub) { mostrarToast('❌ Elige depto y subdepto'); return; }
   if (!carritoSolicitud.length) { mostrarToast('❌ Agrega productos'); return; }
-
   const obs = document.getElementById('sol-obs').value.trim();
   const totalNeto = carritoSolicitud.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
   const totalBruto = carritoSolicitud.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
-
   if (!confirm(`¿Enviar solicitud por ${formatearCLP(totalBruto)}?`)) return;
-  const btn = event.target;
-  btn.disabled = true; btn.textContent = '⏳ Enviando...';
-
+  const btn = event.target; btn.disabled = true; btn.textContent = '⏳ Enviando...';
   try {
     const { data: solData, error: e1 } = await sb.from('lc_solicitudes').insert({
-      departamento: depto,
-      departamento_padre: depto,
-      subdepartamento: sub,
-      solicitante_email: nombreUsuario,
-      solicitante_nombre: nombreCompleto,
-      estado: 'PENDIENTE',
-      monto_estimado: totalNeto,
-      monto_estimado_bruto: totalBruto,
-      urgencia: urgenciaSolicitud,
-      observacion: obs || null,
+      departamento: depto, departamento_padre: depto, subdepartamento: sub,
+      solicitante_email: nombreUsuario, solicitante_nombre: nombreCompleto,
+      estado: 'PENDIENTE', monto_estimado: totalNeto, monto_estimado_bruto: totalBruto,
+      urgencia: urgenciaSolicitud, observacion: obs || null,
       cuenta_l1_id: subdeptoActualCuentas.l1?.id || null,
       cuenta_l2_id: subdeptoActualCuentas.l2?.id || null
     }).select().single();
     if (e1) throw e1;
-
     const items = carritoSolicitud.map(p => ({
-      solicitud_id: solData.id,
-      producto_id: p.producto_id,
-      cantidad: p.cantidad,
-      precio_estimado: p.precio_neto,
-      precio_estimado_bruto: precioBruto(p.precio_neto),
-      subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad,
-      linea: p.linea
+      solicitud_id: solData.id, producto_id: p.producto_id, cantidad: p.cantidad,
+      precio_estimado: p.precio_neto, precio_estimado_bruto: precioBruto(p.precio_neto),
+      subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad, linea: p.linea
     }));
     const { error: e2 } = await sb.from('lc_solicitud_items').insert(items);
     if (e2) throw e2;
-
     if (adjuntosTemporales.length) {
       const adj = adjuntosTemporales.map(a => ({
         solicitud_id: solData.id, archivo_url: a.url, archivo_nombre: a.nombre,
@@ -963,13 +827,11 @@ async function enviarSolicitud() {
       }));
       await sb.from('lc_solicitud_adjuntos').insert(adj);
     }
-
-    mostrarToast(`✅ Solicitud ${solData.codigo} enviada`);
+    mostrarToast(`✅ ${solData.codigo} enviada`);
     const msg = document.getElementById('sol-mensaje');
     msg.style.display = 'block';
     msg.innerHTML = `✅ Solicitud <strong>${solData.codigo}</strong> enviada. Total: <strong>${formatearCLP(totalBruto)}</strong>`;
     msg.scrollIntoView({ behavior: 'smooth' });
-
     await cargarTodo();
     nuevaSolicitudForm();
     renderMisSolicitudes();
@@ -977,25 +839,16 @@ async function enviarSolicitud() {
   } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message || 'Error')); }
   btn.disabled = false; btn.textContent = '📨 ENVIAR SOLICITUD';
 }
-
 function nuevaSolicitudForm() {
-  carritoSolicitud = [];
-  adjuntosTemporales = [];
-  urgenciaSolicitud = 'NORMAL';
-  renderCarritoMiSolicitud();
-  renderAdjuntosSolicitud();
-  elegirUrgencia('NORMAL');
+  carritoSolicitud = []; adjuntosTemporales = []; urgenciaSolicitud = 'NORMAL';
+  renderCarritoMiSolicitud(); renderAdjuntosSolicitud(); elegirUrgencia('NORMAL');
   document.getElementById('sol-obs').value = '';
   document.getElementById('sol-depto-padre').value = '';
   document.getElementById('sol-subdepto').innerHTML = '<option value="">— Primero elige depto —</option>';
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
-  document.getElementById('sol-mensaje').style.display = 'none';
 }
 
-// ============================================================
-// MIS SOLICITUDES
-// ============================================================
 function renderMisSolicitudes() {
   const cont = document.getElementById('mis-solicitudes-container');
   if (!cont) return;
@@ -1006,15 +859,12 @@ function renderMisSolicitudes() {
     const adj = solicitudAdjuntos.filter(a => a.solicitud_id === s.id);
     const puede = s.estado === 'PENDIENTE';
     return `<div class="solicitud-card">
-      <div class="fila-top">
-        <span class="codigo">${escaparHtml(s.codigo)}</span>
-        <span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span>
-      </div>
+      <div class="fila-top"><span class="codigo">${escaparHtml(s.codigo)}</span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></div>
       <div class="fila-info">
-        <span>🏢 <strong>${escaparHtml(s.departamento_padre || s.departamento)} / ${escaparHtml(s.subdepartamento || '—')}</strong></span>
+        <span>🏢 <strong>${escaparHtml(s.departamento_padre||s.departamento)} / ${escaparHtml(s.subdepartamento||'—')}</strong></span>
         <span>📅 ${s.fecha_fmt}</span>
         <span>📦 ${items.length} prod.</span>
-        <span>💰 ${formatearCLP(s.monto_estimado_bruto || 0)}</span>
+        <span>💰 ${formatearCLP(s.monto_estimado_bruto||0)}</span>
         ${adj.length ? `<span>📎 ${adj.length}</span>` : ''}
       </div>
       <div class="acciones">
@@ -1026,11 +876,11 @@ function renderMisSolicitudes() {
 }
 
 async function cancelarSolicitud(id) {
-  if (!confirm('¿Cancelar solicitud?')) return;
+  if (!confirm('¿Cancelar?')) return;
   const { error } = await sb.from('lc_solicitudes').update({ estado: 'CANCELADA', motivo_rechazo: 'Cancelada por el solicitante' }).eq('id', id);
   if (error) { mostrarToast('❌ ' + error.message); return; }
   mostrarToast('✅ Cancelada');
-  await cargarTodo(); renderMisSolicitudes();
+  await cargarTodo(); renderMisSolicitudes(); actualizarBadgePendientes();
 }
 
 function verDetalleSolicitud(id) {
@@ -1039,10 +889,8 @@ function verDetalleSolicitud(id) {
   const items = solicitudItems.filter(i => i.solicitud_id === id);
   const adj = solicitudAdjuntos.filter(a => a.solicitud_id === id);
   solicitudActual = s;
-
   const l1 = items.filter(i => i.linea === 1);
   const l2 = items.filter(i => i.linea === 2);
-
   const renderItems = (arr) => arr.map(it => {
     const p = productos.find(x => x.id === it.producto_id);
     const pb = it.precio_estimado_bruto || precioBruto(it.precio_estimado);
@@ -1052,16 +900,13 @@ function verDetalleSolicitud(id) {
       <span style="font-weight:700; text-align:right;">${formatearCLP(pb * it.cantidad)}</span>
     </div>`;
   }).join('');
-
-  const totalNeto = items.reduce((sum, it) => sum + Number(it.precio_estimado || 0) * it.cantidad, 0);
+  const totalNeto = items.reduce((sum, it) => sum + Number(it.precio_estimado||0) * it.cantidad, 0);
   const totalBruto = items.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
   const iva = totalBruto - totalNeto;
-
   const adjHTML = adj.length ? `<div style="margin-top:12px;"><div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris);">📎 Adjuntos (${adj.length})</div><div class="adjuntos-grid">${adj.map(a => {
     const esImg = a.archivo_tipo && a.archivo_tipo.startsWith('image/');
     return `<a href="${a.archivo_url}" target="_blank" class="adjunto-item" style="text-decoration:none;">${esImg ? `<img src="${a.archivo_url}">` : `<div class="pdf-icon">📄</div>`}<div class="nombre">${escaparHtml(a.archivo_nombre || 'archivo')}</div></a>`;
   }).join('')}</div></div>` : '';
-
   let acciones = '';
   if (esAdmin() && s.estado === 'PENDIENTE') {
     acciones = `<div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
@@ -1070,19 +915,18 @@ function verDetalleSolicitud(id) {
       <button class="btn-primario" style="flex:1;" onclick="descargarPDFSolicitud('${s.id}')">📄 PDF</button>
     </div>`;
   } else if (esAdmin()) {
-    acciones = `<div style="display:flex; gap:8px; margin-top:14px;"><button class="btn-primario" onclick="descargarPDFSolicitud('${s.id}')">📄 PDF Proveedor</button></div>`;
+    acciones = `<div style="display:flex; gap:8px; margin-top:14px;"><button class="btn-primario" onclick="descargarPDFSolicitud('${s.id}')">📄 PDF</button></div>`;
   }
-
   document.getElementById('modal-sol-titulo').textContent = `📋 ${s.codigo}`;
   document.getElementById('modal-sol-contenido').innerHTML = `
     <div style="background:#f8fafc; border-radius:12px; padding:12px; margin-bottom:10px;">
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Estado</span><span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></span></div>
-      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Depto / Subdepto</span><span style="font-weight:600;">${escaparHtml(s.departamento_padre || s.departamento)} / ${escaparHtml(s.subdepartamento || '—')}</span></div>
-      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Solicitante</span><span style="font-weight:600;">${escaparHtml(s.solicitante_nombre || s.solicitante_email)}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Depto / Subdepto</span><span style="font-weight:600;">${escaparHtml(s.departamento_padre||s.departamento)} / ${escaparHtml(s.subdepartamento||'—')}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Solicitante</span><span style="font-weight:600;">${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Fecha</span><span>${s.fecha_fmt}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Urgencia</span><span>${s.urgencia}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Neto</span><span>${formatearCLP(totalNeto)}</span></div>
-      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">IVA (19%)</span><span>${formatearCLP(iva)}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">IVA</span><span>${formatearCLP(iva)}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:13px; border-top:1px solid var(--borde);"><span><strong>Total (IVA inc.)</strong></span><span style="color:var(--azul); font-weight:700;">${formatearCLP(totalBruto)}</span></div>
       ${s.observacion ? `<div style="padding:5px 0; font-size:12px; border-top:1px dotted var(--borde); margin-top:6px;"><div style="color:var(--texto-gris);">Observación</div><div>${escaparHtml(s.observacion)}</div></div>` : ''}
       ${s.motivo_rechazo ? `<div style="padding:5px 0; font-size:12px; color:var(--rojo);"><strong>Motivo rechazo:</strong> ${escaparHtml(s.motivo_rechazo)}</div>` : ''}
@@ -1094,7 +938,6 @@ function verDetalleSolicitud(id) {
   `;
   document.getElementById('modal-detalle-solicitud').classList.add('visible');
 }
-
 function cerrarModalSolicitud() { document.getElementById('modal-detalle-solicitud').classList.remove('visible'); solicitudActual = null; }
 
 async function aprobarSolicitud(id) {
@@ -1102,15 +945,14 @@ async function aprobarSolicitud(id) {
   const firma = obtenerFirma(nombreUsuario);
   const { error } = await sb.from('lc_solicitudes').update({
     estado: 'APROBADA', fecha_aprobacion: new Date().toISOString(),
-    aprobado_por: nombreUsuario, aprobado_por_cargo: firma.cargo_largo || firma.cargo
+    aprobado_por: nombreUsuario, aprobado_por_cargo: firma.cargo
   }).eq('id', id);
   if (error) { mostrarToast('❌ ' + error.message); return; }
   mostrarToast('✅ Aprobada');
   await cargarTodo(); cerrarModalSolicitud(); renderSolicitudesAdmin(); actualizarBadgePendientes();
 }
-
 async function rechazarSolicitud(id) {
-  const motivo = prompt('Motivo del rechazo:');
+  const motivo = prompt('Motivo:');
   if (!motivo) return;
   const { error } = await sb.from('lc_solicitudes').update({ estado: 'RECHAZADA', motivo_rechazo: motivo }).eq('id', id);
   if (error) { mostrarToast('❌ ' + error.message); return; }
@@ -1118,9 +960,6 @@ async function rechazarSolicitud(id) {
   await cargarTodo(); cerrarModalSolicitud(); renderSolicitudesAdmin(); actualizarBadgePendientes();
 }
 
-// ============================================================
-// ADMIN — SOLICITUDES
-// ============================================================
 function renderSolicitudesAdmin() {
   const tbody = document.getElementById('soladmin-tbody');
   if (!tbody) return;
@@ -1130,10 +969,7 @@ function renderSolicitudesAdmin() {
   let lista = solicitudes.filter(s => {
     if (estado && s.estado !== estado) return false;
     if (depto && s.departamento_padre !== depto) return false;
-    if (filtro) {
-      const txt = `${s.codigo} ${s.departamento_padre} ${s.subdepartamento} ${s.solicitante_nombre||''}`.toLowerCase();
-      if (!txt.includes(filtro)) return false;
-    }
+    if (filtro) { const txt = `${s.codigo} ${s.departamento_padre} ${s.subdepartamento} ${s.solicitante_nombre||''}`.toLowerCase(); if (!txt.includes(filtro)) return false; }
     return true;
   });
   actualizarBadgePendientes();
@@ -1151,125 +987,77 @@ function renderSolicitudesAdmin() {
   `).join('');
   document.getElementById('soladmin-total').textContent = `${lista.length} solicitudes`;
 }
-
 function actualizarBadgePendientes() {
-  const pend = solicitudes.filter(s => s.estado === 'PENDIENTE').length;
+  const p = solicitudes.filter(s => s.estado === 'PENDIENTE').length;
   const b = document.getElementById('badge-sol-pend');
-  if (b) { b.textContent = pend; b.style.display = pend > 0 ? 'inline-block' : 'none'; }
+  if (b) { b.textContent = p; b.style.display = p > 0 ? 'inline-block' : 'none'; }
 }
 
-// ============================================================
 // RECEPCIÓN
-// ============================================================
 document.addEventListener('change', e => {
   if (e.target.id === 'rec-depto') {
-    const depto = e.target.value;
-    const sub = document.getElementById('rec-subdepto');
-    if (!depto) { sub.innerHTML = '<option value="">— Primero elige depto —</option>'; return; }
-    const subdeptos = [...new Set(cuentas.filter(c => c.departamento_padre === depto).map(c => c.subdepartamento))].sort();
-    sub.innerHTML = '<option value="">— Selecciona —</option>' + subdeptos.map(s => `<option value="${escaparHtml(s)}">${escaparHtml(s)}</option>`).join('');
+    const d = e.target.value;
+    const s = document.getElementById('rec-subdepto');
+    if (!d) { s.innerHTML = '<option value="">— Primero elige depto —</option>'; return; }
+    const subs = [...new Set(cuentas.filter(c => c.departamento_padre === d).map(c => c.subdepartamento))].sort();
+    s.innerHTML = '<option value="">— Selecciona —</option>' + subs.map(x => `<option value="${escaparHtml(x)}">${escaparHtml(x)}</option>`).join('');
   }
   if (e.target.id === 'rec-subdepto') {
-    const depto = document.getElementById('rec-depto').value;
-    const sub = e.target.value;
+    const d = document.getElementById('rec-depto').value;
+    const s = e.target.value;
     const selC = document.getElementById('rec-cuenta');
-    if (!sub) { selC.innerHTML = '<option value="">— Primero elige subdepto —</option>'; return; }
-    const cuentasSub = cuentas.filter(c => c.departamento_padre === depto && c.subdepartamento === sub);
-    selC.innerHTML = '<option value="">— Selecciona cuenta —</option>' + cuentasSub.map(c => `<option value="${c.id}">L${c.linea} · ${escaparHtml(c.codigo)}</option>`).join('');
+    if (!s) { selC.innerHTML = '<option value="">— Primero elige subdepto —</option>'; return; }
+    const cs = cuentas.filter(c => c.departamento_padre === d && c.subdepartamento === s);
+    selC.innerHTML = '<option value="">— Selecciona —</option>' + cs.map(c => `<option value="${c.id}">L${c.linea} · ${escaparHtml(c.codigo)}</option>`).join('');
   }
   if (e.target.id === 'rec-cuenta') {
     const info = document.getElementById('rec-cuenta-info');
-    const cId = e.target.value;
-    if (!cId) { info.style.display = 'none'; return; }
-    const c = cuentas.find(x => x.id === cId);
+    const cid = e.target.value;
+    if (!cid) { info.style.display = 'none'; return; }
+    const c = cuentas.find(x => x.id === cid);
     if (!c) return;
-    const consumido = calcularConsumidoCuenta(cId);
-    const reservado = calcularReservadoCuenta(cId);
-    const disp = c.monto_asignado - consumido - reservado;
+    const cons = calcularConsumidoCuenta(cid);
+    const res = calcularReservadoCuenta(cid);
+    const disp = c.monto_asignado - cons - res;
     info.style.display = 'block';
-    info.innerHTML = `💰 Asignado: <strong>${formatearCLP(c.monto_asignado)}</strong> · Reservado: <strong>${formatearCLP(reservado)}</strong> · Consumido: <strong>${formatearCLP(consumido)}</strong> · Disponible: <strong style="color:${disp>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(disp)}</strong>`;
+    info.innerHTML = `💰 Asignado: <strong>${formatearCLP(c.monto_asignado)}</strong> · Reservado: <strong>${formatearCLP(res)}</strong> · Consumido: <strong>${formatearCLP(cons)}</strong> · Disponible: <strong style="color:${disp>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(disp)}</strong>`;
   }
 });
 
 function alVincularSolicitud() {
   const id = document.getElementById('rec-solicitud-vinculo').value;
   const info = document.getElementById('rec-vinculo-info');
-
-  // Elementos a ocultar cuando hay vínculo
-  const elCuenta = document.getElementById('rec-cuenta');
-  const elDepto = document.getElementById('rec-depto');
-  const elSub = document.getElementById('rec-subdepto');
-  const elCuentaInfo = document.getElementById('rec-cuenta-info');
-
-  // Encontrar el .field contenedor de cada uno (subiendo hasta el div.field)
-  const fieldCuenta = elCuenta.closest('.field');
-  const fieldDepto = elDepto.closest('.field');
-  const fieldSub = elSub.closest('.field');
-
-  // El buscador de productos está dentro de un .field
-  const fieldBusqueda = document.getElementById('rec-prod-trigger').closest('.field');
-  const fieldProdSel = document.getElementById('rec-prod-sel');
-
+  const wrapCampos = document.getElementById('rec-wrap-campos');
+  const wrapBusqueda = document.getElementById('rec-wrap-busqueda');
+  const prodSel = document.getElementById('rec-prod-sel');
   if (!id) {
-    // Sin vínculo: mostrar todo
     info.style.display = 'none';
-    if (fieldDepto) fieldDepto.style.display = 'block';
-    if (fieldSub) fieldSub.style.display = 'block';
-    if (fieldCuenta) fieldCuenta.style.display = 'block';
-    if (elCuentaInfo) elCuentaInfo.style.display = 'none';
-    if (fieldBusqueda) fieldBusqueda.style.display = 'block';
-    if (fieldProdSel) fieldProdSel.style.display = 'none';
+    wrapCampos.style.display = 'block';
+    wrapBusqueda.style.display = 'block';
     carritoRecepcion = [];
     renderCarritoRecepcion();
     return;
   }
-
   const s = solicitudes.find(x => x.id === id);
   if (!s) return;
-
   info.style.display = 'block';
   info.innerHTML = `✅ <strong>${escaparHtml(s.codigo)}</strong> · ${escaparHtml(s.departamento_padre)} / ${escaparHtml(s.subdepartamento)}`;
-
-  // Ocultar todos los campos que vienen de la solicitud
-  if (fieldDepto) fieldDepto.style.display = 'none';
-  if (fieldSub) fieldSub.style.display = 'none';
-  if (fieldCuenta) fieldCuenta.style.display = 'none';
-  if (elCuentaInfo) elCuentaInfo.style.display = 'none';
-  if (fieldBusqueda) fieldBusqueda.style.display = 'none';
-  if (fieldProdSel) fieldProdSel.style.display = 'none';
-
-  // Cargar items de la solicitud (bloqueados)
+  wrapCampos.style.display = 'none';
+  wrapBusqueda.style.display = 'none';
+  prodSel.style.display = 'none';
   const items = solicitudItems.filter(i => i.solicitud_id === id);
   carritoRecepcion = items.map(it => {
     const p = productos.find(x => x.id === it.producto_id);
-    return {
-      producto_id: it.producto_id,
-      nombre: p?.nombre || 'N/E',
-      linea: it.linea || p?.linea || 1,
-      precio_neto: Number(it.precio_estimado),
-      cantidad: Number(it.cantidad),
-      bloqueado: true
-    };
+    return { producto_id: it.producto_id, nombre: p?.nombre||'N/E', linea: it.linea||p?.linea||1, precio_neto: Number(it.precio_estimado), cantidad: Number(it.cantidad), bloqueado: true };
   });
-
   renderCarritoRecepcion();
 }
-
-  // Guardar los IDs de las cuentas para usar al registrar
-  window._recCuentaL1 = s.cuenta_l1_id;
-  window._recCuentaL2 = s.cuenta_l2_id;
-  window._recSolVinculo = s.id;
-
-  renderCarritoRecepcion();
-}
-
 function poblarVinculoSolicitud() {
   const sel = document.getElementById('rec-solicitud-vinculo');
   if (!sel) return;
-  const disp = solicitudes.filter(s => s.estado === 'APROBADA' || s.estado === 'ENVIADA');
-  sel.innerHTML = '<option value="">— Recepción sin vincular —</option>' + disp.map(s => `<option value="${s.id}">${escaparHtml(s.codigo)} · ${escaparHtml(s.departamento_padre)} · ${formatearCLP(s.monto_estimado_bruto||0)}</option>`).join('');
+  const d = solicitudes.filter(s => s.estado === 'APROBADA' || s.estado === 'ENVIADA');
+  sel.innerHTML = '<option value="">— Recepción sin vincular —</option>' + d.map(s => `<option value="${s.id}">${escaparHtml(s.codigo)} · ${escaparHtml(s.departamento_padre)} · ${formatearCLP(s.monto_estimado_bruto||0)}</option>`).join('');
 }
-
 function filtrarDropdownRecepcion(texto) {
   const list = document.getElementById('rec-prod-list');
   list.style.display = 'block';
@@ -1281,15 +1069,10 @@ function filtrarDropdownRecepcion(texto) {
     const div = document.createElement('div');
     div.className = 'dropdown-item';
     div.innerHTML = `<span>${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></span><span class="precio">${formatearCLP(precioBruto(p.precio_neto))}</span>`;
-    div.onclick = () => {
-      document.getElementById('rec-prod-trigger').value = p.nombre;
-      list.style.display = 'none';
-      seleccionarProductoRecepcion(p);
-    };
+    div.onclick = () => { document.getElementById('rec-prod-trigger').value = p.nombre; list.style.display = 'none'; seleccionarProductoRecepcion(p); };
     list.appendChild(div);
   });
 }
-
 function seleccionarProductoRecepcion(p) {
   productoSeleccionadoRec = p;
   document.getElementById('rec-prod-sel').style.display = 'block';
@@ -1297,24 +1080,18 @@ function seleccionarProductoRecepcion(p) {
   document.getElementById('rec-prod-precio').innerHTML = `Precio: <strong>${formatearCLP(precioBruto(p.precio_neto))}</strong> · L${p.linea}`;
   document.getElementById('rec-cantidad').value = '';
 }
-
 function agregarAlCarritoRecepcion() {
-  if (!productoSeleccionadoRec) { mostrarToast('❌ Selecciona producto'); return; }
-  const cant = parseInt(document.getElementById('rec-cantidad').value);
-  if (isNaN(cant) || cant <= 0) { mostrarToast('❌ Cantidad inválida'); return; }
-  const existe = carritoRecepcion.find(p => p.producto_id === productoSeleccionadoRec.id);
-  if (existe) existe.cantidad += cant;
-  else carritoRecepcion.push({
-    producto_id: productoSeleccionadoRec.id, nombre: productoSeleccionadoRec.nombre,
-    linea: productoSeleccionadoRec.linea, precio_neto: Number(productoSeleccionadoRec.precio_neto), cantidad: cant
-  });
+  if (!productoSeleccionadoRec) { mostrarToast('❌ Selecciona'); return; }
+  const c = parseInt(document.getElementById('rec-cantidad').value);
+  if (isNaN(c) || c <= 0) { mostrarToast('❌ Cantidad inválida'); return; }
+  const ex = carritoRecepcion.find(p => p.producto_id === productoSeleccionadoRec.id);
+  if (ex) ex.cantidad += c;
+  else carritoRecepcion.push({ producto_id: productoSeleccionadoRec.id, nombre: productoSeleccionadoRec.nombre, linea: productoSeleccionadoRec.linea, precio_neto: Number(productoSeleccionadoRec.precio_neto), cantidad: c });
   renderCarritoRecepcion();
   productoSeleccionadoRec = null;
   document.getElementById('rec-prod-trigger').value = '';
   document.getElementById('rec-prod-sel').style.display = 'none';
-  mostrarToast(`✅ ${cant} × producto`);
 }
-
 function renderCarritoRecepcion() {
   const cont = document.getElementById('rec-carrito-container');
   document.getElementById('rec-carrito-count').textContent = carritoRecepcion.length;
@@ -1325,128 +1102,102 @@ function renderCarritoRecepcion() {
     total += sub;
     const bloqueado = p.bloqueado === true;
     return `<div class="producto-agregado">
-      <div class="info">
-        <div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div>
-        <div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = ${formatearCLP(sub)}</div>
-      </div>
+      <div class="info"><div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div><div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = ${formatearCLP(sub)}</div></div>
       <div class="cantidad">${p.cantidad}</div>
       ${bloqueado ? '' : `<button class="btn-eliminar-prod" onclick="carritoRecepcion.splice(${i},1);renderCarritoRecepcion();">✕</button>`}
     </div>`;
   }).join('');
   document.getElementById('rec-total-estimado').textContent = formatearCLP(total);
 }
-
 async function registrarRecepcion() {
   const solVinculo = document.getElementById('rec-solicitud-vinculo').value;
   let cuentaId = document.getElementById('rec-cuenta').value;
   let depto = document.getElementById('rec-depto').value;
-  let sub = document.getElementById('rec-subdepto').value;
-
-  // Si hay solicitud vinculada, usar sus datos
   if (solVinculo) {
     const s = solicitudes.find(x => x.id === solVinculo);
-    if (s) {
-      depto = s.departamento_padre;
-      sub = s.subdepartamento;
-      // Usar cuenta L1 (o L2 si no hay L1)
-      cuentaId = s.cuenta_l1_id || s.cuenta_l2_id;
-    }
+    if (s) { depto = s.departamento_padre; cuentaId = s.cuenta_l1_id || s.cuenta_l2_id; }
   }
-
-  if (!depto) { mostrarToast('❌ Elige depto'); return; }
-  if (!cuentaId) { mostrarToast('❌ No se encontró cuenta'); return; }
-  if (!carritoRecepcion.length) { mostrarToast('❌ Agrega productos'); return; }
-
+  if (!depto) { mostrarToast('❌ Sin depto'); return; }
+  if (!cuentaId) { mostrarToast('❌ Sin cuenta'); return; }
+  if (!carritoRecepcion.length) { mostrarToast('❌ Sin productos'); return; }
+  const cuenta = cuentas.find(c => c.id === cuentaId);
+  if (!cuenta) { mostrarToast('❌ Cuenta no encontrada'); return; }
+  const disp = calcularDisponibleCuenta(cuentaId);
+  const totalNeto = carritoRecepcion.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
+  const totalBruto = carritoRecepcion.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  if (totalBruto > disp) { mostrarToast(`⛔ Excede ${formatearCLP(disp)}`, 6000); return; }
   const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
   try {
-    const totalNeto = carritoRecepcion.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
     const guia = document.getElementById('rec-guia').value.trim();
     const factura = document.getElementById('rec-factura').value.trim();
     const obs = document.getElementById('rec-obs').value.trim();
     const firma = obtenerFirma(nombreUsuario);
-    const solVinculo = document.getElementById('rec-solicitud-vinculo').value;
-
-  const { data: rec, error: e1 } = await sb.from('lc_recepciones').insert({
-    proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
-    numero_guia: guia || null, numero_factura: factura || null, observacion: obs || null,
-    responsable: nombreUsuario, monto_total: totalNeto, monto_total_bruto: totalBruto,
-    iva_total: totalBruto - totalNeto, cuenta_id: cuentaId, departamento: depto,
-    solicitud_id: solVinculo || null,
-    recibido_por_nombre: firma.nombre, recibido_por_cargo: firma.cargo
-  }).select().single();
+    const { data: rec, error: e1 } = await sb.from('lc_recepciones').insert({
+      proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
+      numero_guia: guia || null, numero_factura: factura || null, observacion: obs || null,
+      responsable: nombreUsuario, monto_total: totalNeto, monto_total_bruto: totalBruto,
+      iva_total: totalBruto - totalNeto, cuenta_id: cuentaId, departamento: depto,
+      solicitud_id: solVinculo || null,
+      recibido_por_nombre: firma.nombre, recibido_por_cargo: firma.cargo
+    }).select().single();
     if (e1) throw e1;
-
     const items = carritoRecepcion.map(p => ({
       recepcion_id: rec.id, producto_id: p.producto_id, cantidad: p.cantidad,
       precio_neto: p.precio_neto, precio_bruto: precioBruto(p.precio_neto),
       subtotal: p.precio_neto * p.cantidad, subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad,
-      iva: (precioBruto(p.precio_neto) - p.precio_neto) * p.cantidad,
-      cuenta_id: cuentaId
+      iva: (precioBruto(p.precio_neto) - p.precio_neto) * p.cantidad, cuenta_id: cuentaId
     }));
     const { error: e2 } = await sb.from('lc_recepcion_items').insert(items);
     if (e2) throw e2;
-
     for (const p of carritoRecepcion) {
       const prod = productos.find(x => x.id === p.producto_id);
       if (prod) {
-        const ns = Number(prod.stock || 0) + p.cantidad;
+        const ns = Number(prod.stock||0) + p.cantidad;
         await sb.from('lc_productos').update({ stock: ns }).eq('id', p.producto_id);
         prod.stock = ns;
       }
     }
-
     if (solVinculo) {
       await sb.from('lc_solicitudes').update({ estado: 'RECIBIDA', fecha_recepcion: new Date().toISOString(), recepcion_id: rec.id }).eq('id', solVinculo);
     }
-
     ultimaRecepcion = {
       id: rec.id, codigo: rec.codigo,
-      productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad})),
+      productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
       proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
       guia, factura, obs, departamento: depto, cuenta, monto_total: totalNeto, monto_total_bruto: totalBruto,
       responsable: nombreUsuario, firma, fecha: formatearFecha(rec.fecha)
     };
-
-    mostrarToast(`✅ Recepción ${rec.codigo}`);
+    mostrarToast(`✅ ${rec.codigo}`);
     const msg = document.getElementById('rec-mensaje');
     msg.style.display = 'block';
-    msg.innerHTML = `✅ Recepción <strong>${rec.codigo}</strong> · Total: <strong>${formatearCLP(totalBruto)}</strong> <button class="btn-pequeno azul" onclick="descargarPDFRecepcion()" style="margin-left:10px;">📄 PDF</button>`;
-
+    msg.innerHTML = `✅ Recepción <strong>${rec.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFRecepcion()" style="margin-left:10px;">📄 PDF</button>`;
     carritoRecepcion = []; renderCarritoRecepcion();
-    document.getElementById('rec-guia').value = ''; document.getElementById('rec-factura').value = '';
-    document.getElementById('rec-obs').value = '';
+    document.getElementById('rec-guia').value = ''; document.getElementById('rec-factura').value = ''; document.getElementById('rec-obs').value = '';
+    document.getElementById('rec-solicitud-vinculo').value = '';
+    alVincularSolicitud();
     await cargarTodo(); renderStock(); actualizarResumenes();
-  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message || 'Error')); }
+  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
   btn.disabled = false; btn.textContent = '✅ Registrar Recepción';
 }
 
-// ============================================================
 // SALIDA
-// ============================================================
 function filtrarDropdownSalida(texto) {
   const list = document.getElementById('sal-prod-list');
   list.style.display = 'block';
   list.innerHTML = '';
   const t = texto.toLowerCase().trim();
   const lista = productos.filter(p => !t || p.nombre.toLowerCase().includes(t)).slice(0, 30);
-  lista.sort((a,b) => (Number(b.stock||0)>0?1:0) - (Number(a.stock||0)>0?1:0));
   if (!lista.length) { list.innerHTML = '<div class="dropdown-item">Sin resultados</div>'; return; }
   lista.forEach(p => {
-    const sinStock = Number(p.stock || 0) <= 0;
+    const ss = Number(p.stock||0) <= 0;
     const div = document.createElement('div');
     div.className = 'dropdown-item';
-    div.style.opacity = sinStock ? '0.45' : '1';
-    div.innerHTML = `<span>${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></span>${sinStock ? '<span style="color:var(--rojo);font-size:10px;">SIN STOCK</span>' : `<span class="precio">Stock: ${p.stock}</span>`}`;
-    div.onclick = () => {
-      if (sinStock) { mostrarToast('❌ Sin stock'); return; }
-      document.getElementById('sal-prod-trigger').value = p.nombre;
-      list.style.display = 'none';
-      seleccionarProductoSalida(p);
-    };
+    div.style.opacity = ss ? '0.45' : '1';
+    div.innerHTML = `<span>${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></span>${ss ? '<span style="color:var(--rojo);font-size:10px;">SIN STOCK</span>' : `<span class="precio">Stock: ${p.stock}</span>`}`;
+    div.onclick = () => { if (ss) { mostrarToast('❌ Sin stock'); return; } document.getElementById('sal-prod-trigger').value = p.nombre; list.style.display = 'none'; seleccionarProductoSalida(p); };
     list.appendChild(div);
   });
 }
-
 function seleccionarProductoSalida(p) {
   productoSeleccionadoSal = p;
   document.getElementById('sal-prod-sel').style.display = 'block';
@@ -1454,25 +1205,19 @@ function seleccionarProductoSalida(p) {
   document.getElementById('sal-prod-info').innerHTML = `Stock: <strong>${p.stock}</strong> · ${formatearCLP(precioBruto(p.precio_neto))} · L${p.linea}`;
   document.getElementById('sal-cantidad').value = '';
 }
-
 function agregarAlCarritoSalida() {
   if (!productoSeleccionadoSal) { mostrarToast('❌ Selecciona'); return; }
-  const cant = parseInt(document.getElementById('sal-cantidad').value);
-  if (isNaN(cant) || cant <= 0) { mostrarToast('❌ Cantidad inválida'); return; }
-  if (cant > productoSeleccionadoSal.stock) { mostrarToast(`❌ Stock insuficiente (${productoSeleccionadoSal.stock})`); return; }
+  const c = parseInt(document.getElementById('sal-cantidad').value);
+  if (isNaN(c) || c <= 0) { mostrarToast('❌ Cantidad inválida'); return; }
+  if (c > productoSeleccionadoSal.stock) { mostrarToast(`❌ Stock: ${productoSeleccionadoSal.stock}`); return; }
   const ex = carritoSalida.find(p => p.producto_id === productoSeleccionadoSal.id);
-  if (ex) ex.cantidad += cant;
-  else carritoSalida.push({
-    producto_id: productoSeleccionadoSal.id, nombre: productoSeleccionadoSal.nombre,
-    linea: productoSeleccionadoSal.linea, precio_neto: Number(productoSeleccionadoSal.precio_neto),
-    cantidad: cant, stock_max: productoSeleccionadoSal.stock
-  });
+  if (ex) ex.cantidad += c;
+  else carritoSalida.push({ producto_id: productoSeleccionadoSal.id, nombre: productoSeleccionadoSal.nombre, linea: productoSeleccionadoSal.linea, precio_neto: Number(productoSeleccionadoSal.precio_neto), cantidad: c, stock_max: productoSeleccionadoSal.stock });
   renderCarritoSalida();
   productoSeleccionadoSal = null;
   document.getElementById('sal-prod-trigger').value = '';
   document.getElementById('sal-prod-sel').style.display = 'none';
 }
-
 function renderCarritoSalida() {
   const cont = document.getElementById('sal-carrito-container');
   document.getElementById('sal-carrito-count').textContent = carritoSalida.length;
@@ -1485,14 +1230,12 @@ function renderCarritoSalida() {
     </div>
   `).join('');
 }
-
 async function registrarSalida() {
   const depto = document.getElementById('sal-depto').value;
   const receptor = document.getElementById('sal-receptor').value.trim();
   if (!depto) { mostrarToast('❌ Elige depto'); return; }
   if (!carritoSalida.length) { mostrarToast('❌ Agrega productos'); return; }
   if (!receptor) { mostrarToast('❌ Nombre receptor'); return; }
-
   const btn = event.target; btn.disabled = true;
   try {
     const totalNeto = carritoSalida.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
@@ -1500,15 +1243,13 @@ async function registrarSalida() {
     const firma = obtenerFirma(nombreUsuario);
     const email = document.getElementById('sal-receptor-email').value.trim();
     const obs = document.getElementById('sal-obs').value.trim();
-
     const { data: sal, error: e1 } = await sb.from('lc_salidas').insert({
       departamento: depto, receptor_nombre: receptor, receptor_email: email || null,
       observacion: obs || null, responsable: nombreUsuario,
       monto_total: totalNeto, monto_total_bruto: totalBruto, iva_total: totalBruto - totalNeto,
-      entregado_por_nombre: firma.nombre, entregado_por_cargo: firma.cargo_largo || firma.cargo
+      entregado_por_nombre: firma.nombre, entregado_por_cargo: firma.cargo
     }).select().single();
     if (e1) throw e1;
-
     const items = carritoSalida.map(p => ({
       salida_id: sal.id, producto_id: p.producto_id, cantidad: p.cantidad,
       precio_neto: p.precio_neto, precio_bruto: precioBruto(p.precio_neto),
@@ -1517,41 +1258,33 @@ async function registrarSalida() {
     }));
     const { error: e2 } = await sb.from('lc_salida_items').insert(items);
     if (e2) throw e2;
-
     for (const p of carritoSalida) {
       const prod = productos.find(x => x.id === p.producto_id);
       if (prod) {
-        const ns = Number(prod.stock || 0) - p.cantidad;
+        const ns = Number(prod.stock||0) - p.cantidad;
         await sb.from('lc_productos').update({ stock: ns }).eq('id', p.producto_id);
         prod.stock = ns;
       }
     }
-
     ultimaSalida = {
       id: sal.id, codigo: sal.codigo,
-      productos: carritoSalida.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad})),
+      productos: carritoSalida.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
       departamento: depto, receptor, receptor_email: email, obs,
       responsable: nombreUsuario, firma, monto_total: totalNeto, monto_total_bruto: totalBruto,
       fecha: formatearFecha(sal.fecha)
     };
-
-    mostrarToast(`✅ Salida ${sal.codigo}`);
+    mostrarToast(`✅ ${sal.codigo}`);
     const msg = document.getElementById('sal-mensaje');
     msg.style.display = 'block';
-    msg.innerHTML = `✅ Salida <strong>${sal.codigo}</strong> · Total: <strong>${formatearCLP(totalBruto)}</strong> <button class="btn-pequeno azul" onclick="descargarPDFSalida()" style="margin-left:10px;">📄 PDF</button>`;
-
+    msg.innerHTML = `✅ Salida <strong>${sal.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFSalida()" style="margin-left:10px;">📄 PDF</button>`;
     carritoSalida = []; renderCarritoSalida();
-    document.getElementById('sal-receptor').value = '';
-    document.getElementById('sal-receptor-email').value = '';
-    document.getElementById('sal-obs').value = '';
+    document.getElementById('sal-receptor').value = ''; document.getElementById('sal-receptor-email').value = ''; document.getElementById('sal-obs').value = '';
     await cargarTodo(); renderStock(); actualizarResumenes();
-  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message || 'Error')); }
+  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
   btn.disabled = false;
 }
 
-// ============================================================
 // STOCK
-// ============================================================
 function renderStock() {
   const tbody = document.getElementById('stock-tbody');
   if (!tbody) return;
@@ -1561,7 +1294,7 @@ function renderStock() {
   let lista = productos.filter(p => {
     if (fn && !p.nombre.toLowerCase().includes(fn)) return false;
     if (fl && String(p.linea) !== fl) return false;
-    const st = Number(p.stock || 0);
+    const st = Number(p.stock||0);
     if (fs === 'agotado' && st > 0) return false;
     if (fs === 'critico' && (st > 3 || st === 0)) return false;
     if (fs === 'bajo' && (st > 5 || st === 0)) return false;
@@ -1571,7 +1304,7 @@ function renderStock() {
   if (!lista.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin productos</td></tr>'; document.getElementById('stock-total').textContent = '0'; return; }
   let tu = 0, tv = 0;
   tbody.innerHTML = lista.map(p => {
-    const st = Number(p.stock || 0);
+    const st = Number(p.stock||0);
     const pb = precioBruto(p.precio_neto);
     const val = st * pb;
     tu += st; tv += val;
@@ -1584,12 +1317,10 @@ function renderStock() {
       <td style="text-align:right;font-size:11px;">${formatearCLP(val)}</td>
     </tr>`;
   }).join('');
-  document.getElementById('stock-total').textContent = `${lista.length} prod. · ${tu} unid. · ${formatearCLP(tv)}`;
+  document.getElementById('stock-total').textContent = `${lista.length} prod · ${tu} unid · ${formatearCLP(tv)}`;
 }
 
-// ============================================================
 // CUENTAS
-// ============================================================
 function renderCuentas() {
   const tbody = document.getElementById('cuentas-tbody');
   if (!tbody) return;
@@ -1614,9 +1345,7 @@ function renderCuentas() {
   document.getElementById('cuentas-total').textContent = `${lista.length} cuentas · Asignado: ${formatearCLP(ta)} · Reservado: ${formatearCLP(tr)} · Consumido: ${formatearCLP(tc)}`;
 }
 
-// ============================================================
 // AUDITORÍA
-// ============================================================
 function renderAuditoria() {
   const tbody = document.getElementById('aud-tbody');
   if (!tbody) return;
@@ -1624,31 +1353,13 @@ function renderAuditoria() {
   const tipo = document.getElementById('aud-tipo').value;
   const lista = [];
   if (!tipo || tipo === 'solicitud') {
-    solicitudes.forEach(s => lista.push({
-      tipo: 'solicitud', icono: '📋', codigo: s.codigo, fecha: s.fecha_fmt,
-      timestamp: new Date(s.fecha_solicitud).getTime(),
-      detalle: `${s.departamento_padre||''} / ${s.subdepartamento||''} · ${s.solicitante_nombre||''}`,
-      responsable: s.solicitante_nombre || s.solicitante_email || 'N/E',
-      monto: Number(s.monto_estimado_bruto || 0)
-    }));
+    solicitudes.forEach(s => lista.push({ tipo:'solicitud', icono:'📋', codigo: s.codigo, fecha: s.fecha_fmt, timestamp: new Date(s.fecha_solicitud).getTime(), detalle: `${s.departamento_padre||''} / ${s.subdepartamento||''}`, responsable: s.solicitante_nombre||s.solicitante_email||'N/E', monto: Number(s.monto_estimado_bruto||0) }));
   }
   if (!tipo || tipo === 'recepcion') {
-    recepciones.forEach(r => lista.push({
-      tipo: 'recepcion', icono: '📥', codigo: r.codigo, fecha: r.fecha_fmt,
-      timestamp: new Date(r.fecha).getTime(),
-      detalle: `${r.departamento||''} · ${r.proveedor||''}`,
-      responsable: r.responsable || 'N/E',
-      monto: Number(r.monto_total_bruto || 0)
-    }));
+    recepciones.forEach(r => lista.push({ tipo:'recepcion', icono:'📥', codigo: r.codigo, fecha: r.fecha_fmt, timestamp: new Date(r.fecha).getTime(), detalle: `${r.departamento||''} · ${r.proveedor||''}`, responsable: r.responsable||'N/E', monto: Number(r.monto_total_bruto||0) }));
   }
   if (!tipo || tipo === 'salida') {
-    salidas.forEach(s => lista.push({
-      tipo: 'salida', icono: '📤', codigo: s.codigo, fecha: s.fecha_fmt,
-      timestamp: new Date(s.fecha).getTime(),
-      detalle: `${s.departamento||''} · ${s.receptor_nombre||''}`,
-      responsable: s.responsable || 'N/E',
-      monto: Number(s.monto_total_bruto || 0)
-    }));
+    salidas.forEach(s => lista.push({ tipo:'salida', icono:'📤', codigo: s.codigo, fecha: s.fecha_fmt, timestamp: new Date(s.fecha).getTime(), detalle: `${s.departamento||''} · ${s.receptor_nombre||''}`, responsable: s.responsable||'N/E', monto: Number(s.monto_total_bruto||0) }));
   }
   lista.sort((a, b) => b.timestamp - a.timestamp);
   const fil = lista.filter(m => !filtro || `${m.codigo} ${m.detalle} ${m.responsable}`.toLowerCase().includes(filtro));
@@ -1666,9 +1377,7 @@ function renderAuditoria() {
   document.getElementById('aud-total').textContent = `${fil.length} movimientos`;
 }
 
-// ============================================================
 // REPORTES
-// ============================================================
 function renderReportes() {
   const t = document.getElementById('rep-total-productos');
   if (!t) return;
@@ -1680,9 +1389,6 @@ function renderReportes() {
   document.getElementById('rep-total-cuentas').textContent = cuentas.length;
 }
 
-// ============================================================
-// RESUMENES
-// ============================================================
 function actualizarResumenes() {
   const hoy = recepciones.filter(r => esHoy(r.fecha_fmt));
   const rrh = document.getElementById('res-rec-hoy');
@@ -1701,9 +1407,7 @@ function actualizarResumenes() {
   if (esAdmin()) renderReportes();
 }
 
-// ============================================================
-// PDF BASE
-// ============================================================
+// PDF
 function generarPDFBase(config) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
@@ -1712,7 +1416,6 @@ function generarPDFBase(config) {
   const m = 16;
   const azul = [22,100,192], azulOsc = [15,74,138];
   const gris = [74,90,110], grisC = [245,247,252], borde = [226,232,240];
-
   doc.setFillColor(...azul); doc.rect(0,0,pw,32,'F');
   doc.setFillColor(...azulOsc); doc.rect(0,30.5,pw,1.5,'F');
   if (logoImageData) { try { doc.addImage(logoImageData, 'PNG', m, 6, 20, 20); } catch(e){} }
@@ -1721,15 +1424,12 @@ function generarPDFBase(config) {
   doc.text('MUNICIPALIDAD DE LAS CONDES', xT, 14);
   doc.setFont('helvetica','normal'); doc.setFontSize(9);
   doc.text('Licitación 2345-99-LP26 · Materiales Gráficos', xT, 20);
-
   doc.setFillColor(255,255,255); doc.roundedRect(pw-m-58, 8, 58, 16, 2, 2, 'F');
   doc.setTextColor(...azul); doc.setFont('helvetica','bold'); doc.setFontSize(8);
   doc.text(config.titulo, pw-m-29, 14, { align:'center' });
   doc.setFontSize(13);
   doc.text('N° ' + config.numero, pw-m-29, 21, { align:'center' });
-
   let y = 42;
-
   if (config.mostrarProveedor) {
     doc.setFillColor(255,250,235); doc.setDrawColor(224,142,11);
     doc.roundedRect(m, y, pw-m*2, 24, 2, 2, 'FD');
@@ -1741,7 +1441,6 @@ function generarPDFBase(config) {
     doc.text(PROVEEDOR_OFICIAL.direccion + ' · ' + PROVEEDOR_OFICIAL.telefono, m+5, y+18);
     y += 30;
   }
-
   const filaH = 7;
   const boxH = 6 + config.filas.length * filaH;
   doc.setFillColor(...grisC); doc.setDrawColor(...borde);
@@ -1752,16 +1451,13 @@ function generarPDFBase(config) {
     doc.text(lb+':', m+5, yd);
     doc.setFont('helvetica','normal'); doc.setTextColor(20,30,45);
     const t = doc.splitTextToSize(String(v||''), pw-m*2-55);
-    doc.text(t[0], m+45, yd);
-    yd += filaH;
+    doc.text(t[0], m+45, yd); yd += filaH;
   });
   y += boxH + 10;
-
   doc.setDrawColor(...azul); doc.setLineWidth(0.8);
   doc.line(m, y, m+3, y);
   doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...azulOsc);
   doc.text(config.tituloProd, m+6, y+1); y += 6;
-
   const cCant = 20, cUnit = 30, cSub = 35;
   const cProd = pw-m*2 - cCant - cUnit - cSub;
   const enc = (yy) => {
@@ -1793,10 +1489,9 @@ function generarPDFBase(config) {
     doc.setFont('helvetica','bold');
     doc.text(formatearCLP(stB), pw-m-cSub/2, y+5.5, { align:'center' });
     doc.setFont('helvetica','normal');
-    tb += stB; tn += stN; ti += (stB-stN);
+    tb += stB; tn += stN; ti += (stB - stN);
     y += h; par = !par;
   });
-
   if (y > ph-55) { doc.addPage(); y = 16; }
   const totH = config.desglose ? 27 : 9;
   doc.setFillColor(230,240,255); doc.rect(m, y, pw-m*2, totH, 'F');
@@ -1814,7 +1509,6 @@ function generarPDFBase(config) {
     doc.text('TOTAL (IVA inc.):', m+4, y+6); doc.text(formatearCLP(tb), pw-m-4, y+6, { align:'right' });
   }
   y += totH + 8;
-
   const yF = ph - 45;
   if (y + 14 > yF) doc.addPage();
   y = yF;
@@ -1837,7 +1531,6 @@ function generarPDFBase(config) {
     doc.text(config.firmaDer.nombre||'', x2+wF/2, y+10, { align:'center' });
     if (config.firmaDer.extra) { doc.setFontSize(7.5); doc.setTextColor(...gris); doc.text(config.firmaDer.extra, x2+wF/2, y+14, { align:'center' }); }
   }
-
   const total = doc.internal.getNumberOfPages();
   for (let i = 1; i <= total; i++) {
     doc.setPage(i);
@@ -1858,18 +1551,11 @@ function descargarPDFSolicitud(id) {
   const firmaAdm = FIRMAS_OFICIALES[s.aprobado_por] || obtenerFirma(nombreUsuario);
   const doc = generarPDFBase({
     titulo: 'SOLICITUD', numero: s.codigo,
-    filas: [
-      ['Fecha', s.fecha_fmt], ['Departamento', `${s.departamento_padre||s.departamento} / ${s.subdepartamento||''}`],
-      ['Solicitante', s.solicitante_nombre||s.solicitante_email], ['Urgencia', s.urgencia], ['Estado', s.estado]
-    ],
-    productos: items.map(it => {
-      const p = productos.find(x => x.id === it.producto_id);
-      return { nombre: p?.nombre||'N/E', precio_neto: it.precio_estimado, cantidad: it.cantidad };
-    }),
-    tituloProd: 'PRODUCTOS SOLICITADOS',
-    mostrarProveedor: true, desglose: true,
+    filas: [['Fecha', s.fecha_fmt], ['Departamento', `${s.departamento_padre||s.departamento} / ${s.subdepartamento||''}`], ['Solicitante', s.solicitante_nombre||s.solicitante_email], ['Urgencia', s.urgencia], ['Estado', s.estado]],
+    productos: items.map(it => { const p = productos.find(x => x.id === it.producto_id); return { nombre: p?.nombre||'N/E', precio_neto: it.precio_estimado, cantidad: it.cantidad }; }),
+    tituloProd: 'PRODUCTOS SOLICITADOS', mostrarProveedor: true, desglose: true,
     firmaIzq: { cargo: 'SOLICITANTE', nombre: firmaSol.nombre, extra: firmaSol.cargo },
-    firmaDer: { cargo: 'AUTORIZADO POR', nombre: firmaAdm.nombre||'Pendiente', extra: s.aprobado_por_cargo||firmaAdm.cargo_largo||firmaAdm.cargo }
+    firmaDer: { cargo: 'AUTORIZADO POR', nombre: firmaAdm.nombre||'Pendiente', extra: s.aprobado_por_cargo || firmaAdm.cargo }
   });
   doc.save(`Solicitud_${s.codigo}.pdf`);
   mostrarToast('✅ PDF descargado');
@@ -1881,10 +1567,10 @@ function descargarPDFRecepcion() {
   const sup = r.firma && r.firma.nombre ? r.firma : FIRMAS_OFICIALES['nvera@lascondes.cl'];
   const doc = generarPDFBase({
     titulo: 'RECEPCIÓN', numero: r.codigo,
-    filas: [['Fecha', r.fecha], ['Departamento', r.departamento], ['Cuenta', `${r.cuenta.departamento_padre} / ${r.cuenta.subdepartamento} · L${r.cuenta.linea}`], ['N° Guía', r.guia||'N/E'], ['N° Factura', r.factura||'N/E'], ['Responsable', r.responsable]],
+    filas: [['Fecha', r.fecha], ['Departamento', r.departamento], ['Cuenta', `${r.cuenta.departamento_padre} / ${r.cuenta.subdepartamento} · L${r.cuenta.linea}`], ['N° Guía', r.guia||'N/E'], ['N° Factura', r.factura||'N/E']],
     productos: r.productos, tituloProd: 'PRODUCTOS RECEPCIONADOS', desglose: false,
     firmaIzq: { cargo: 'PROVEEDOR', nombre: PROVEEDOR_OFICIAL.representante_legal, extra: 'Rep. Legal · ' + PROVEEDOR_OFICIAL.rut },
-    firmaDer: { cargo: 'RECIBIDO POR', nombre: sup.nombre, extra: sup.cargo_largo || sup.cargo }
+    firmaDer: { cargo: 'RECIBIDO POR', nombre: sup.nombre, extra: sup.cargo }
   });
   doc.save(`Recepcion_${r.codigo}.pdf`);
   mostrarToast('✅ PDF descargado');
@@ -1898,16 +1584,13 @@ function descargarPDFSalida() {
     titulo: 'SALIDA', numero: s.codigo,
     filas: [['Fecha', s.fecha], ['Departamento', s.departamento], ['Receptor', s.receptor], ['Email', s.receptor_email||'N/E']],
     productos: s.productos, tituloProd: 'PRODUCTOS ENTREGADOS', desglose: true,
-    firmaIzq: { cargo: 'ENTREGADO POR', nombre: firma.nombre, extra: firma.cargo_largo || firma.cargo },
+    firmaIzq: { cargo: 'ENTREGADO POR', nombre: firma.nombre, extra: firma.cargo },
     firmaDer: { cargo: 'RECIBIDO POR', nombre: s.receptor, extra: s.departamento }
   });
   doc.save(`Salida_${s.codigo}.pdf`);
   mostrarToast('✅ PDF descargado');
 }
 
-// ============================================================
-// EXCEL
-// ============================================================
 function hojaExcel(data, cols) {
   const AZ = '1664C0', GR = 'F5F7FC', BO = 'E2E8F0', BL = 'FFFFFF';
   const bf = { style: 'thin', color: { rgb: BO } };
@@ -1929,95 +1612,42 @@ function hojaExcel(data, cols) {
   if (data.length) { const l = String.fromCharCode(65 + cols.length - 1); ws['!autofilter'] = { ref: `A1:${l}${data.length+1}` }; }
   return ws;
 }
-
 function exportarExcelStock() {
-  if (!productos.length) return;
-  const data = productos.map(p => {
-    const pB = precioBruto(p.precio_neto);
-    const st = Number(p.stock);
-    return { nombre: p.nombre, linea: 'L'+p.linea, neto: Number(p.precio_neto), iva: pB - Number(p.precio_neto), bruto: pB, stock: st, valor: st*pB };
-  });
+  const data = productos.map(p => { const pB = precioBruto(p.precio_neto); const st = Number(p.stock); return { nombre: p.nombre, linea: 'L'+p.linea, neto: Number(p.precio_neto), iva: pB - Number(p.precio_neto), bruto: pB, stock: st, valor: st*pB }; });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'nombre', label:'Producto', width:50 }, { key:'linea', label:'L', width:6, align:'center' },
-    { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true },
-    { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'stock', label:'Stock', width:10, align:'center' },
-    { key:'valor', label:'Valor Total', width:16, align:'right', money:true }
-  ]);
+  const ws = hojaExcel(data, [{ key:'nombre', label:'Producto', width:50 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'stock', label:'Stock', width:10, align:'center' }, { key:'valor', label:'Valor Total', width:16, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Stock');
   XLSX.writeFile(wb, `Stock_${fechaActual()}.xlsx`);
-  mostrarToast('✅ Excel descargado');
 }
-
 function exportarExcelRecepciones() {
-  const data = recepciones.map(r => ({ codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento||'', proveedor: r.proveedor||'', guia: r.numero_guia||'', factura: r.numero_factura||'', neto: Number(r.monto_total||0), bruto: Number(r.monto_total_bruto||0), responsable: r.responsable||'' }));
+  const data = recepciones.map(r => ({ codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento||'', proveedor: r.proveedor||'', neto: Number(r.monto_total||0), bruto: Number(r.monto_total_bruto||0), responsable: r.responsable||'' }));
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18, align:'center' },
-    { key:'depto', label:'Depto', width:30 }, { key:'proveedor', label:'Proveedor', width:30 },
-    { key:'guia', label:'Guía', width:14 }, { key:'factura', label:'Factura', width:14 },
-    { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true },
-    { key:'responsable', label:'Responsable', width:28 }
-  ]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Depto', width:30 }, { key:'proveedor', label:'Proveedor', width:30 }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'responsable', label:'Responsable', width:28 }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Recepciones');
   XLSX.writeFile(wb, `Recepciones_${fechaActual()}.xlsx`);
 }
-
 function exportarExcelSalidas() {
-  const data = salidas.map(s => ({ codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento||'', receptor: s.receptor_nombre||'', neto: Number(s.monto_total||0), bruto: Number(s.monto_total_bruto||0), responsable: s.responsable||'' }));
+  const data = salidas.map(s => ({ codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento||'', receptor: s.receptor_nombre||'', neto: Number(s.monto_total||0), bruto: Number(s.monto_total_bruto||0) }));
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18, align:'center' },
-    { key:'depto', label:'Depto', width:30 }, { key:'receptor', label:'Receptor', width:28 },
-    { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true },
-    { key:'responsable', label:'Responsable', width:28 }
-  ]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Depto', width:30 }, { key:'receptor', label:'Receptor', width:28 }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Salidas');
   XLSX.writeFile(wb, `Salidas_${fechaActual()}.xlsx`);
 }
-
 function exportarExcelCuentas() {
-  const data = cuentas.map(c => {
-    const cons = calcularConsumidoCuenta(c.id);
-    const res = calcularReservadoCuenta(c.id);
-    const disp = Number(c.monto_asignado) - cons - res;
-    return { depto: c.departamento_padre, sub: c.subdepartamento, linea: 'L'+c.linea, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: disp };
-  });
+  const data = cuentas.map(c => { const cons = calcularConsumidoCuenta(c.id); const res = calcularReservadoCuenta(c.id); return { depto: c.departamento_padre, sub: c.subdepartamento, linea: 'L'+c.linea, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: Number(c.monto_asignado) - cons - res }; });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'depto', label:'Depto', width:30 }, { key:'sub', label:'Subdepto', width:35 },
-    { key:'linea', label:'L', width:6, align:'center' },
-    { key:'asignado', label:'Asignado', width:16, align:'right', money:true },
-    { key:'reservado', label:'Reservado', width:16, align:'right', money:true },
-    { key:'consumido', label:'Consumido', width:16, align:'right', money:true },
-    { key:'disponible', label:'Disponible', width:16, align:'right', money:true }
-  ]);
+  const ws = hojaExcel(data, [{ key:'depto', label:'Depto', width:30 }, { key:'sub', label:'Subdepto', width:35 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'asignado', label:'Asignado', width:16, align:'right', money:true }, { key:'reservado', label:'Reservado', width:16, align:'right', money:true }, { key:'consumido', label:'Consumido', width:16, align:'right', money:true }, { key:'disponible', label:'Disponible', width:16, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Cuentas');
   XLSX.writeFile(wb, `Cuentas_${fechaActual()}.xlsx`);
 }
-
 function exportarExcelSolicitudes() {
-  const data = solicitudes.map(s => ({ codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento_padre||s.departamento, sub: s.subdepartamento||'', solicitante: s.solicitante_nombre||s.solicitante_email, urgencia: s.urgencia, estado: s.estado, bruto: Number(s.monto_estimado_bruto||0) }));
+  const data = solicitudes.map(s => ({ codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento_padre||'', sub: s.subdepartamento||'', solicitante: s.solicitante_nombre||s.solicitante_email, estado: s.estado, bruto: Number(s.monto_estimado_bruto||0) }));
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'codigo', label:'Código', width:18, align:'center' }, { key:'fecha', label:'Fecha', width:18, align:'center' },
-    { key:'depto', label:'Depto', width:30 }, { key:'sub', label:'Subdepto', width:30 },
-    { key:'solicitante', label:'Solicitante', width:28 }, { key:'urgencia', label:'Urgencia', width:12, align:'center' },
-    { key:'estado', label:'Estado', width:14, align:'center' },
-    { key:'bruto', label:'Monto (IVA)', width:16, align:'right', money:true }
-  ]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:18, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Depto', width:30 }, { key:'sub', label:'Subdepto', width:30 }, { key:'solicitante', label:'Solicitante', width:28 }, { key:'estado', label:'Estado', width:14, align:'center' }, { key:'bruto', label:'Monto (IVA)', width:16, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Solicitudes');
   XLSX.writeFile(wb, `Solicitudes_${fechaActual()}.xlsx`);
 }
 
-// ============================================================
-// MODALES
-// ============================================================
-function cerrarModalComprobante() { document.getElementById('modal-comprobante').classList.remove('visible'); }
-
-// ============================================================
-// CAMBIAR TAB
-// ============================================================
 function cambiarTab(tabId) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   const sec = document.getElementById(tabId);
@@ -2025,8 +1655,7 @@ function cambiarTab(tabId) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   const tab = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
   if (tab) tab.classList.add('active');
-
-  if (tabId === 'tab-mi-solicitud') { renderMisSolicitudes(); if (esAdmin() && departamentoPadreUsuario) { document.getElementById('sol-depto-padre').value = departamentoPadreUsuario; } }
+  if (tabId === 'tab-mi-solicitud') { renderMisSolicitudes(); actualizarBadgePendientes(); }
   if (tabId === 'tab-recepcion') { poblarVinculoSolicitud(); actualizarResumenes(); }
   if (tabId === 'tab-salida') { actualizarResumenes(); }
   if (tabId === 'tab-stock') renderStock();
@@ -2036,9 +1665,7 @@ function cambiarTab(tabId) {
   if (tabId === 'tab-reportes' && esAdmin()) renderReportes();
 }
 
-// ============================================================
 // EXPONER GLOBALES
-// ============================================================
 window.intentarLogin = intentarLogin;
 window.cerrarSesion = cerrarSesion;
 window.cambiarTab = cambiarTab;
@@ -2071,7 +1698,6 @@ window.descargarPDFSalida = descargarPDFSalida;
 window.renderStock = renderStock;
 window.renderCuentas = renderCuentas;
 window.renderAuditoria = renderAuditoria;
-window.cerrarModalComprobante = cerrarModalComprobante;
 window.exportarExcelStock = exportarExcelStock;
 window.exportarExcelRecepciones = exportarExcelRecepciones;
 window.exportarExcelSalidas = exportarExcelSalidas;

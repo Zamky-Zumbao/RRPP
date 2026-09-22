@@ -505,7 +505,7 @@ const PROVEEDOR_OFICIAL = {
 };
 
 const FIRMAS_OFICIALES = {
-  'nvera@lascondes.cl': { nombre: 'Nelson Vera G.', cargo: 'Supervisor del Contrato', cargo_largo: 'Supervisor del Contrato · Jefe Depto. Relaciones Públicas y Prensa' },
+  'nvera@lascondes.cl': { nombre: 'Nelson Vera G.', cargo: 'Supervisor del Contrato', cargo_largo: 'Supervisor del Contrato' },
   'pureta@lascondes.cl': { nombre: 'Pablo Ureta M.', cargo: 'Supervisor del Contrato', cargo_largo: 'Supervisor del Contrato' },
   'usuario@lascondes.cl': { nombre: 'Usuario de Prueba', cargo: 'Funcionario' },
   'operador@lascondes.cl': { nombre: 'Operador de Bodega', cargo: 'Funcionario' }
@@ -1194,23 +1194,56 @@ document.addEventListener('change', e => {
 function alVincularSolicitud() {
   const id = document.getElementById('rec-solicitud-vinculo').value;
   const info = document.getElementById('rec-vinculo-info');
-  if (!id) { info.style.display = 'none'; return; }
+  const wrapDepto = document.getElementById('rec-depto').parentElement;
+  const wrapSub = document.getElementById('rec-subdepto').parentElement;
+  const wrapCuenta = document.getElementById('rec-cuenta').parentElement;
+  const wrapCuentaInfo = document.getElementById('rec-cuenta-info');
+  const wrapBusqueda = document.querySelector('#rec-prod-trigger').parentElement.parentElement;
+
+  if (!id) {
+    info.style.display = 'none';
+    // Mostrar todos los campos
+    wrapDepto.style.display = 'block';
+    wrapSub.style.display = 'block';
+    wrapCuenta.style.display = 'block';
+    wrapBusqueda.style.display = 'block';
+    carritoRecepcion = [];
+    renderCarritoRecepcion();
+    return;
+  }
+
   const s = solicitudes.find(x => x.id === id);
   if (!s) return;
   info.style.display = 'block';
   info.innerHTML = `✅ <strong>${escaparHtml(s.codigo)}</strong> · ${escaparHtml(s.departamento_padre)} / ${escaparHtml(s.subdepartamento)}`;
-  document.getElementById('rec-depto').value = s.departamento_padre;
-  document.getElementById('rec-depto').dispatchEvent(new Event('change'));
-  setTimeout(() => {
-    document.getElementById('rec-subdepto').value = s.subdepartamento;
-    document.getElementById('rec-subdepto').dispatchEvent(new Event('change'));
-  }, 100);
-  // Pre-cargar items
+
+  // Ocultar depto/subdepto/cuenta/busqueda porque vienen de la solicitud
+  wrapDepto.style.display = 'none';
+  wrapSub.style.display = 'none';
+  wrapCuenta.style.display = 'none';
+  wrapCuentaInfo.style.display = 'none';
+  wrapBusqueda.style.display = 'none';
+
+  // Cargar items de la solicitud (sin poder modificar)
   const items = solicitudItems.filter(i => i.solicitud_id === id);
   carritoRecepcion = items.map(it => {
     const p = productos.find(x => x.id === it.producto_id);
-    return { producto_id: it.producto_id, nombre: p?.nombre || 'N/E', linea: it.linea || p?.linea || 1, precio_neto: Number(it.precio_estimado), cantidad: Number(it.cantidad) };
+    return {
+      producto_id: it.producto_id,
+      nombre: p?.nombre || 'N/E',
+      linea: it.linea || p?.linea || 1,
+      precio_neto: Number(it.precio_estimado),
+      cantidad: Number(it.cantidad),
+      cuenta_id: it.linea === 2 ? s.cuenta_l2_id : s.cuenta_l1_id,
+      bloqueado: true
+    };
   });
+
+  // Guardar los IDs de las cuentas para usar al registrar
+  window._recCuentaL1 = s.cuenta_l1_id;
+  window._recCuentaL2 = s.cuenta_l2_id;
+  window._recSolVinculo = s.id;
+
   renderCarritoRecepcion();
 }
 
@@ -1274,27 +1307,39 @@ function renderCarritoRecepcion() {
   cont.innerHTML = carritoRecepcion.map((p, i) => {
     const sub = precioBruto(p.precio_neto) * p.cantidad;
     total += sub;
+    const bloqueado = p.bloqueado === true;
     return `<div class="producto-agregado">
-      <div class="info"><div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div><div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = ${formatearCLP(sub)}</div></div>
+      <div class="info">
+        <div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div>
+        <div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = ${formatearCLP(sub)}</div>
+      </div>
       <div class="cantidad">${p.cantidad}</div>
-      <button class="btn-eliminar-prod" onclick="carritoRecepcion.splice(${i},1);renderCarritoRecepcion();">✕</button>
+      ${bloqueado ? '' : `<button class="btn-eliminar-prod" onclick="carritoRecepcion.splice(${i},1);renderCarritoRecepcion();">✕</button>`}
     </div>`;
   }).join('');
   document.getElementById('rec-total-estimado').textContent = formatearCLP(total);
 }
 
 async function registrarRecepcion() {
-  const cuentaId = document.getElementById('rec-cuenta').value;
-  const depto = document.getElementById('rec-depto').value;
-  const sub = document.getElementById('rec-subdepto').value;
-  if (!depto) { mostrarToast('❌ Elige depto'); return; }
-  if (!cuentaId) { mostrarToast('❌ Elige cuenta'); return; }
-  if (!carritoRecepcion.length) { mostrarToast('❌ Agrega productos'); return; }
+  const solVinculo = document.getElementById('rec-solicitud-vinculo').value;
+  let cuentaId = document.getElementById('rec-cuenta').value;
+  let depto = document.getElementById('rec-depto').value;
+  let sub = document.getElementById('rec-subdepto').value;
 
-  const cuenta = cuentas.find(c => c.id === cuentaId);
-  const disp = calcularDisponibleCuenta(cuentaId);
-  const totalBruto = carritoRecepcion.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
-  if (totalBruto > disp) { mostrarToast(`⛔ Excede disponible ${formatearCLP(disp)}`, 6000); return; }
+  // Si hay solicitud vinculada, usar sus datos
+  if (solVinculo) {
+    const s = solicitudes.find(x => x.id === solVinculo);
+    if (s) {
+      depto = s.departamento_padre;
+      sub = s.subdepartamento;
+      // Usar cuenta L1 (o L2 si no hay L1)
+      cuentaId = s.cuenta_l1_id || s.cuenta_l2_id;
+    }
+  }
+
+  if (!depto) { mostrarToast('❌ Elige depto'); return; }
+  if (!cuentaId) { mostrarToast('❌ No se encontró cuenta'); return; }
+  if (!carritoRecepcion.length) { mostrarToast('❌ Agrega productos'); return; }
 
   const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
   try {
@@ -1305,14 +1350,14 @@ async function registrarRecepcion() {
     const firma = obtenerFirma(nombreUsuario);
     const solVinculo = document.getElementById('rec-solicitud-vinculo').value;
 
-    const { data: rec, error: e1 } = await sb.from('lc_recepciones').insert({
-      proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
-      numero_guia: guia || null, numero_factura: factura || null, observacion: obs || null,
-      responsable: nombreUsuario, monto_total: totalNeto, monto_total_bruto: totalBruto,
-      iva_total: totalBruto - totalNeto, cuenta_id: cuentaId, departamento: depto,
-      solicitud_id: solVinculo || null,
-      recibido_por_nombre: firma.nombre, recibido_por_cargo: firma.cargo_largo || firma.cargo
-    }).select().single();
+  const { data: rec, error: e1 } = await sb.from('lc_recepciones').insert({
+    proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
+    numero_guia: guia || null, numero_factura: factura || null, observacion: obs || null,
+    responsable: nombreUsuario, monto_total: totalNeto, monto_total_bruto: totalBruto,
+    iva_total: totalBruto - totalNeto, cuenta_id: cuentaId, departamento: depto,
+    solicitud_id: solVinculo || null,
+    recibido_por_nombre: firma.nombre, recibido_por_cargo: firma.cargo
+  }).select().single();
     if (e1) throw e1;
 
     const items = carritoRecepcion.map(p => ({

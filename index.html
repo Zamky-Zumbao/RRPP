@@ -44,6 +44,7 @@
   .badge-rol { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
   .badge-rol.operador { background: #eef2f8; color: var(--texto-gris); }
   .badge-rol.admin { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; }
+  .badge-rol.solicitante { background: linear-gradient(135deg, #34d399, #10b981); color: white; }
 
   .nav-tabs { display: flex; background: var(--blanco); margin: 10px 14px 0 14px; border-radius: 16px 16px 0 0; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--borde); border-bottom: none; flex-wrap: wrap; }
   .nav-tab { flex: 1; min-width: 100px; padding: 10px 6px; text-align: center; font-weight: 700; font-size: 11px; cursor: pointer; transition: 0.3s; color: var(--texto-gris); background: #fafbfc; border-bottom: 3px solid transparent; user-select: none; }
@@ -80,6 +81,7 @@
   .btn-pequeno.azul { background: var(--azul); color: white; }
   .btn-pequeno.verde { background: var(--verde); color: white; }
   .btn-pequeno.rojo { background: var(--rojo); color: white; }
+  .btn-pequeno.morado { background: var(--morado); color: white; }
   .btn-pequeno.gris { background: #eef2f8; color: var(--texto-oscuro); }
   .btn-pequeno:hover { opacity: 0.8; }
 
@@ -139,6 +141,7 @@
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: flex-end; }
   .modal-overlay.visible { display: flex; }
   .modal { background: white; max-height: 92vh; border-radius: 28px 28px 0 0; overflow: auto; padding: 18px 16px 30px; width: 100%; max-width: 700px; margin: 0 auto; }
+  .modal.modal-ancho { max-width: 800px; }
   .modal .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
   .modal .modal-header h2 { font-size: 16px; color: #000; }
   .btn-cerrar-modal { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--texto-gris); }
@@ -151,11 +154,83 @@
   .badge-linea.l1 { background: #dbeafe; color: #1e40af; }
   .badge-linea.l2 { background: var(--morado-claro); color: var(--morado); }
 
-  .solo-admin { display: none !important; }
+  /* ============================================================
+     SOLICITUDES — ESTILOS
+     ============================================================ */
+  .badge-estado { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .badge-estado.pendiente  { background: #fef3c7; color: #92400e; }
+  .badge-estado.aprobada   { background: #dbeafe; color: #1e40af; }
+  .badge-estado.enviada    { background: #ede9fe; color: #5b21b6; }
+  .badge-estado.recibida   { background: #d1fae5; color: #065f46; }
+  .badge-estado.rechazada  { background: #fee2e2; color: #991b1b; }
+  .badge-estado.cancelada  { background: #e5e7eb; color: #4b5563; }
+
+  .urgencia-grupo { display: flex; gap: 8px; flex-wrap: wrap; }
+  .urgencia-opcion { flex: 1; min-width: 90px; padding: 10px 8px; border: 2px solid var(--borde); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 11px; font-weight: 600; color: var(--texto-gris); background: white; }
+  .urgencia-opcion:hover { border-color: var(--azul-claro); }
+  .urgencia-opcion.activo { border-color: var(--azul); background: #eff6ff; color: var(--azul); box-shadow: 0 0 0 3px rgba(22,100,192,0.12); }
+  .urgencia-opcion .icono-urg { font-size: 18px; display: block; margin-bottom: 2px; }
+  .urgencia-opcion[data-urg="URGENTE"].activo { border-color: var(--rojo); background: #fef2f2; color: var(--rojo); box-shadow: 0 0 0 3px rgba(231,76,60,0.12); }
+  .urgencia-opcion[data-urg="ALTA"].activo    { border-color: var(--naranja); background: #fffbeb; color: var(--naranja); box-shadow: 0 0 0 3px rgba(224,142,11,0.12); }
+
+  .info-depto-card { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; border-radius: 16px; padding: 14px 16px; margin-bottom: 14px; }
+  .info-depto-card .titulo { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #1e40af; font-weight: 700; margin-bottom: 4px; }
+  .info-depto-card .nombre-depto { font-size: 16px; font-weight: 800; color: #1e3a8a; margin-bottom: 6px; }
+  .info-depto-card .disponible { display: flex; align-items: baseline; gap: 6px; font-size: 12px; color: #1e40af; flex-wrap: wrap; }
+  .info-depto-card .disponible strong { font-size: 18px; font-weight: 800; color: #065f46; }
+
+  .proveedor-card { background: #f8fafc; border: 1px solid var(--borde); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; }
+  .proveedor-card .titulo { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--texto-gris); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .proveedor-card .razon-social { font-size: 14px; font-weight: 700; color: var(--texto-oscuro); margin-bottom: 6px; }
+  .proveedor-card .dato { font-size: 11px; color: var(--texto-gris); padding: 2px 0; display: flex; gap: 6px; }
+  .proveedor-card .dato strong { color: var(--texto-oscuro); font-weight: 600; }
+
+  .solicitud-card { background: white; border: 1px solid var(--borde); border-radius: 14px; padding: 12px 14px; margin-bottom: 8px; transition: all 0.2s; }
+  .solicitud-card:hover { border-color: var(--azul-claro); box-shadow: 0 2px 8px rgba(22,100,192,0.08); }
+  .solicitud-card .fila-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .solicitud-card .codigo { font-family: 'Courier New', monospace; font-weight: 800; font-size: 13px; color: var(--azul); }
+  .solicitud-card .fila-info { display: flex; gap: 12px; font-size: 11px; color: var(--texto-gris); flex-wrap: wrap; }
+  .solicitud-card .fila-info strong { color: var(--texto-oscuro); }
+  .solicitud-card .acciones { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+
+  .detalle-solicitud { background: #f8fafc; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+  .detalle-solicitud .fila { display: flex; justify-content: space-between; padding: 5px 0; font-size: 12px; border-bottom: 1px dotted #e2e8f0; gap: 8px; }
+  .detalle-solicitud .fila:last-child { border-bottom: none; }
+  .detalle-solicitud .fila .lbl { color: var(--texto-gris); font-weight: 500; }
+  .detalle-solicitud .fila .val { font-weight: 600; color: var(--texto-oscuro); text-align: right; }
+
+  .detalle-productos { background: white; border-radius: 10px; border: 1px solid var(--borde); overflow: hidden; margin-top: 8px; }
+  .detalle-productos .prod-fila { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; padding: 8px 12px; font-size: 11.5px; border-bottom: 1px solid #f1f5f9; align-items: center; }
+  .detalle-productos .prod-fila:last-child { border-bottom: none; }
+  .detalle-productos .prod-fila.head { background: #f8fafc; font-weight: 700; font-size: 10px; text-transform: uppercase; color: var(--texto-gris); letter-spacing: 0.5px; }
+  .detalle-productos .prod-nombre { font-weight: 600; color: var(--texto-oscuro); }
+  .detalle-productos .prod-cant { font-weight: 700; color: var(--azul); text-align: center; }
+  .detalle-productos .prod-sub  { font-weight: 700; color: var(--texto-oscuro); text-align: right; font-family: 'Courier New', monospace; }
+
+  .tab-badge { display: inline-block; background: var(--rojo); color: white; font-size: 9px; font-weight: 800; padding: 1px 6px; border-radius: 10px; margin-left: 4px; min-width: 16px; text-align: center; }
+
+  .btn-aprobar { background: var(--verde); color: white; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; flex: 1; min-width: 100px; }
+  .btn-rechazar { background: var(--rojo); color: white; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; flex: 1; min-width: 100px; }
+  .btn-enviar-prov { background: var(--morado); color: white; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; flex: 1; min-width: 100px; }
+  .btn-pdf-prov { background: var(--azul); color: white; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; flex: 1; min-width: 100px; }
+
+  .aviso-info { background: #fffbeb; border-left: 4px solid var(--naranja); padding: 10px 14px; border-radius: 10px; font-size: 11.5px; color: #78350f; margin-bottom: 12px; line-height: 1.5; }
+  .aviso-info strong { color: #92400e; }
+
+  .empty-state-grande { text-align: center; padding: 30px 20px; color: var(--texto-gris); font-size: 12px; }
+  .empty-state-grande .icono { font-size: 40px; display: block; margin-bottom: 8px; opacity: 0.5; }
+
+  /* Visibilidad por rol */
+  .solo-admin, .solo-operador, .solo-solicitante { display: none !important; }
   body.rol-admin .solo-admin { display: block !important; }
   body.rol-admin .nav-tab.solo-admin { display: block !important; }
-  body.rol-admin .section.solo-admin { display: none; }
-  body.rol-admin .section.solo-admin.active { display: block; }
+  body.rol-admin .section.solo-admin.active { display: block !important; }
+  body.rol-operador .solo-operador { display: block !important; }
+  body.rol-operador .nav-tab.solo-operador { display: block !important; }
+  body.rol-operador .section.solo-operador.active { display: block !important; }
+  body.rol-solicitante .solo-solicitante { display: block !important; }
+  body.rol-solicitante .nav-tab.solo-solicitante { display: block !important; }
+  body.rol-solicitante .section.solo-solicitante.active { display: block !important; }
 
   @media (max-width: 700px) {
     .resumen-grid { grid-template-columns: 1fr 1fr; }
@@ -213,17 +288,25 @@
 
 <!-- ===== NAV TABS ===== -->
 <div class="nav-tabs" id="navTabs">
-  <div class="nav-tab active" data-tab="tab-recepcion" onclick="cambiarTab('tab-recepcion')">
+  <div class="nav-tab solo-solicitante active" data-tab="tab-mi-solicitud" onclick="cambiarTab('tab-mi-solicitud')">
+    <span class="icono">📝</span>
+    <span class="label">MI SOLICITUD</span>
+  </div>
+  <div class="nav-tab solo-operador solo-admin" data-tab="tab-recepcion" onclick="cambiarTab('tab-recepcion')">
     <span class="icono">📥</span>
     <span class="label">RECEPCIÓN</span>
   </div>
-  <div class="nav-tab" data-tab="tab-salida" onclick="cambiarTab('tab-salida')">
+  <div class="nav-tab solo-operador solo-admin" data-tab="tab-salida" onclick="cambiarTab('tab-salida')">
     <span class="icono">📤</span>
     <span class="label">SALIDA</span>
   </div>
-  <div class="nav-tab" data-tab="tab-stock" onclick="cambiarTab('tab-stock')">
+  <div class="nav-tab solo-operador solo-admin" data-tab="tab-stock" onclick="cambiarTab('tab-stock')">
     <span class="icono">📊</span>
     <span class="label">STOCK</span>
+  </div>
+  <div class="nav-tab solo-admin" data-tab="tab-solicitudes" onclick="cambiarTab('tab-solicitudes')">
+    <span class="icono">📋</span>
+    <span class="label">SOLICITUDES<span class="tab-badge" id="badge-sol-pend" style="display:none;">0</span></span>
   </div>
   <div class="nav-tab solo-admin" data-tab="tab-cuentas" onclick="cambiarTab('tab-cuentas')">
     <span class="icono">💰</span>
@@ -239,8 +322,97 @@
   </div>
 </div>
 
-<!-- ===== TAB 1: RECEPCIÓN ===== -->
-<div class="section active" id="tab-recepcion">
+<!-- ===== TAB: MI SOLICITUD (SOLICITANTE) ===== -->
+<div class="section solo-solicitante active" id="tab-mi-solicitud">
+  <div class="section-label">📝 CREAR SOLICITUD DE ARTÍCULOS</div>
+
+  <div class="info-depto-card">
+    <div class="titulo">Mi departamento</div>
+    <div class="nombre-depto" id="mi-depto-nombre">—</div>
+    <div class="disponible">
+      Presupuesto disponible: <strong id="mi-depto-disponible">$0</strong>
+    </div>
+  </div>
+
+  <div class="aviso-info">
+    ℹ️ Solicita los artículos que necesites. Al enviar, quedarán <strong>PENDIENTES</strong> hasta que un administrador los revise y apruebe.
+  </div>
+
+  <div class="field">
+    <label class="required">Buscar producto</label>
+    <div class="custom-dropdown">
+      <input type="text" id="sol-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownMiSolicitud(this.value)">
+      <div class="dropdown-list" id="sol-prod-list"></div>
+    </div>
+  </div>
+
+  <div id="sol-prod-sel" style="display:none; background:#f0f5ff; border-radius:12px; padding:10px 14px; margin-bottom:12px; border:1px solid var(--azul-claro);">
+    <div style="font-size:14px; font-weight:700; color:var(--azul);" id="sol-prod-nombre">Producto</div>
+    <div style="font-size:12px; color:var(--texto-gris);" id="sol-prod-info">Precio: $0</div>
+    <div class="row-2" style="margin-top:8px;">
+      <div class="field" style="margin-bottom:0;">
+        <label>Cantidad</label>
+        <input type="number" id="sol-cantidad" min="1" placeholder="0">
+      </div>
+      <div class="field" style="margin-bottom:0; display:flex; align-items:flex-end;">
+        <button class="btn-verde" onclick="agregarAlCarritoMiSolicitud()" style="width:100%;">+ Agregar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Productos a solicitar (<span id="sol-carrito-count">0</span>)</label>
+    <div id="sol-carrito-container"></div>
+  </div>
+
+  <div class="field">
+    <label>Total estimado: <strong id="sol-total-estimado" style="color:var(--verde); font-size:14px;">$0</strong></label>
+  </div>
+
+  <div class="field">
+    <label class="required">Urgencia de la solicitud</label>
+    <div class="urgencia-grupo" id="sol-urgencia">
+      <div class="urgencia-opcion activo" data-urg="NORMAL" onclick="elegirUrgencia('NORMAL')">
+        <span class="icono-urg">🟢</span>
+        Normal
+      </div>
+      <div class="urgencia-opcion" data-urg="ALTA" onclick="elegirUrgencia('ALTA')">
+        <span class="icono-urg">🟡</span>
+        Alta
+      </div>
+      <div class="urgencia-opcion" data-urg="URGENTE" onclick="elegirUrgencia('URGENTE')">
+        <span class="icono-urg">🔴</span>
+        Urgente
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Observación (opcional)</label>
+    <textarea id="sol-obs" rows="2" placeholder="Ej: para evento del 15 de octubre, etc."></textarea>
+  </div>
+
+  <button class="btn-primario" onclick="enviarSolicitud()">📨 ENVIAR SOLICITUD</button>
+
+  <div id="sol-mensaje" class="mensaje-exito">
+    <div class="titulo">✅ Solicitud Enviada</div>
+    <div class="detalle" id="sol-mensaje-detalle"></div>
+    <button class="btn-verde" onclick="nuevaSolicitud()" style="margin-top:10px;">➕ Nueva Solicitud</button>
+  </div>
+
+  <div style="margin-top:20px;">
+    <div class="section-label" style="margin-top:16px;">📋 MIS SOLICITUDES</div>
+    <div id="mis-solicitudes-container">
+      <div class="empty-state-grande">
+        <span class="icono">📭</span>
+        Aún no has creado solicitudes
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: RECEPCIÓN ===== -->
+<div class="section solo-operador solo-admin" id="tab-recepcion">
   <div class="section-label">📥 RECEPCIÓN DE PRODUCTOS</div>
 
   <div class="resumen-grid">
@@ -248,6 +420,23 @@
     <div class="resumen-card verde"><div class="num" id="res-rec-unidades">0</div><div class="lbl">Unidades ingresadas</div></div>
     <div class="resumen-card naranja"><div class="num" id="res-rec-monto">$0</div><div class="lbl">Monto hoy</div></div>
     <div class="resumen-card rojo"><div class="num" id="res-stock-critico">0</div><div class="lbl">Stock crítico</div></div>
+  </div>
+
+  <div class="proveedor-card">
+    <div class="titulo">🏭 Proveedor adjudicado (fijo)</div>
+    <div class="razon-social">Sociedad de Inversiones Publicitarias S&S Spa</div>
+    <div class="dato"><strong>RUT:</strong> 76.511.618-k</div>
+    <div class="dato"><strong>Rep. Legal:</strong> Sugey Edith Siccha Saldaña</div>
+    <div class="dato"><strong>Dirección:</strong> Mac Iver N°323, Santiago</div>
+    <div class="dato"><strong>Contacto:</strong> sugeysiccha@ssgrafica.cl · +569 7779 5120</div>
+  </div>
+
+  <div class="field" id="rec-solicitud-vincular-wrap">
+    <label>Vincular a solicitud aprobada (opcional)</label>
+    <select id="rec-solicitud-vinculo" onchange="alVincularSolicitud()">
+      <option value="">— Recepción sin vincular (compra directa) —</option>
+    </select>
+    <div id="rec-vinculo-info" style="display:none; font-size:11px; background:#f0fdf4; border-left:3px solid var(--verde); padding:8px 12px; border-radius:8px; margin-top:6px;"></div>
   </div>
 
   <div class="field">
@@ -298,17 +487,6 @@
 
   <div class="row-2">
     <div class="field">
-      <label>Proveedor</label>
-      <input type="text" id="rec-proveedor" placeholder="Ej: S&S SpA">
-    </div>
-    <div class="field">
-      <label>RUT proveedor</label>
-      <input type="text" id="rec-proveedor-rut" placeholder="Ej: 76.511.618-k">
-    </div>
-  </div>
-
-  <div class="row-2">
-    <div class="field">
       <label>N° Guía</label>
       <input type="text" id="rec-guia" placeholder="Ej: 12345">
     </div>
@@ -335,8 +513,8 @@
   </div>
 </div>
 
-<!-- ===== TAB 2: SALIDA ===== -->
-<div class="section" id="tab-salida">
+<!-- ===== TAB: SALIDA ===== -->
+<div class="section solo-operador solo-admin" id="tab-salida">
   <div class="section-label">📤 SALIDA DE PRODUCTOS</div>
 
   <div class="resumen-grid">
@@ -411,8 +589,8 @@
   </div>
 </div>
 
-<!-- ===== TAB 3: STOCK ===== -->
-<div class="section" id="tab-stock">
+<!-- ===== TAB: STOCK ===== -->
+<div class="section solo-operador solo-admin" id="tab-stock">
   <div class="section-label">📊 INVENTARIO ACTUAL</div>
 
   <div class="filtros">
@@ -452,7 +630,46 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="stock-total"></div>
 </div>
 
-<!-- ===== TAB 4: CUENTAS ===== -->
+<!-- ===== TAB: SOLICITUDES (ADMIN) ===== -->
+<div class="section solo-admin" id="tab-solicitudes">
+  <div class="section-label">📋 SOLICITUDES DE DEPARTAMENTOS</div>
+
+  <div class="filtros">
+    <input type="text" id="soladmin-filtro" placeholder="🔍 Buscar por código, depto o solicitante..." oninput="renderSolicitudesAdmin()">
+    <select id="soladmin-estado" onchange="renderSolicitudesAdmin()">
+      <option value="">Todos los estados</option>
+      <option value="PENDIENTE">🟡 Pendientes</option>
+      <option value="APROBADA">🔵 Aprobadas</option>
+      <option value="ENVIADA">🟣 Enviadas al proveedor</option>
+      <option value="RECIBIDA">🟢 Recibidas</option>
+      <option value="RECHAZADA">🔴 Rechazadas</option>
+      <option value="CANCELADA">⚫ Canceladas</option>
+    </select>
+    <select id="soladmin-depto" onchange="renderSolicitudesAdmin()">
+      <option value="">Todos los departamentos</option>
+    </select>
+  </div>
+
+  <div class="tabla-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Depto</th>
+          <th>Solicitante</th>
+          <th>Fecha</th>
+          <th style="text-align:right;">Monto</th>
+          <th style="text-align:center;">Estado</th>
+          <th style="text-align:center;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="soladmin-tbody"></tbody>
+    </table>
+  </div>
+  <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="soladmin-total"></div>
+</div>
+
+<!-- ===== TAB: CUENTAS ===== -->
 <div class="section solo-admin" id="tab-cuentas">
   <div class="section-label">💰 GESTIÓN DE CUENTAS Y PRESUPUESTO</div>
 
@@ -479,7 +696,7 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="cuentas-total"></div>
 </div>
 
-<!-- ===== TAB 5: AUDITORÍA ===== -->
+<!-- ===== TAB: AUDITORÍA ===== -->
 <div class="section solo-admin" id="tab-auditoria">
   <div class="section-label">🔍 AUDITORÍA</div>
 
@@ -511,7 +728,7 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="aud-total"></div>
 </div>
 
-<!-- ===== TAB 6: REPORTES ===== -->
+<!-- ===== TAB: REPORTES ===== -->
 <div class="section solo-admin" id="tab-reportes">
   <div class="section-label">📈 REPORTES Y EXPORTACIONES</div>
 
@@ -522,6 +739,7 @@
       <button class="btn-verde" style="flex:1; min-width:150px;" onclick="exportarExcelRecepciones()">📥 Recepciones</button>
       <button class="btn-verde" style="flex:1; min-width:150px;" onclick="exportarExcelSalidas()">📤 Salidas</button>
       <button class="btn-verde" style="flex:1; min-width:150px;" onclick="exportarExcelCuentas()">💰 Cuentas</button>
+      <button class="btn-verde" style="flex:1; min-width:150px;" onclick="exportarExcelSolicitudes()">📋 Solicitudes</button>
     </div>
   </div>
 
@@ -580,6 +798,16 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-detalle-solicitud">
+  <div class="modal modal-ancho">
+    <div class="modal-header">
+      <h2 id="modal-sol-titulo">📋 Detalle de Solicitud</h2>
+      <button class="btn-cerrar-modal" onclick="cerrarModalSolicitud()">✕</button>
+    </div>
+    <div id="modal-sol-contenido"></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <footer style="text-align:center; color:var(--texto-gris); font-size:9px; padding:16px; opacity:0.7;">
@@ -594,12 +822,24 @@ const SUPABASE_URL = 'https://wxgboogoygogxrftsire.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_TMSNvBHNfonWB8kfEkiZDg_LvGpcYdG';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Proveedor oficial (fijo, adjudicado)
+const PROVEEDOR_OFICIAL = {
+    razon_social: 'Sociedad de Inversiones Publicitarias S&S Spa',
+    rut: '76.511.618-k',
+    representante_legal: 'Sugey Edith Siccha Saldaña',
+    rut_representante: '21.675.203-1',
+    direccion: 'Mac Iver N°323, Santiago',
+    telefono: '+569 7779 5120',
+    email: 'sugeysiccha@ssgrafica.cl'
+};
+
 // ============================================================
 // ESTADO GLOBAL
 // ============================================================
 let rolActual = null;
 let nombreUsuario = '';
 let nombreCompleto = '';
+let departamentoUsuario = null;
 let productos = [];
 let departamentos = [];
 let cuentas = [];
@@ -607,12 +847,18 @@ let recepciones = [];
 let recepcionItems = [];
 let salidas = [];
 let salidaItems = [];
+let solicitudes = [];
+let solicitudItems = [];
 let carritoRecepcion = [];
 let carritoSalida = [];
+let carritoSolicitud = [];
 let productoSeleccionadoRec = null;
 let productoSeleccionadoSal = null;
+let productoSeleccionadoSol = null;
+let urgenciaSolicitud = 'NORMAL';
 let ultimaRecepcion = null;
 let ultimaSalida = null;
+let solicitudActual = null;
 let cuentaEditando = null;
 let logoImageData = null;
 
@@ -628,6 +874,7 @@ function uuid() {
 }
 
 function formatearFecha(iso) {
+    if (!iso) return '—';
     const d = new Date(iso);
     const dd = String(d.getDate()).padStart(2, '0');
     const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -643,7 +890,6 @@ function fechaActual() {
 }
 
 function fechaHoraActual() { return formatearFecha(new Date().toISOString()); }
-
 function esHoy(fechaStr) { return fechaStr && fechaStr.startsWith(fechaActual()); }
 
 function formatearCLP(n) {
@@ -664,6 +910,24 @@ function escaparHtml(str) {
 }
 
 function esAdmin() { return rolActual === 'ADMINISTRADOR'; }
+function esOperador() { return rolActual === 'OPERADOR'; }
+function esSolicitante() { return rolActual === 'SOLICITANTE'; }
+
+function claseEstado(estado) {
+    const map = {
+        'PENDIENTE': 'pendiente', 'APROBADA': 'aprobada', 'ENVIADA': 'enviada',
+        'RECIBIDA': 'recibida', 'RECHAZADA': 'rechazada', 'CANCELADA': 'cancelada'
+    };
+    return map[estado] || 'pendiente';
+}
+
+function iconoEstado(estado) {
+    const map = {
+        'PENDIENTE': '🟡', 'APROBADA': '🔵', 'ENVIADA': '🟣',
+        'RECIBIDA': '🟢', 'RECHAZADA': '🔴', 'CANCELADA': '⚫'
+    };
+    return map[estado] || '⚪';
+}
 
 function precargarLogoPDF() {
     const img = new Image();
@@ -688,16 +952,18 @@ async function aplicarSesion(session) {
     const email = (session.user.email || '').toLowerCase();
     const { data: perfil } = await sb
         .from('lc_perfiles')
-        .select('nombre, rol')
+        .select('nombre, rol, departamento')
         .eq('id', session.user.id)
         .single();
 
     if (perfil) {
         rolActual = perfil.rol;
         nombreCompleto = perfil.nombre || email;
+        departamentoUsuario = perfil.departamento || null;
     } else {
         rolActual = 'OPERADOR';
         nombreCompleto = email;
+        departamentoUsuario = null;
     }
     nombreUsuario = email;
 }
@@ -734,6 +1000,14 @@ async function intentarLogin() {
     }
 
     await aplicarSesion(data.session);
+
+    if (rolActual === 'SOLICITANTE' && !departamentoUsuario) {
+        error.textContent = '⛔ No estás autorizado. Contacta al administrador para que asigne tu departamento.';
+        error.style.display = 'block';
+        await sb.auth.signOut();
+        return;
+    }
+
     document.getElementById('login-overlay').style.display = 'none';
     iniciarApp();
 }
@@ -752,6 +1026,10 @@ document.getElementById('login-password').addEventListener('keypress', function(
     const { data } = await sb.auth.getSession();
     if (data.session) {
         await aplicarSesion(data.session);
+        if (rolActual === 'SOLICITANTE' && !departamentoUsuario) {
+            await sb.auth.signOut();
+            return;
+        }
         document.getElementById('login-overlay').style.display = 'none';
         iniciarApp();
     }
@@ -761,17 +1039,23 @@ document.getElementById('login-password').addEventListener('keypress', function(
 // INICIAR APP
 // ============================================================
 async function iniciarApp() {
-    document.body.classList.toggle('rol-admin', esAdmin());
+    document.body.classList.remove('rol-admin', 'rol-operador', 'rol-solicitante');
+    if (esAdmin()) document.body.classList.add('rol-admin');
+    else if (esOperador()) document.body.classList.add('rol-operador');
+    else if (esSolicitante()) document.body.classList.add('rol-solicitante');
 
     const badge = document.getElementById('badge-rol');
     const bienvenida = document.getElementById('bienvenida-texto');
 
     if (esAdmin()) {
         badge.className = 'badge-rol admin';
-        badge.textContent = '👑 ADMINISTRADOR';
-    } else {
+        badge.textContent = '👑 ADMIN';
+    } else if (esOperador()) {
         badge.className = 'badge-rol operador';
         badge.textContent = '👤 OPERADOR';
+    } else {
+        badge.className = 'badge-rol solicitante';
+        badge.textContent = '📝 SOLICITANTE';
     }
     bienvenida.textContent = `Bienvenido, ${nombreCompleto}`;
 
@@ -782,13 +1066,15 @@ async function iniciarApp() {
     if (!ok) { mostrarToast('❌ Error de conexión'); return; }
 
     poblarSelects();
-    renderRecepcion();
-    renderSalida();
-    renderStock();
-    if (esAdmin()) {
-        renderCuentas();
-        renderAuditoria();
-        renderReportes();
+
+    // Activar tab inicial según rol
+    if (esSolicitante()) {
+        cambiarTab('tab-mi-solicitud');
+        renderMiSolicitud();
+    } else if (esOperador()) {
+        cambiarTab('tab-recepcion');
+    } else {
+        cambiarTab('tab-recepcion');
     }
 
     document.addEventListener('click', function(e) {
@@ -802,14 +1088,16 @@ async function iniciarApp() {
 
 async function cargarTodo() {
     try {
-        const [rProd, rDeptos, rCuentas, rRec, rRecItems, rSal, rSalItems] = await Promise.all([
+        const [rProd, rDeptos, rCuentas, rRec, rRecItems, rSal, rSalItems, rSol, rSolItems] = await Promise.all([
             sb.from('lc_productos').select('*').eq('activo', true).order('nombre'),
             sb.from('lc_departamentos').select('*').eq('activo', true).order('nombre'),
             sb.from('lc_cuentas').select('*').eq('activo', true).order('departamento'),
             sb.from('lc_recepciones').select('*').order('fecha', { ascending: false }).limit(500),
             sb.from('lc_recepcion_items').select('*').limit(2000),
             sb.from('lc_salidas').select('*').order('fecha', { ascending: false }).limit(500),
-            sb.from('lc_salida_items').select('*').limit(2000)
+            sb.from('lc_salida_items').select('*').limit(2000),
+            sb.from('lc_solicitudes').select('*').order('fecha_solicitud', { ascending: false }).limit(500),
+            sb.from('lc_solicitud_items').select('*').limit(2000)
         ]);
 
         if (rProd.error) throw rProd.error;
@@ -821,6 +1109,8 @@ async function cargarTodo() {
         recepcionItems = rRecItems.data || [];
         salidas = (rSal.data || []).map(s => ({ ...s, fecha_fmt: formatearFecha(s.fecha) }));
         salidaItems = rSalItems.data || [];
+        solicitudes = (rSol.data || []).map(s => ({ ...s, fecha_fmt: formatearFecha(s.fecha_solicitud) }));
+        solicitudItems = rSolItems.data || [];
 
         return true;
     } catch (e) {
@@ -839,13 +1129,41 @@ function poblarSelects() {
     const optsDeptos = '<option value="">— Selecciona un departamento —</option>' +
         departamentos.map(d => `<option value="${escaparHtml(d.nombre)}">${escaparHtml(d.nombre)}</option>`).join('');
 
-    selRec.innerHTML = optsDeptos;
-    selSal.innerHTML = optsDeptos;
+    if (selRec) selRec.innerHTML = optsDeptos;
+    if (selSal) selSal.innerHTML = optsDeptos;
 
     const selFiltro = document.getElementById('stock-filtro-cuenta');
-    const optsCuentas = '<option value="">Todas las cuentas</option>' +
-        cuentas.map(c => `<option value="${c.id}">${escaparHtml(c.departamento)} · ${escaparHtml(c.codigo)}</option>`).join('');
-    selFiltro.innerHTML = optsCuentas;
+    if (selFiltro) {
+        const optsCuentas = '<option value="">Todas las cuentas</option>' +
+            cuentas.map(c => `<option value="${c.id}">${escaparHtml(c.departamento)} · ${escaparHtml(c.codigo)}</option>`).join('');
+        selFiltro.innerHTML = optsCuentas;
+    }
+
+    // Filtro depto en solicitudes (admin)
+    const selSolDepto = document.getElementById('soladmin-depto');
+    if (selSolDepto) {
+        const deptosUnicos = [...new Set(cuentas.map(c => c.departamento))].sort();
+        selSolDepto.innerHTML = '<option value="">Todos los departamentos</option>' +
+            deptosUnicos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+    }
+}
+
+function calcularDisponibleDepto(depto) {
+    const cuentasDepto = cuentas.filter(c => c.departamento === depto);
+    let total = 0;
+    cuentasDepto.forEach(c => {
+        const consumido = calcularConsumidoCuenta(c.id);
+        total += (Number(c.monto_asignado) - consumido);
+    });
+    return total;
+}
+
+function calcularConsumidoCuenta(cuentaId) {
+    const productosCuenta = productos.filter(p => p.cuenta_id === cuentaId).map(p => p.id);
+    const consumido = recepcionItems
+        .filter(ri => productosCuenta.includes(ri.producto_id))
+        .reduce((sum, ri) => sum + Number(ri.subtotal || 0), 0);
+    return consumido;
 }
 
 function alCambiarDeptoRecepcion() {
@@ -890,12 +1208,517 @@ function alCambiarCuentaRecepcion() {
     `;
 }
 
-function calcularConsumidoCuenta(cuentaId) {
-    const productosCuenta = productos.filter(p => p.cuenta_id === cuentaId).map(p => p.id);
-    const consumido = recepcionItems
-        .filter(ri => productosCuenta.includes(ri.producto_id))
-        .reduce((sum, ri) => sum + Number(ri.subtotal || 0), 0);
-    return consumido;
+// ============================================================
+// MI SOLICITUD (SOLICITANTE)
+// ============================================================
+function renderMiSolicitud() {
+    document.getElementById('mi-depto-nombre').textContent = departamentoUsuario || '—';
+    const disponible = calcularDisponibleDepto(departamentoUsuario);
+    document.getElementById('mi-depto-disponible').textContent = formatearCLP(disponible);
+    poblarDropdownMiSolicitud();
+    renderCarritoMiSolicitud();
+    renderMisSolicitudes();
+}
+
+function poblarDropdownMiSolicitud(filtroTexto) {
+    const list = document.getElementById('sol-prod-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const texto = (filtroTexto || '').toLowerCase().trim();
+    let lista = productos.filter(p => !texto || p.nombre.toLowerCase().includes(texto));
+    lista.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+    if (!lista.length) {
+        list.innerHTML = '<div class="dropdown-item">Sin resultados</div>';
+        return;
+    }
+
+    lista.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'dropdown-item';
+        div.innerHTML = `
+            <span>${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></span>
+            <span class="precio">${formatearCLP(p.precio_neto)}</span>
+        `;
+        div.onclick = () => {
+            document.getElementById('sol-prod-trigger').value = p.nombre;
+            list.style.display = 'none';
+            seleccionarProductoMiSolicitud(p);
+        };
+        list.appendChild(div);
+    });
+}
+
+function filtrarDropdownMiSolicitud(texto) {
+    const list = document.getElementById('sol-prod-list');
+    list.style.display = 'block';
+    poblarDropdownMiSolicitud(texto);
+}
+
+function seleccionarProductoMiSolicitud(p) {
+    productoSeleccionadoSol = p;
+    document.getElementById('sol-prod-sel').style.display = 'block';
+    document.getElementById('sol-prod-nombre').textContent = p.nombre;
+    document.getElementById('sol-prod-info').innerHTML = `Precio: <strong>${formatearCLP(p.precio_neto)}</strong> · Línea ${p.linea}`;
+    document.getElementById('sol-cantidad').value = '';
+    document.getElementById('sol-cantidad').focus();
+}
+
+function agregarAlCarritoMiSolicitud() {
+    if (!productoSeleccionadoSol) { mostrarToast('❌ Selecciona un producto'); return; }
+    const cantidad = parseInt(document.getElementById('sol-cantidad').value);
+    if (isNaN(cantidad) || cantidad <= 0) { mostrarToast('❌ Cantidad inválida'); return; }
+
+    const existe = carritoSolicitud.find(p => p.producto_id === productoSeleccionadoSol.id);
+    if (existe) {
+        existe.cantidad += cantidad;
+    } else {
+        carritoSolicitud.push({
+            producto_id: productoSeleccionadoSol.id,
+            nombre: productoSeleccionadoSol.nombre,
+            linea: productoSeleccionadoSol.linea,
+            precio_neto: Number(productoSeleccionadoSol.precio_neto),
+            cantidad: cantidad
+        });
+    }
+    renderCarritoMiSolicitud();
+    limpiarSeleccionMiSolicitud();
+    mostrarToast(`✅ ${cantidad} × ${productoSeleccionadoSol.nombre}`);
+}
+
+function limpiarSeleccionMiSolicitud() {
+    productoSeleccionadoSol = null;
+    document.getElementById('sol-prod-trigger').value = '';
+    document.getElementById('sol-cantidad').value = '';
+    document.getElementById('sol-prod-sel').style.display = 'none';
+}
+
+function eliminarDelCarritoMiSolicitud(idx) {
+    if (!confirm('¿Eliminar producto?')) return;
+    carritoSolicitud.splice(idx, 1);
+    renderCarritoMiSolicitud();
+}
+
+function renderCarritoMiSolicitud() {
+    const cont = document.getElementById('sol-carrito-container');
+    document.getElementById('sol-carrito-count').textContent = carritoSolicitud.length;
+
+    if (!carritoSolicitud.length) {
+        cont.innerHTML = '<div class="empty-state">Sin productos</div>';
+        document.getElementById('sol-total-estimado').textContent = '$0';
+        return;
+    }
+
+    let total = 0;
+    cont.innerHTML = carritoSolicitud.map((p, i) => {
+        const sub = p.precio_neto * p.cantidad;
+        total += sub;
+        return `
+            <div class="producto-agregado">
+                <div class="info">
+                    <div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div>
+                    <div class="detalle">${formatearCLP(p.precio_neto)} × ${p.cantidad} = <strong>${formatearCLP(sub)}</strong></div>
+                </div>
+                <div class="cantidad">${p.cantidad}</div>
+                <button class="btn-eliminar-prod" onclick="eliminarDelCarritoMiSolicitud(${i})">✕</button>
+            </div>
+        `;
+    }).join('');
+    document.getElementById('sol-total-estimado').textContent = formatearCLP(total);
+}
+
+function elegirUrgencia(u) {
+    urgenciaSolicitud = u;
+    document.querySelectorAll('#sol-urgencia .urgencia-opcion').forEach(o => {
+        o.classList.toggle('activo', o.dataset.urg === u);
+    });
+}
+
+async function enviarSolicitud() {
+    if (!departamentoUsuario) {
+        mostrarToast('❌ No tienes departamento asignado');
+        return;
+    }
+    if (!carritoSolicitud.length) { mostrarToast('❌ Agrega productos'); return; }
+
+    const obs = document.getElementById('sol-obs').value.trim();
+    const total = carritoSolicitud.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
+
+    if (!confirm(`¿Enviar solicitud por ${formatearCLP(total)} con ${carritoSolicitud.length} producto(s)?`)) return;
+
+    const btn = event.target;
+    btn.disabled = true;
+    btn.textContent = '⏳ Enviando...';
+
+    try {
+        const { data: solData, error: errSol } = await sb
+            .from('lc_solicitudes')
+            .insert({
+                departamento: departamentoUsuario,
+                solicitante_email: nombreUsuario,
+                solicitante_nombre: nombreCompleto,
+                estado: 'PENDIENTE',
+                monto_estimado: total,
+                urgencia: urgenciaSolicitud,
+                observacion: obs || null
+            })
+            .select()
+            .single();
+
+        if (errSol) throw errSol;
+
+        const itemsInsert = carritoSolicitud.map(p => ({
+            solicitud_id: solData.id,
+            producto_id: p.producto_id,
+            cantidad: p.cantidad,
+            precio_estimado: p.precio_neto
+        }));
+
+        const { error: errItems } = await sb.from('lc_solicitud_items').insert(itemsInsert);
+        if (errItems) throw errItems;
+
+        mostrarToast(`✅ Solicitud ${solData.codigo} enviada`);
+
+        const detalle = document.getElementById('sol-mensaje-detalle');
+        detalle.innerHTML = `📅 ${formatearFecha(solData.fecha_solicitud)}<br>Código: <strong>${solData.codigo}</strong><br>Total estimado: <strong>${formatearCLP(total)}</strong>`;
+        document.getElementById('sol-mensaje').style.display = 'block';
+        document.getElementById('sol-mensaje').scrollIntoView({ behavior: 'smooth' });
+
+        await cargarTodo();
+        renderMisSolicitudes();
+
+    } catch (e) {
+        console.error(e);
+        mostrarToast('❌ ' + (e.message || 'Error al enviar'));
+    }
+
+    btn.disabled = false;
+    btn.textContent = '📨 ENVIAR SOLICITUD';
+}
+
+function nuevaSolicitud() {
+    carritoSolicitud = [];
+    urgenciaSolicitud = 'NORMAL';
+    renderCarritoMiSolicitud();
+    document.getElementById('sol-mensaje').style.display = 'none';
+    document.getElementById('sol-obs').value = '';
+    elegirUrgencia('NORMAL');
+    limpiarSeleccionMiSolicitud();
+    mostrarToast('🔄 Lista para nueva solicitud');
+}
+
+function renderMisSolicitudes() {
+    const cont = document.getElementById('mis-solicitudes-container');
+    if (!cont) return;
+
+    const mias = solicitudes.filter(s => s.solicitante_email === nombreUsuario);
+
+    if (!mias.length) {
+        cont.innerHTML = `
+            <div class="empty-state-grande">
+                <span class="icono">📭</span>
+                Aún no has creado solicitudes
+            </div>
+        `;
+        return;
+    }
+
+    cont.innerHTML = mias.map(s => {
+        const items = solicitudItems.filter(i => i.solicitud_id === s.id);
+        const puedeCancelar = s.estado === 'PENDIENTE';
+        return `
+            <div class="solicitud-card">
+                <div class="fila-top">
+                    <span class="codigo">${escaparHtml(s.codigo)}</span>
+                    <span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span>
+                </div>
+                <div class="fila-info">
+                    <span>📅 <strong>${s.fecha_fmt}</strong></span>
+                    <span>📦 <strong>${items.length}</strong> producto(s)</span>
+                    <span>💰 <strong>${formatearCLP(s.monto_estimado)}</strong></span>
+                    <span>⚡ <strong>${s.urgencia}</strong></span>
+                </div>
+                <div class="acciones">
+                    <button class="btn-pequeno azul" onclick="verDetalleSolicitud('${s.id}')">👁️ Ver detalle</button>
+                    ${puedeCancelar ? `<button class="btn-pequeno rojo" onclick="cancelarSolicitud('${s.id}')">✕ Cancelar</button>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+async function cancelarSolicitud(id) {
+    if (!confirm('¿Cancelar esta solicitud? Esta acción no se puede deshacer.')) return;
+    const { error } = await sb.from('lc_solicitudes').update({
+        estado: 'CANCELADA',
+        motivo_rechazo: 'Cancelada por el solicitante'
+    }).eq('id', id);
+    if (error) { mostrarToast('❌ ' + error.message); return; }
+    mostrarToast('✅ Solicitud cancelada');
+    await cargarTodo();
+    renderMisSolicitudes();
+}
+
+function verDetalleSolicitud(id) {
+    const s = solicitudes.find(x => x.id === id);
+    if (!s) return;
+    const items = solicitudItems.filter(i => i.solicitud_id === id);
+    solicitudActual = s;
+
+    document.getElementById('modal-sol-titulo').textContent = `📋 ${s.codigo}`;
+
+    const productosHTML = items.map(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        return `
+            <div class="prod-fila">
+                <span class="prod-nombre">${escaparHtml(p?.nombre || 'N/E')} <span class="badge-linea l${p?.linea||1}">L${p?.linea||1}</span></span>
+                <span class="prod-cant">×${it.cantidad}</span>
+                <span class="prod-sub">${formatearCLP(it.precio_estimado * it.cantidad)}</span>
+            </div>
+        `;
+    }).join('');
+
+    let accionesHTML = '';
+    if (esAdmin()) {
+        if (s.estado === 'PENDIENTE') {
+            accionesHTML = `
+                <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+                    <button class="btn-aprobar" onclick="aprobarSolicitud('${s.id}')">✅ Aprobar</button>
+                    <button class="btn-rechazar" onclick="rechazarSolicitud('${s.id}')">❌ Rechazar</button>
+                    <button class="btn-pdf-prov" onclick="descargarPDFSolicitud('${s.id}')">📄 PDF Proveedor</button>
+                </div>
+            `;
+        } else if (s.estado === 'APROBADA') {
+            accionesHTML = `
+                <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+                    <button class="btn-enviar-prov" onclick="marcarEnviadaProveedor('${s.id}')">📤 Marcar enviada al proveedor</button>
+                    <button class="btn-pdf-prov" onclick="descargarPDFSolicitud('${s.id}')">📄 PDF Proveedor</button>
+                </div>
+            `;
+        } else if (s.estado === 'ENVIADA') {
+            accionesHTML = `
+                <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+                    <button class="btn-pdf-prov" onclick="descargarPDFSolicitud('${s.id}')">📄 PDF Proveedor</button>
+                </div>
+            `;
+        } else {
+            accionesHTML = `
+                <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+                    <button class="btn-pdf-prov" onclick="descargarPDFSolicitud('${s.id}')">📄 PDF Proveedor</button>
+                </div>
+            `;
+        }
+    }
+
+    document.getElementById('modal-sol-contenido').innerHTML = `
+        <div class="detalle-solicitud">
+            <div class="fila"><span class="lbl">Estado</span><span class="val"><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></span></div>
+            <div class="fila"><span class="lbl">Departamento</span><span class="val">${escaparHtml(s.departamento)}</span></div>
+            <div class="fila"><span class="lbl">Solicitante</span><span class="val">${escaparHtml(s.solicitante_nombre || s.solicitante_email)}</span></div>
+            <div class="fila"><span class="lbl">Fecha solicitud</span><span class="val">${s.fecha_fmt}</span></div>
+            <div class="fila"><span class="lbl">Urgencia</span><span class="val">${s.urgencia}</span></div>
+            <div class="fila"><span class="lbl">Monto estimado</span><span class="val">${formatearCLP(s.monto_estimado)}</span></div>
+            ${s.observacion ? `<div class="fila"><span class="lbl">Observación</span><span class="val">${escaparHtml(s.observacion)}</span></div>` : ''}
+            ${s.motivo_rechazo ? `<div class="fila"><span class="lbl">Motivo rechazo</span><span class="val" style="color:var(--rojo);">${escaparHtml(s.motivo_rechazo)}</span></div>` : ''}
+        </div>
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); margin-top:12px; letter-spacing:0.5px;">Productos</div>
+        <div class="detalle-productos">
+            <div class="prod-fila head">
+                <span>Producto</span>
+                <span style="text-align:center;">Cant.</span>
+                <span style="text-align:right;">Subtotal</span>
+            </div>
+            ${productosHTML}
+        </div>
+        ${accionesHTML}
+    `;
+
+    document.getElementById('modal-detalle-solicitud').classList.add('visible');
+}
+
+function cerrarModalSolicitud() {
+    document.getElementById('modal-detalle-solicitud').classList.remove('visible');
+    solicitudActual = null;
+}
+
+// ============================================================
+// ADMIN — SOLICITUDES
+// ============================================================
+function renderSolicitudesAdmin() {
+    const tbody = document.getElementById('soladmin-tbody');
+    if (!tbody) return;
+
+    const filtro = document.getElementById('soladmin-filtro').value.toLowerCase().trim();
+    const estado = document.getElementById('soladmin-estado').value;
+    const depto = document.getElementById('soladmin-depto').value;
+
+    let lista = solicitudes.filter(s => {
+        if (estado && s.estado !== estado) return false;
+        if (depto && s.departamento !== depto) return false;
+        if (filtro) {
+            const txt = `${s.codigo} ${s.departamento} ${s.solicitante_nombre || ''} ${s.solicitante_email}`.toLowerCase();
+            if (!txt.includes(filtro)) return false;
+        }
+        return true;
+    });
+
+    // Contador de pendientes para el badge
+    const pendientes = solicitudes.filter(s => s.estado === 'PENDIENTE').length;
+    const badge = document.getElementById('badge-sol-pend');
+    if (badge) {
+        if (pendientes > 0) {
+            badge.textContent = pendientes;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    if (!lista.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--texto-gris);">Sin solicitudes</td></tr>';
+        document.getElementById('soladmin-total').textContent = '0 solicitudes';
+        return;
+    }
+
+    tbody.innerHTML = lista.map(s => `
+        <tr>
+            <td><strong style="font-family:'Courier New',monospace;">${escaparHtml(s.codigo)}</strong></td>
+            <td style="font-size:11px;">${escaparHtml(s.departamento)}</td>
+            <td style="font-size:11px;">${escaparHtml(s.solicitante_nombre || s.solicitante_email)}</td>
+            <td style="font-size:11px;">${s.fecha_fmt}</td>
+            <td style="text-align:right; font-size:11px;">${formatearCLP(s.monto_estimado)}</td>
+            <td style="text-align:center;"><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></td>
+            <td style="text-align:center;">
+                <button class="btn-pequeno azul" onclick="verDetalleSolicitud('${s.id}')">👁️</button>
+            </td>
+        </tr>
+    `).join('');
+
+    document.getElementById('soladmin-total').textContent = `${lista.length} solicitudes`;
+}
+
+async function aprobarSolicitud(id) {
+    if (!confirm('¿Aprobar esta solicitud?')) return;
+    const { error } = await sb.from('lc_solicitudes').update({
+        estado: 'APROBADA',
+        fecha_aprobacion: new Date().toISOString(),
+        aprobado_por: nombreUsuario
+    }).eq('id', id);
+    if (error) { mostrarToast('❌ ' + error.message); return; }
+    mostrarToast('✅ Solicitud aprobada');
+    await cargarTodo();
+    cerrarModalSolicitud();
+    renderSolicitudesAdmin();
+}
+
+async function rechazarSolicitud(id) {
+    const motivo = prompt('Motivo del rechazo:');
+    if (!motivo) return;
+    const { error } = await sb.from('lc_solicitudes').update({
+        estado: 'RECHAZADA',
+        motivo_rechazo: motivo
+    }).eq('id', id);
+    if (error) { mostrarToast('❌ ' + error.message); return; }
+    mostrarToast('✅ Solicitud rechazada');
+    await cargarTodo();
+    cerrarModalSolicitud();
+    renderSolicitudesAdmin();
+}
+
+async function marcarEnviadaProveedor(id) {
+    if (!confirm('¿Marcar como ENVIADA al proveedor?')) return;
+    const { error } = await sb.from('lc_solicitudes').update({
+        estado: 'ENVIADA',
+        fecha_envio_proveedor: new Date().toISOString()
+    }).eq('id', id);
+    if (error) { mostrarToast('❌ ' + error.message); return; }
+    mostrarToast('✅ Marcada como enviada al proveedor');
+    await cargarTodo();
+    cerrarModalSolicitud();
+    renderSolicitudesAdmin();
+}
+
+// PDF de solicitud (para proveedor)
+function descargarPDFSolicitud(id) {
+    const s = solicitudes.find(x => x.id === id);
+    if (!s) { mostrarToast('❌ Solicitud no encontrada'); return; }
+    const items = solicitudItems.filter(i => i.solicitud_id === id);
+
+    const doc = generarPDFBase({
+        tituloDocumento: 'SOLICITUD DE ARTÍCULOS',
+        numero: s.codigo,
+        filasInfo: [
+            ['Fecha solicitud', s.fecha_fmt],
+            ['Departamento', s.departamento],
+            ['Solicitante', s.solicitante_nombre || s.solicitante_email],
+            ['Urgencia', s.urgencia],
+            ['Estado', s.estado]
+        ],
+        productos: items.map(it => {
+            const p = productos.find(x => x.id === it.producto_id);
+            return {
+                nombre: p?.nombre || 'N/E',
+                precio_neto: it.precio_estimado,
+                cantidad: it.cantidad
+            };
+        }),
+        tituloProductos: 'PRODUCTOS SOLICITADOS',
+        firmaIzqLabel: 'Solicitante',
+        firmaDerLabel: 'Autorizado por',
+        mostrarProveedor: true
+    });
+
+    doc.save(`Solicitud_${s.codigo}.pdf`);
+    mostrarToast('✅ PDF descargado');
+}
+
+// ============================================================
+// RECEPCIÓN — VINCULACIÓN CON SOLICITUD
+// ============================================================
+function poblarVinculoSolicitud() {
+    const sel = document.getElementById('rec-solicitud-vinculo');
+    if (!sel) return;
+    const disponibles = solicitudes.filter(s => s.estado === 'APROBADA' || s.estado === 'ENVIADA');
+    sel.innerHTML = '<option value="">— Recepción sin vincular (compra directa) —</option>' +
+        disponibles.map(s => `<option value="${s.id}">${escaparHtml(s.codigo)} · ${escaparHtml(s.departamento)} · ${formatearCLP(s.monto_estimado)}</option>`).join('');
+}
+
+function alVincularSolicitud() {
+    const id = document.getElementById('rec-solicitud-vinculo').value;
+    const info = document.getElementById('rec-vinculo-info');
+    const selDepto = document.getElementById('rec-depto');
+
+    if (!id) { info.style.display = 'none'; return; }
+
+    const s = solicitudes.find(x => x.id === id);
+    if (!s) return;
+
+    info.style.display = 'block';
+    info.innerHTML = `
+        ✅ Vinculado a <strong>${escaparHtml(s.codigo)}</strong> ·
+        Depto: <strong>${escaparHtml(s.departamento)}</strong> ·
+        Solicitante: <strong>${escaparHtml(s.solicitante_nombre || s.solicitante_email)}</strong>
+    `;
+
+    if (selDepto) {
+        selDepto.value = s.departamento;
+        alCambiarDeptoRecepcion();
+    }
+
+    // Pre-cargar productos al carrito
+    const items = solicitudItems.filter(i => i.solicitud_id === id);
+    carritoRecepcion = items.map(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        return {
+            producto_id: it.producto_id,
+            nombre: p?.nombre || 'N/E',
+            linea: p?.linea || 1,
+            precio_neto: Number(it.precio_estimado),
+            cantidad: Number(it.cantidad)
+        };
+    });
+    renderCarritoRecepcion();
 }
 
 // ============================================================
@@ -906,9 +1729,6 @@ function poblarDropdownRecepcion() {
     list.innerHTML = '';
     if (!productos.length) { list.innerHTML = '<div class="dropdown-item">Sin productos</div>'; return; }
 
-    const cuentaId = document.getElementById('rec-cuenta').value;
-
-    // Agrupar por nombre
     const nombresUnicos = {};
     productos.forEach(p => {
         if (!nombresUnicos[p.nombre]) nombresUnicos[p.nombre] = [];
@@ -919,8 +1739,6 @@ function poblarDropdownRecepcion() {
         const grupo = nombresUnicos[nombre];
         const div = document.createElement('div');
         div.className = 'dropdown-item';
-        div.dataset.nombre = nombre;
-
         const p0 = grupo[0];
         div.innerHTML = `
             <span>${escaparHtml(nombre)} <span class="badge-linea l${p0.linea}">L${p0.linea}</span></span>
@@ -959,9 +1777,6 @@ function seleccionarProductoRecepcion(p) {
     document.getElementById('rec-cantidad').focus();
 }
 
-// ============================================================
-// CARRITO RECEPCIÓN
-// ============================================================
 function agregarAlCarritoRecepcion() {
     if (!productoSeleccionadoRec) { mostrarToast('❌ Selecciona un producto'); return; }
     const cantidad = parseInt(document.getElementById('rec-cantidad').value);
@@ -1025,12 +1840,10 @@ function renderCarritoRecepcion() {
     document.getElementById('rec-total-estimado').textContent = formatearCLP(total);
 }
 
-// ============================================================
-// REGISTRAR RECEPCIÓN
-// ============================================================
 async function registrarRecepcion() {
     const depto = document.getElementById('rec-depto').value;
     const cuentaId = document.getElementById('rec-cuenta').value;
+    const solicitudVinculo = document.getElementById('rec-solicitud-vinculo').value;
 
     if (!depto) { mostrarToast('❌ Selecciona un departamento'); return; }
     if (!cuentaId) { mostrarToast('❌ Selecciona una cuenta'); return; }
@@ -1039,19 +1852,15 @@ async function registrarRecepcion() {
     const cuenta = cuentas.find(c => c.id === cuentaId);
     if (!cuenta) { mostrarToast('❌ Cuenta no encontrada'); return; }
 
-    // Validar tope
     const consumido = calcularConsumidoCuenta(cuentaId);
     const disponible = cuenta.monto_asignado - consumido;
     const totalCarrito = carritoRecepcion.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
 
     if (totalCarrito > disponible) {
-        const excedente = totalCarrito - disponible;
-        mostrarToast(`⛔ Excede el monto de la cuenta ${cuenta.codigo}. Disponible: ${formatearCLP(disponible)}. Intentado: ${formatearCLP(totalCarrito)}. Excedente: ${formatearCLP(excedente)}`, 8000);
+        mostrarToast(`⛔ Excede el monto de la cuenta ${cuenta.codigo}. Disponible: ${formatearCLP(disponible)}`, 8000);
         return;
     }
 
-    const proveedor = document.getElementById('rec-proveedor').value.trim();
-    const proveedorRut = document.getElementById('rec-proveedor-rut').value.trim();
     const guia = document.getElementById('rec-guia').value.trim();
     const factura = document.getElementById('rec-factura').value.trim();
     const obs = document.getElementById('rec-obs').value.trim();
@@ -1061,26 +1870,25 @@ async function registrarRecepcion() {
     btn.textContent = '⏳ Guardando...';
 
     try {
-        // Insertar cabecera
         const { data: recData, error: errRec } = await sb
             .from('lc_recepciones')
             .insert({
-                proveedor: proveedor || 'No especificado',
-                proveedor_rut: proveedorRut || null,
+                proveedor: PROVEEDOR_OFICIAL.razon_social,
+                proveedor_rut: PROVEEDOR_OFICIAL.rut,
                 numero_guia: guia || null,
                 numero_factura: factura || null,
                 observacion: obs || null,
                 responsable: nombreUsuario,
                 monto_total: totalCarrito,
                 cuenta_id: cuentaId,
-                departamento: depto
+                departamento: depto,
+                solicitud_id: solicitudVinculo || null
             })
             .select()
             .single();
 
         if (errRec) throw errRec;
 
-        // Insertar items
         const itemsInsert = carritoRecepcion.map(p => ({
             recepcion_id: recData.id,
             producto_id: p.producto_id,
@@ -1092,7 +1900,6 @@ async function registrarRecepcion() {
         const { error: errItems } = await sb.from('lc_recepcion_items').insert(itemsInsert);
         if (errItems) throw errItems;
 
-        // Actualizar stock
         for (const p of carritoRecepcion) {
             const prod = productos.find(x => x.id === p.producto_id);
             if (prod) {
@@ -1102,12 +1909,21 @@ async function registrarRecepcion() {
             }
         }
 
+        // Si hay solicitud vinculada, marcarla como RECIBIDA
+        if (solicitudVinculo) {
+            await sb.from('lc_solicitudes').update({
+                estado: 'RECIBIDA',
+                fecha_recepcion: new Date().toISOString(),
+                recepcion_id: recData.id
+            }).eq('id', solicitudVinculo);
+        }
+
         ultimaRecepcion = {
             id: recData.id,
             codigo: recData.codigo,
             productos: carritoRecepcion.map(p => ({ ...p, subtotal: p.precio_neto * p.cantidad })),
-            proveedor: proveedor || 'No especificado',
-            proveedor_rut: proveedorRut,
+            proveedor: PROVEEDOR_OFICIAL.razon_social,
+            proveedor_rut: PROVEEDOR_OFICIAL.rut,
             guia, factura, obs,
             departamento: depto,
             cuenta: cuenta,
@@ -1122,7 +1938,6 @@ async function registrarRecepcion() {
         await cargarTodo();
         renderStock();
         actualizarResumenes();
-        if (esAdmin()) renderCuentas();
 
     } catch (e) {
         console.error(e);
@@ -1151,14 +1966,14 @@ function nuevaRecepcion() {
     carritoRecepcion = [];
     renderCarritoRecepcion();
     document.getElementById('rec-mensaje').style.display = 'none';
-    document.getElementById('rec-proveedor').value = '';
-    document.getElementById('rec-proveedor-rut').value = '';
     document.getElementById('rec-guia').value = '';
     document.getElementById('rec-factura').value = '';
     document.getElementById('rec-obs').value = '';
     document.getElementById('rec-depto').value = '';
     document.getElementById('rec-cuenta').innerHTML = '<option value="">— Primero selecciona un departamento —</option>';
     document.getElementById('rec-cuenta-info').style.display = 'none';
+    document.getElementById('rec-solicitud-vinculo').value = '';
+    document.getElementById('rec-vinculo-info').style.display = 'none';
     limpiarSeleccionRecepcion();
     mostrarToast('🔄 Lista para nueva recepción');
 }
@@ -1166,20 +1981,37 @@ function nuevaRecepcion() {
 // ============================================================
 // DROPDOWN SALIDA
 // ============================================================
-function poblarDropdownSalida() {
+function poblarDropdownSalida(filtroTexto) {
     const list = document.getElementById('sal-prod-list');
     list.innerHTML = '';
-    const disponibles = productos.filter(p => Number(p.stock || 0) > 0);
-    if (!disponibles.length) { list.innerHTML = '<div class="dropdown-item">Sin productos con stock</div>'; return; }
+    const texto = (filtroTexto || '').toLowerCase().trim();
 
-    disponibles.sort((a, b) => a.nombre.localeCompare(b.nombre)).forEach(p => {
+    let lista = productos.filter(p => !texto || p.nombre.toLowerCase().includes(texto));
+    lista.sort((a, b) => {
+        const sa = Number(a.stock || 0), sb = Number(b.stock || 0);
+        if (sa > 0 && sb === 0) return -1;
+        if (sa === 0 && sb > 0) return 1;
+        return a.nombre.localeCompare(b.nombre);
+    });
+
+    if (!lista.length) {
+        list.innerHTML = '<div class="dropdown-item">Sin resultados</div>';
+        return;
+    }
+
+    lista.forEach(p => {
+        const stock = Number(p.stock || 0);
+        const sinStock = stock <= 0;
         const div = document.createElement('div');
         div.className = 'dropdown-item';
-        div.innerHTML = `
-            <span>${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></span>
-            <span class="precio">Stock: ${p.stock}</span>
-        `;
+        div.style.opacity = sinStock ? '0.45' : '1';
+        div.style.cursor = sinStock ? 'not-allowed' : 'pointer';
+        const badgeStock = sinStock
+            ? '<span style="color:var(--rojo); font-weight:700; font-size:10px;">❌ SIN STOCK</span>'
+            : `<span class="precio">Stock: ${stock}</span>`;
+        div.innerHTML = `<span>${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></span>${badgeStock}`;
         div.onclick = () => {
+            if (sinStock) { mostrarToast('❌ Sin stock. Primero recepciona el producto.', 4000); return; }
             document.getElementById('sal-prod-trigger').value = p.nombre;
             list.style.display = 'none';
             seleccionarProductoSalida(p);
@@ -1187,20 +2019,19 @@ function poblarDropdownSalida() {
         list.appendChild(div);
     });
 
-    document.getElementById('sal-prod-trigger').onclick = function() {
-        if (list.style.display === 'block') list.style.display = 'none';
-        else { list.style.display = 'block'; poblarDropdownSalida(); }
-    };
+    const conStock = productos.filter(p => Number(p.stock || 0) > 0).length;
+    if (conStock === 0) {
+        const aviso = document.createElement('div');
+        aviso.style.cssText = 'padding:10px 12px; background:#fff3cd; color:#856404; font-size:11px; font-weight:600;';
+        aviso.innerHTML = '⚠️ No hay productos con stock. Ve a <strong>Recepción</strong> primero.';
+        list.insertBefore(aviso, list.firstChild);
+    }
 }
 
 function filtrarDropdownSalida(texto) {
     const list = document.getElementById('sal-prod-list');
-    const t = texto.toLowerCase().trim();
-    if (!list.children.length) poblarDropdownSalida();
-    list.querySelectorAll('.dropdown-item').forEach(item => {
-        item.style.display = item.textContent.toLowerCase().includes(t) ? 'flex' : 'none';
-    });
     list.style.display = 'block';
+    poblarDropdownSalida(texto);
 }
 
 function seleccionarProductoSalida(p) {
@@ -1213,9 +2044,6 @@ function seleccionarProductoSalida(p) {
     document.getElementById('sal-cantidad').focus();
 }
 
-// ============================================================
-// CARRITO SALIDA
-// ============================================================
 function agregarAlCarritoSalida() {
     if (!productoSeleccionadoSal) { mostrarToast('❌ Selecciona un producto'); return; }
     const cantidad = parseInt(document.getElementById('sal-cantidad').value);
@@ -1272,9 +2100,6 @@ function renderCarritoSalida() {
     `).join('');
 }
 
-// ============================================================
-// REGISTRAR SALIDA
-// ============================================================
 async function registrarSalida() {
     const depto = document.getElementById('sal-depto').value;
     const receptor = document.getElementById('sal-receptor').value.trim();
@@ -1285,7 +2110,6 @@ async function registrarSalida() {
     if (!carritoSalida.length) { mostrarToast('❌ Agrega productos'); return; }
     if (!receptor) { mostrarToast('❌ Ingresa el nombre de quien recibe'); return; }
 
-    // Validar stock
     for (const p of carritoSalida) {
         const prod = productos.find(x => x.id === p.producto_id);
         if (!prod || Number(prod.stock || 0) < p.cantidad) {
@@ -1395,6 +2219,7 @@ function nuevaSalida() {
 // ============================================================
 function renderStock() {
     const tbody = document.getElementById('stock-tbody');
+    if (!tbody) return;
     const filtroNombre = document.getElementById('stock-filtro-nombre').value.toLowerCase().trim();
     const filtroLinea = document.getElementById('stock-filtro-linea').value;
     const filtroCuenta = document.getElementById('stock-filtro-cuenta').value;
@@ -1419,7 +2244,6 @@ function renderStock() {
     }
 
     let totalUnidades = 0, totalValor = 0;
-
     tbody.innerHTML = lista.map(p => {
         const cuenta = cuentas.find(c => c.id === p.cuenta_id);
         const cuentaTxt = cuenta ? `${escaparHtml(cuenta.departamento)} · ${escaparHtml(cuenta.codigo)}` : '<span style="color:var(--texto-gris);">—</span>';
@@ -1427,9 +2251,7 @@ function renderStock() {
         const valor = st * Number(p.precio_neto || 0);
         totalUnidades += st;
         totalValor += valor;
-
         const colorStock = st === 0 ? 'var(--rojo)' : st <= 3 ? 'var(--naranja)' : 'var(--texto-oscuro)';
-
         return `
             <tr>
                 <td><strong>${escaparHtml(p.nombre)}</strong></td>
@@ -1441,7 +2263,6 @@ function renderStock() {
             </tr>
         `;
     }).join('');
-
     document.getElementById('stock-total').textContent = `${lista.length} productos · ${totalUnidades} unidades · Valor total: ${formatearCLP(totalValor)}`;
 }
 
@@ -1450,6 +2271,7 @@ function renderStock() {
 // ============================================================
 function renderCuentas() {
     const tbody = document.getElementById('cuentas-tbody');
+    if (!tbody) return;
     const filtro = document.getElementById('cuentas-filtro').value.toLowerCase().trim();
 
     let lista = cuentas.filter(c => {
@@ -1464,18 +2286,15 @@ function renderCuentas() {
     }
 
     let totalAsignado = 0, totalConsumido = 0;
-
     tbody.innerHTML = lista.map(c => {
         const consumido = calcularConsumidoCuenta(c.id);
         const disponible = c.monto_asignado - consumido;
         const pct = c.monto_asignado > 0 ? Math.round((consumido / c.monto_asignado) * 100) : 0;
         totalAsignado += Number(c.monto_asignado);
         totalConsumido += consumido;
-
         let colorPct = 'var(--verde)';
         if (pct >= 90) colorPct = 'var(--rojo)';
         else if (pct >= 70) colorPct = 'var(--naranja)';
-
         return `
             <tr>
                 <td style="font-size:11px;">${escaparHtml(c.departamento)}</td>
@@ -1490,7 +2309,6 @@ function renderCuentas() {
             </tr>
         `;
     }).join('');
-
     document.getElementById('cuentas-total').textContent = `${lista.length} cuentas · Asignado: ${formatearCLP(totalAsignado)} · Consumido: ${formatearCLP(totalConsumido)}`;
 }
 
@@ -1512,10 +2330,8 @@ async function guardarMontoCuenta() {
     if (!cuentaEditando) return;
     const nuevoMonto = Number(document.getElementById('edit-cuenta-monto').value);
     if (isNaN(nuevoMonto) || nuevoMonto < 0) { mostrarToast('❌ Monto inválido'); return; }
-
     const { error } = await sb.from('lc_cuentas').update({ monto_asignado: nuevoMonto }).eq('id', cuentaEditando.id);
     if (error) { mostrarToast('❌ ' + error.message); return; }
-
     cuentaEditando.monto_asignado = nuevoMonto;
     mostrarToast('✅ Monto actualizado');
     cerrarModalEditarCuenta();
@@ -1527,18 +2343,15 @@ async function guardarMontoCuenta() {
 // ============================================================
 function renderAuditoria() {
     const tbody = document.getElementById('aud-tbody');
+    if (!tbody) return;
     const filtro = document.getElementById('aud-filtro').value.toLowerCase().trim();
     const tipo = document.getElementById('aud-tipo').value;
-
     const lista = [];
 
     if (!tipo || tipo === 'recepcion') {
         recepciones.forEach(r => {
             lista.push({
-                tipo: 'recepcion',
-                icono: '📥',
-                codigo: r.codigo,
-                fecha: r.fecha_fmt,
+                tipo: 'recepcion', icono: '📥', codigo: r.codigo, fecha: r.fecha_fmt,
                 timestamp: new Date(r.fecha).getTime(),
                 detalle: `${r.departamento || ''} · ${r.proveedor || 'N/E'}`,
                 responsable: r.responsable || 'N/E',
@@ -1546,14 +2359,10 @@ function renderAuditoria() {
             });
         });
     }
-
     if (!tipo || tipo === 'salida') {
         salidas.forEach(s => {
             lista.push({
-                tipo: 'salida',
-                icono: '📤',
-                codigo: s.codigo,
-                fecha: s.fecha_fmt,
+                tipo: 'salida', icono: '📤', codigo: s.codigo, fecha: s.fecha_fmt,
                 timestamp: new Date(s.fecha).getTime(),
                 detalle: `${s.departamento || ''} · ${s.receptor_nombre || 'N/E'}`,
                 responsable: s.responsable || 'N/E',
@@ -1588,7 +2397,6 @@ function renderAuditoria() {
             </td>
         </tr>
     `).join('');
-
     document.getElementById('aud-total').textContent = `${filtrada.length} movimientos`;
 }
 
@@ -1606,7 +2414,9 @@ function verComprobante(tipo, codigo) {
 // REPORTES
 // ============================================================
 function renderReportes() {
-    document.getElementById('rep-total-productos').textContent = productos.length;
+    const tp = document.getElementById('rep-total-productos');
+    if (!tp) return;
+    tp.textContent = productos.length;
     const totalUnid = productos.reduce((s, p) => s + Number(p.stock || 0), 0);
     const totalValor = productos.reduce((s, p) => s + Number(p.stock || 0) * Number(p.precio_neto || 0), 0);
     document.getElementById('rep-total-unidades').textContent = totalUnid;
@@ -1619,27 +2429,29 @@ function renderReportes() {
 // ============================================================
 function actualizarResumenes() {
     const hoy = recepciones.filter(r => esHoy(r.fecha_fmt));
-    document.getElementById('res-rec-hoy').textContent = hoy.length;
-    document.getElementById('res-rec-unidades').textContent = hoy.reduce((s, r) => {
-        return s + recepcionItems.filter(ri => ri.recepcion_id === r.id).reduce((a, x) => a + Number(x.cantidad || 0), 0);
-    }, 0);
-    document.getElementById('res-rec-monto').textContent = formatearCLP(hoy.reduce((s, r) => s + Number(r.monto_total || 0), 0));
-    const critico = productos.filter(p => Number(p.stock || 0) <= 3 && Number(p.stock || 0) > 0).length;
-    document.getElementById('res-stock-critico').textContent = critico;
-    document.getElementById('res-stock-critico2').textContent = critico;
+    const rrh = document.getElementById('res-rec-hoy');
+    if (rrh) {
+        rrh.textContent = hoy.length;
+        document.getElementById('res-rec-unidades').textContent = hoy.reduce((s, r) => {
+            return s + recepcionItems.filter(ri => ri.recepcion_id === r.id).reduce((a, x) => a + Number(x.cantidad || 0), 0);
+        }, 0);
+        document.getElementById('res-rec-monto').textContent = formatearCLP(hoy.reduce((s, r) => s + Number(r.monto_total || 0), 0));
+        const critico = productos.filter(p => Number(p.stock || 0) <= 3 && Number(p.stock || 0) > 0).length;
+        document.getElementById('res-stock-critico').textContent = critico;
+        document.getElementById('res-stock-critico2').textContent = critico;
 
-    const hoySal = salidas.filter(s => esHoy(s.fecha_fmt));
-    document.getElementById('res-sal-hoy').textContent = hoySal.length;
-    document.getElementById('res-sal-unidades').textContent = hoySal.reduce((s, x) => {
-        return s + salidaItems.filter(si => si.salida_id === x.id).reduce((a, y) => a + Number(y.cantidad || 0), 0);
-    }, 0);
-    document.getElementById('res-sal-prods').textContent = productos.filter(p => Number(p.stock || 0) > 0).length;
-
+        const hoySal = salidas.filter(s => esHoy(s.fecha_fmt));
+        document.getElementById('res-sal-hoy').textContent = hoySal.length;
+        document.getElementById('res-sal-unidades').textContent = hoySal.reduce((s, x) => {
+            return s + salidaItems.filter(si => si.salida_id === x.id).reduce((a, y) => a + Number(y.cantidad || 0), 0);
+        }, 0);
+        document.getElementById('res-sal-prods').textContent = productos.filter(p => Number(p.stock || 0) > 0).length;
+    }
     if (esAdmin()) renderReportes();
 }
 
 // ============================================================
-// PDF — Base
+// PDF BASE
 // ============================================================
 function generarPDFBase(config) {
     const { jsPDF } = window.jspdf;
@@ -1679,6 +2491,24 @@ function generarPDFBase(config) {
 
     doc.setTextColor(0, 0, 0);
     let y = 42;
+
+    // Si es para proveedor, agregar datos del proveedor
+    if (config.mostrarProveedor) {
+        doc.setFillColor(255, 250, 235);
+        doc.setDrawColor(224, 142, 11);
+        doc.roundedRect(margin, y, pageW - margin * 2, 24, 2, 2, 'FD');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(146, 64, 14);
+        doc.text('PROVEEDOR:', margin + 5, y + 6);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(20, 30, 45);
+        doc.text(PROVEEDOR_OFICIAL.razon_social + ' · RUT ' + PROVEEDOR_OFICIAL.rut, margin + 30, y + 6);
+        doc.text('Rep. Legal: ' + PROVEEDOR_OFICIAL.representante_legal, margin + 5, y + 12);
+        doc.text(PROVEEDOR_OFICIAL.direccion + ' · ' + PROVEEDOR_OFICIAL.telefono, margin + 5, y + 18);
+        y += 30;
+    }
+
     const filaH = 7;
     const boxH = 6 + config.filasInfo.length * filaH;
     doc.setFillColor(...grisClaro);
@@ -1746,7 +2576,6 @@ function generarPDFBase(config) {
         y += h; par = !par;
     });
 
-    // Fila total
     if (y > pageH - 55) { doc.addPage(); y = 16; }
     doc.setFillColor(230, 240, 255);
     doc.rect(margin, y, pageW - margin * 2, 9, 'F');
@@ -1801,8 +2630,8 @@ function descargarPDFRecepcion() {
             ['Fecha', r.fecha],
             ['Departamento', r.departamento],
             ['Cuenta', `${r.cuenta.departamento} · ${r.cuenta.codigo}`],
-            ['Proveedor', r.proveedor || 'N/E'],
-            ['RUT', r.proveedor_rut || 'N/E'],
+            ['Proveedor', r.proveedor],
+            ['RUT', r.proveedor_rut],
             ['N° Guía', r.guia || 'N/E'],
             ['N° Factura', r.factura || 'N/E'],
             ['Responsable', r.responsable]
@@ -1889,7 +2718,7 @@ function generarPDFCuentas() {
 }
 
 // ============================================================
-// EXCEL PROFESIONAL
+// EXCEL
 // ============================================================
 function hojaExcel(data, cols) {
     const AZUL = '1664C0';
@@ -1898,16 +2727,13 @@ function hojaExcel(data, cols) {
     const BLANCO = 'FFFFFF';
     const bordeFino = { style: 'thin', color: { rgb: BORDE } };
     const borde = { top: bordeFino, bottom: bordeFino, left: bordeFino, right: bordeFino };
-
     const estiloHead = {
         font: { bold: true, color: { rgb: BLANCO }, sz: 12, name: 'Century Gothic' },
         fill: { patternType: 'solid', fgColor: { rgb: AZUL } },
         alignment: { vertical: 'center', horizontal: 'center' },
         border: borde
     };
-
     const filas = [cols.map(c => ({ v: c.label, t: 's', s: estiloHead }))];
-
     data.forEach((row, i) => {
         const par = i % 2 === 1;
         filas.push(cols.map(c => {
@@ -1925,11 +2751,9 @@ function hojaExcel(data, cols) {
             };
         }));
     });
-
     const ws = XLSX.utils.aoa_to_sheet(filas);
     ws['!cols'] = cols.map(c => ({ wch: c.width || 18 }));
     ws['!rows'] = [{ hpt: 24 }];
-    ws['!freeze'] = { xSplit: 0, ySplit: 1 };
     ws['!views'] = [{ state: 'frozen', ySplit: 1 }];
     if (data.length) {
         const letra = String.fromCharCode(65 + cols.length - 1);
@@ -1943,15 +2767,12 @@ function exportarExcelStock() {
     const data = productos.map(p => {
         const c = cuentas.find(x => x.id === p.cuenta_id);
         return {
-            producto: p.nombre,
-            linea: 'L' + p.linea,
+            producto: p.nombre, linea: 'L' + p.linea,
             cuenta: c ? `${c.departamento} · ${c.codigo}` : '—',
-            precio: Number(p.precio_neto),
-            stock: Number(p.stock),
+            precio: Number(p.precio_neto), stock: Number(p.stock),
             valor: Number(p.stock) * Number(p.precio_neto)
         };
     });
-
     const wb = XLSX.utils.book_new();
     const ws = hojaExcel(data, [
         { key: 'producto', label: 'Producto', width: 45 },
@@ -1969,16 +2790,10 @@ function exportarExcelStock() {
 function exportarExcelRecepciones() {
     if (!recepciones.length) { mostrarToast('❌ Sin recepciones'); return; }
     const data = recepciones.map(r => ({
-        codigo: r.codigo,
-        fecha: r.fecha_fmt,
-        departamento: r.departamento || '',
-        proveedor: r.proveedor || '',
-        guia: r.numero_guia || '',
-        factura: r.numero_factura || '',
-        monto: Number(r.monto_total || 0),
-        responsable: r.responsable || ''
+        codigo: r.codigo, fecha: r.fecha_fmt, departamento: r.departamento || '',
+        proveedor: r.proveedor || '', guia: r.numero_guia || '', factura: r.numero_factura || '',
+        monto: Number(r.monto_total || 0), responsable: r.responsable || ''
     }));
-
     const wb = XLSX.utils.book_new();
     const ws = hojaExcel(data, [
         { key: 'codigo', label: 'Código', width: 14, align: 'center' },
@@ -1998,15 +2813,10 @@ function exportarExcelRecepciones() {
 function exportarExcelSalidas() {
     if (!salidas.length) { mostrarToast('❌ Sin salidas'); return; }
     const data = salidas.map(s => ({
-        codigo: s.codigo,
-        fecha: s.fecha_fmt,
-        departamento: s.departamento || '',
-        receptor: s.receptor_nombre || '',
-        email: s.receptor_email || '',
-        monto: Number(s.monto_total || 0),
-        responsable: s.responsable || ''
+        codigo: s.codigo, fecha: s.fecha_fmt, departamento: s.departamento || '',
+        receptor: s.receptor_nombre || '', email: s.receptor_email || '',
+        monto: Number(s.monto_total || 0), responsable: s.responsable || ''
     }));
-
     const wb = XLSX.utils.book_new();
     const ws = hojaExcel(data, [
         { key: 'codigo', label: 'Código', width: 14, align: 'center' },
@@ -2027,21 +2837,17 @@ function exportarExcelCuentas() {
     const data = cuentas.map(c => {
         const consumido = calcularConsumidoCuenta(c.id);
         return {
-            departamento: c.departamento,
-            codigo: c.codigo,
-            nombre: c.nombre || '',
-            asignado: Number(c.monto_asignado),
-            consumido: consumido,
+            departamento: c.departamento, codigo: c.codigo, nombre: c.nombre || '',
+            asignado: Number(c.monto_asignado), consumido: consumido,
             disponible: Number(c.monto_asignado) - consumido,
             pct: c.monto_asignado > 0 ? Math.round((consumido / c.monto_asignado) * 100) : 0
         };
     });
-
     const wb = XLSX.utils.book_new();
     const ws = hojaExcel(data, [
         { key: 'departamento', label: 'Departamento', width: 35 },
-        { key: 'codigo', label: 'Cuenta', width: 14, align: 'center' },
-        { key: 'nombre', label: 'Nombre', width: 30 },
+        { key: 'codigo', label: 'Cuenta', width: 20, align: 'center' },
+        { key: 'nombre', label: 'Nombre', width: 40 },
         { key: 'asignado', label: 'Asignado', width: 16, align: 'right' },
         { key: 'consumido', label: 'Consumido', width: 16, align: 'right' },
         { key: 'disponible', label: 'Disponible', width: 16, align: 'right' },
@@ -2049,6 +2855,29 @@ function exportarExcelCuentas() {
     ]);
     XLSX.utils.book_append_sheet(wb, ws, 'Cuentas');
     XLSX.writeFile(wb, `Cuentas_${fechaActual()}.xlsx`);
+    mostrarToast('✅ Excel exportado');
+}
+
+function exportarExcelSolicitudes() {
+    if (!solicitudes.length) { mostrarToast('❌ Sin solicitudes'); return; }
+    const data = solicitudes.map(s => ({
+        codigo: s.codigo, fecha: s.fecha_fmt, departamento: s.departamento,
+        solicitante: s.solicitante_nombre || s.solicitante_email,
+        urgencia: s.urgencia, estado: s.estado,
+        monto: Number(s.monto_estimado || 0)
+    }));
+    const wb = XLSX.utils.book_new();
+    const ws = hojaExcel(data, [
+        { key: 'codigo', label: 'Código', width: 18, align: 'center' },
+        { key: 'fecha', label: 'Fecha', width: 18, align: 'center' },
+        { key: 'departamento', label: 'Departamento', width: 30 },
+        { key: 'solicitante', label: 'Solicitante', width: 28 },
+        { key: 'urgencia', label: 'Urgencia', width: 12, align: 'center' },
+        { key: 'estado', label: 'Estado', width: 14, align: 'center' },
+        { key: 'monto', label: 'Monto', width: 16, align: 'right' }
+    ]);
+    XLSX.utils.book_append_sheet(wb, ws, 'Solicitudes');
+    XLSX.writeFile(wb, `Solicitudes_${fechaActual()}.xlsx`);
     mostrarToast('✅ Excel exportado');
 }
 
@@ -2126,13 +2955,17 @@ function imprimirComprobante() {
 // ============================================================
 function cambiarTab(tabId) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
+    const sec = document.getElementById(tabId);
+    if (sec) sec.classList.add('active');
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.querySelector(`.nav-tab[data-tab="${tabId}"]`).classList.add('active');
+    const tab = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
+    if (tab) tab.classList.add('active');
 
-    if (tabId === 'tab-recepcion') { renderRecepcion(); actualizarResumenes(); }
+    if (tabId === 'tab-mi-solicitud') renderMiSolicitud();
+    if (tabId === 'tab-recepcion') { renderRecepcion(); actualizarResumenes(); poblarVinculoSolicitud(); }
     if (tabId === 'tab-salida') { renderSalida(); actualizarResumenes(); }
     if (tabId === 'tab-stock') renderStock();
+    if (tabId === 'tab-solicitudes' && esAdmin()) renderSolicitudesAdmin();
     if (tabId === 'tab-cuentas' && esAdmin()) renderCuentas();
     if (tabId === 'tab-auditoria' && esAdmin()) renderAuditoria();
     if (tabId === 'tab-reportes' && esAdmin()) renderReportes();
@@ -2145,17 +2978,27 @@ function renderRecepcion() {
 }
 
 function renderSalida() {
-    poblarDropdownSalida();
+    if (!document.getElementById('sal-prod-trigger')._configurado) {
+        document.getElementById('sal-prod-trigger')._configurado = true;
+        document.getElementById('sal-prod-trigger').onclick = function() {
+            const list = document.getElementById('sal-prod-list');
+            if (list.style.display === 'block') list.style.display = 'none';
+            else { list.style.display = 'block'; poblarDropdownSalida(this.value); }
+        };
+    }
     renderCarritoSalida();
     actualizarResumenes();
 }
 
-// Exponer funciones globales para los onclick
+// ============================================================
+// EXPONER FUNCIONES GLOBALES
+// ============================================================
 window.intentarLogin = intentarLogin;
 window.cerrarSesion = cerrarSesion;
 window.cambiarTab = cambiarTab;
 window.alCambiarDeptoRecepcion = alCambiarDeptoRecepcion;
 window.alCambiarCuentaRecepcion = alCambiarCuentaRecepcion;
+window.alVincularSolicitud = alVincularSolicitud;
 window.filtrarDropdownRecepcion = filtrarDropdownRecepcion;
 window.agregarAlCarritoRecepcion = agregarAlCarritoRecepcion;
 window.eliminarDelCarritoRecepcion = eliminarDelCarritoRecepcion;
@@ -2181,8 +3024,24 @@ window.exportarExcelStock = exportarExcelStock;
 window.exportarExcelRecepciones = exportarExcelRecepciones;
 window.exportarExcelSalidas = exportarExcelSalidas;
 window.exportarExcelCuentas = exportarExcelCuentas;
+window.exportarExcelSolicitudes = exportarExcelSolicitudes;
 window.generarPDFStock = generarPDFStock;
 window.generarPDFCuentas = generarPDFCuentas;
+// Solicitudes
+window.filtrarDropdownMiSolicitud = filtrarDropdownMiSolicitud;
+window.agregarAlCarritoMiSolicitud = agregarAlCarritoMiSolicitud;
+window.eliminarDelCarritoMiSolicitud = eliminarDelCarritoMiSolicitud;
+window.elegirUrgencia = elegirUrgencia;
+window.enviarSolicitud = enviarSolicitud;
+window.nuevaSolicitud = nuevaSolicitud;
+window.cancelarSolicitud = cancelarSolicitud;
+window.verDetalleSolicitud = verDetalleSolicitud;
+window.cerrarModalSolicitud = cerrarModalSolicitud;
+window.renderSolicitudesAdmin = renderSolicitudesAdmin;
+window.aprobarSolicitud = aprobarSolicitud;
+window.rechazarSolicitud = rechazarSolicitud;
+window.marcarEnviadaProveedor = marcarEnviadaProveedor;
+window.descargarPDFSolicitud = descargarPDFSolicitud;
 </script>
 </body>
 </html>

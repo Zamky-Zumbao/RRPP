@@ -148,6 +148,10 @@
   .tab-badge { display:inline-block; background:var(--rojo); color:white; font-size:9px; font-weight:800; padding:1px 6px; border-radius:10px; margin-left:4px; min-width:16px; text-align:center; }
   .cuenta-info-box { background:#f0f5ff; border-left:3px solid var(--azul); border-radius:8px; padding:8px 12px; margin-top:8px; font-size:11px; color:var(--texto-gris); }
   .cuenta-info-box strong { color:var(--texto-oscuro); }
+  .articulo-fila { display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center; padding:10px 14px; background:white; border:1px solid var(--borde); border-radius:10px; margin-bottom:6px; }
+  .articulo-fila .nombre { font-weight:600; font-size:12.5px; }
+  .articulo-fila .cant { font-weight:700; font-size:13px; color:var(--azul); text-align:center; white-space:nowrap; }
+  .articulo-fila .monto { font-weight:700; font-size:12.5px; color:var(--texto-oscuro); text-align:right; white-space:nowrap; }
   .solo-admin.nav-tab, .solo-operador.nav-tab, .solo-solicitante.nav-tab, .solo-admin.section, .solo-operador.section, .solo-solicitante.section { display:none !important; }
   body.rol-admin .nav-tab.solo-admin { display:block !important; }
   body.rol-admin .section.solo-admin.active { display:block !important; }
@@ -333,49 +337,65 @@
 
 <div class="section solo-operador solo-admin" id="tab-salida">
   <div class="section-label">📤 SALIDA DE PRODUCTOS</div>
+
   <div class="resumen-grid">
     <div class="resumen-card"><div class="num" id="res-sal-hoy">0</div><div class="lbl">Salidas hoy</div></div>
     <div class="resumen-card rojo"><div class="num" id="res-sal-unidades">0</div><div class="lbl">Unidades</div></div>
     <div class="resumen-card verde"><div class="num" id="res-sal-prods">0</div><div class="lbl">Productos</div></div>
     <div class="resumen-card naranja"><div class="num" id="res-stock-critico2">0</div><div class="lbl">Stock crítico</div></div>
   </div>
-  <div class="field"><label class="required">Dirección</label><select id="sal-depto-padre" onchange="salCambiarDireccion()"><option value="">— Selecciona —</option></select></div>
-  <div class="field"><label>Departamento</label><select id="sal-depto" onchange="salCambiarDepto()"><option value="">— Primero elige dirección —</option></select></div>
-  <div class="field"><label class="required">Área</label><select id="sal-subdepto" onchange="salCambiarArea()"><option value="">— Primero elige departamento —</option></select></div>
-  <div id="sal-linea-panel" style="display:none;">
+
+  <div class="field">
+    <label class="required">Dirección</label>
+    <select id="sal-depto-padre" onchange="salCambiarDireccion()"><option value="">— Selecciona —</option></select>
+  </div>
+
+  <div id="sal-wrap-recepciones" style="display:none;">
     <div class="field">
-      <label>Selecciona línea</label>
-      <div class="linea-tabs" id="sal-linea-tabs">
-        <div class="linea-tab" id="sal-linea-l1" data-linea="1" onclick="salElegirLinea(1)">L1 · PVC<span class="sub" id="sal-l1-sub">—</span></div>
-        <div class="linea-tab" id="sal-linea-l2" data-linea="2" onclick="salElegirLinea(2)">L2 · Papelería<span class="sub" id="sal-l2-sub">—</span></div>
+      <label class="required">Recepción a despachar</label>
+      <select id="sal-recepcion-sel" onchange="salCargarRecepcion()"><option value="">— Selecciona una recepción —</option></select>
+    </div>
+  </div>
+
+  <div id="sal-detalle" style="display:none;">
+    <div id="sal-info-recepcion" class="cuenta-info-box" style="margin-bottom:12px;"></div>
+
+    <div id="sal-bloque-l1" style="display:none; margin-bottom:16px;">
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--azul); padding-left:8px; margin-bottom:8px;">
+        📦 ARTÍCULOS L1 · PVC
       </div>
-      <div id="sal-cuenta-info" class="cuenta-info-box" style="display:none;"></div>
+      <div id="sal-lista-l1"></div>
+      <div style="text-align:right; font-weight:700; margin-top:6px; color:var(--azul);" id="sal-total-l1"></div>
     </div>
-  </div>
-  <div class="field" id="sal-busqueda-wrap" style="display:none;">
-    <label class="required">Buscar producto</label>
-    <div class="custom-dropdown">
-      <input type="text" id="sal-prod-trigger" class="dropdown-input" placeholder="Escribe para buscar..." oninput="filtrarDropdownSalida(this.value)" onclick="filtrarDropdownSalida(this.value)" onfocus="filtrarDropdownSalida(this.value)">
-      <div class="dropdown-list" id="sal-prod-list"></div>
+
+    <div id="sal-bloque-l2" style="display:none; margin-bottom:16px;">
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--morado); padding-left:8px; margin-bottom:8px;">
+        📦 ARTÍCULOS L2 · PAPELERÍA
+      </div>
+      <div id="sal-lista-l2"></div>
+      <div style="text-align:right; font-weight:700; margin-top:6px; color:var(--morado);" id="sal-total-l2"></div>
     </div>
-  </div>
-  <div id="sal-prod-sel" style="display:none; background:#f0f5ff; border-radius:12px; padding:10px 14px; margin-bottom:12px; border:1px solid var(--azul-claro);">
-    <div style="font-size:14px; font-weight:700; color:var(--azul);" id="sal-prod-nombre">—</div>
-    <div style="font-size:12px; color:var(--texto-gris);" id="sal-prod-info">—</div>
-    <div class="row-2" style="margin-top:8px;">
-      <div class="field" style="margin-bottom:0;"><label>Cantidad</label><input type="number" id="sal-cantidad" min="1"></div>
-      <div class="field" style="margin-bottom:0; display:flex; align-items:flex-end;"><button class="btn-verde" onclick="agregarAlCarritoSalida()">+ Agregar</button></div>
+
+    <div class="field">
+      <label class="required">Nombre receptor</label>
+      <input type="text" id="sal-receptor" placeholder="Ej: Juan Pérez">
     </div>
+    <div class="field">
+      <label class="required">RUT receptor</label>
+      <input type="text" id="sal-receptor-rut" placeholder="Ej: 12.345.678-9">
+    </div>
+    <div class="field">
+      <label>Correo (opcional)</label>
+      <input type="email" id="sal-receptor-email" placeholder="Ej: juan@lascondes.cl">
+    </div>
+    <div class="field">
+      <label>Observación (opcional)</label>
+      <textarea id="sal-obs" rows="2"></textarea>
+    </div>
+
+    <button class="btn-primario" onclick="registrarSalida()">✅ Registrar Salida</button>
+    <div id="sal-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
   </div>
-  <div class="field"><label>Carrito (<span id="sal-carrito-count">0</span>)</label><div id="sal-carrito-container"></div></div>
-  <div class="row-2">
-    <div class="field"><label class="required">Nombre receptor</label><input type="text" id="sal-receptor"></div>
-    <div class="field"><label class="required">RUT receptor</label><input type="text" id="sal-receptor-rut" placeholder="Ej: 12.345.678-9"></div>
-  </div>
-  <div class="field"><label>Correo (opcional)</label><input type="email" id="sal-receptor-email"></div>
-  <div class="field"><label>Observación</label><textarea id="sal-obs" rows="2"></textarea></div>
-  <button class="btn-primario" onclick="registrarSalida()">✅ Registrar Salida</button>
-  <div id="sal-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
 </div>
 
 <div class="section solo-operador solo-admin" id="tab-stock">
@@ -510,32 +530,21 @@ let carritoSalida = [];
 let carritoSolicitud = [];
 let adjuntosTemporales = [];
 let productoSeleccionadoRec = null;
-let productoSeleccionadoSal = null;
 let productoSeleccionadoSol = null;
 let urgenciaSolicitud = 'NORMAL';
 let lineaSeleccionadaSol = null;
 let lineaSeleccionadaRec = null;
-let lineaSeleccionadaSal = null;
 let subdeptoActualSol = { l1: null, l2: null };
 let subdeptoActualRec = { l1: null, l2: null };
-let subdeptoActualSal = { l1: null, l2: null };
 let ultimaRecepcion = null;
 let ultimaSalida = null;
 let solicitudActual = null;
 let logoImageData = null;
+let recepcionSeleccionadaSalida = null;
 
 // ============================================================
 // HELPERS
 // ============================================================
-function norm(s) {
-  return String(s || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toUpperCase();
-}
-
 function formatearFecha(iso) {
   if (!iso) return '—';
   const d = new Date(iso);
@@ -645,7 +654,6 @@ async function cargarTodo() {
     solicitudes = (rSol.data || []).map(s => ({...s, fecha_fmt: formatearFecha(s.fecha_solicitud)}));
     solicitudItems = rSolI.data || [];
     solicitudAdjuntos = rSolA.data || [];
-    console.log(`📦 Cargados: ${productos.length} productos · ${cuentas.length} cuentas`);
     return true;
   } catch(e) { console.error(e); return false; }
 }
@@ -674,22 +682,16 @@ function cambiarDireccion(prefijo) {
   const selArea = document.getElementById(`${prefijo}-subdepto`);
   const panelLinea = document.getElementById(`${prefijo}-linea-panel`);
   const wrapBusqueda = document.getElementById(`${prefijo}-busqueda-wrap`);
-  
   selArea.innerHTML = '<option value="">— Primero elige departamento —</option>';
   if (panelLinea) panelLinea.style.display = 'none';
   if (wrapBusqueda) wrapBusqueda.style.display = 'none';
-  
   if (!direccion) {
     selDepto.innerHTML = '<option value="">— Primero elige dirección —</option>';
     selDepto.disabled = false;
     return;
   }
-  
   const filtradas = cuentas.filter(c => c.direccion === direccion);
   const deptos = [...new Set(filtradas.map(c => c.departamento_padre).filter(Boolean))].sort();
-  
-  console.log(`📍 Dirección "${direccion}" · ${filtradas.length} cuentas · ${deptos.length} deptos distintos`);
-  
   if (deptos.length === 0) {
     selDepto.innerHTML = '<option value="">— No aplica —</option>';
     selDepto.disabled = true;
@@ -699,7 +701,6 @@ function cambiarDireccion(prefijo) {
     selDepto.innerHTML = '<option value="">— Selecciona —</option>' + deptos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
   }
 }
-
 function cambiarDepto(prefijo) {
   const direccion = document.getElementById(`${prefijo}-depto-padre`).value;
   const depto = document.getElementById(`${prefijo}-depto`).value;
@@ -710,16 +711,13 @@ function cambiarDepto(prefijo) {
   if (!direccion) return;
   poblarAreas(prefijo, direccion, depto || null);
 }
-
 function poblarAreas(prefijo, direccion, depto) {
   const selArea = document.getElementById(`${prefijo}-subdepto`);
   let filtradas = cuentas.filter(c => c.direccion === direccion);
   if (depto) filtradas = filtradas.filter(c => c.departamento_padre === depto);
   const areas = [...new Set(filtradas.map(c => c.subdepartamento).filter(Boolean))].sort();
-  console.log(`🏢 Depto "${depto || '(sin depto)'}" · ${areas.length} áreas`);
   selArea.innerHTML = '<option value="">— Selecciona área —</option>' + areas.map(a => `<option value="${escaparHtml(a)}">${escaparHtml(a)}</option>`).join('');
 }
-
 function cambiarArea(prefijo) {
   const direccion = document.getElementById(`${prefijo}-depto-padre`).value;
   const depto = document.getElementById(`${prefijo}-depto`).value || null;
@@ -731,57 +729,42 @@ function cambiarArea(prefijo) {
     if (wrapBusqueda) wrapBusqueda.style.display = 'none';
     return;
   }
-  
   const filtradas = cuentas.filter(c => 
     c.direccion === direccion && 
     c.subdepartamento === area &&
     ((!depto && !c.departamento_padre) || (depto && c.departamento_padre === depto))
   );
-  
   const cL1 = filtradas.find(c => c.linea === 1);
   const cL2 = filtradas.find(c => c.linea === 2);
-  
-  console.log(`📊 Área "${area}" · ${filtradas.length} cuentas · L1:${!!cL1} L2:${!!cL2}`);
-  
   if (prefijo === 'sol') subdeptoActualSol = { l1: cL1, l2: cL2 };
   if (prefijo === 'rec') subdeptoActualRec = { l1: cL1, l2: cL2 };
-  if (prefijo === 'sal') subdeptoActualSal = { l1: cL1, l2: cL2 };
-  
   if (panelLinea) panelLinea.style.display = 'block';
   const btnL1 = document.getElementById(`${prefijo}-linea-l1`);
   const btnL2 = document.getElementById(`${prefijo}-linea-l2`);
   const subL1 = document.getElementById(`${prefijo}-l1-sub`);
   const subL2 = document.getElementById(`${prefijo}-l2-sub`);
-  
   const dL1 = cL1 ? calcularDisponibleCuenta(cL1.id) : 0;
   const dL2 = cL2 ? calcularDisponibleCuenta(cL2.id) : 0;
-  
   btnL1.classList.remove('bloqueado');
   btnL2.classList.remove('bloqueado');
   if (!cL1) btnL1.classList.add('bloqueado');
   if (!cL2) btnL2.classList.add('bloqueado');
   subL1.textContent = cL1 ? formatearCLP(dL1) : 'No disponible';
   subL2.textContent = cL2 ? formatearCLP(dL2) : 'No disponible';
-  
-  // Auto-seleccionar primera línea disponible
   if (cL1) elegirLinea(prefijo, 1);
   else if (cL2) elegirLinea(prefijo, 2);
 }
-
 function elegirLinea(prefijo, linea) {
   document.querySelectorAll(`#${prefijo}-linea-tabs .linea-tab`).forEach(b => {
     b.classList.toggle('activo', parseInt(b.dataset.linea) === linea);
   });
   if (prefijo === 'sol') lineaSeleccionadaSol = linea;
   if (prefijo === 'rec') lineaSeleccionadaRec = linea;
-  if (prefijo === 'sal') lineaSeleccionadaSal = linea;
-  
   const wrap = document.getElementById(`${prefijo}-busqueda-wrap`);
   if (wrap) wrap.style.display = 'block';
-  
   const cuentaInfo = document.getElementById(`${prefijo}-cuenta-info`);
   if (cuentaInfo) {
-    const cuentasLoc = prefijo === 'rec' ? subdeptoActualRec : (prefijo === 'sal' ? subdeptoActualSal : subdeptoActualSol);
+    const cuentasLoc = prefijo === 'rec' ? subdeptoActualRec : subdeptoActualSol;
     const c = linea === 1 ? cuentasLoc.l1 : cuentasLoc.l2;
     if (c) {
       const disp = calcularDisponibleCuenta(c.id);
@@ -791,7 +774,6 @@ function elegirLinea(prefijo, linea) {
       cuentaInfo.innerHTML = `💰 Cuenta <strong>${escaparHtml(c.nombre || c.codigo)}</strong> · Asignado: <strong>${formatearCLP(c.monto_asignado)}</strong> · Reservado: <strong>${formatearCLP(res)}</strong> · Consumido: <strong>${formatearCLP(cons)}</strong> · Disponible: <strong style="color:${disp>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(disp)}</strong>`;
     }
   }
-  
   const trigger = document.getElementById(`${prefijo}-prod-trigger`);
   if (trigger) trigger.value = '';
   const sel = document.getElementById(`${prefijo}-prod-sel`);
@@ -915,7 +897,6 @@ function elegirUrgencia(u) {
   urgenciaSolicitud = u;
   document.querySelectorAll('.urgencia-opcion').forEach(o => o.classList.toggle('activo', o.dataset.urg === u));
 }
-
 async function subirAdjuntoSolicitud(event) {
   const files = event.target.files;
   if (!files || !files.length) return;
@@ -1006,7 +987,6 @@ function nuevaSolicitudForm() {
   document.getElementById('sol-subdepto').innerHTML = '<option value="">— Primero elige departamento —</option>';
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
-  // ✅ FIX: la búsqueda wrap en lugar de linea-panel
   const buscador = document.getElementById('sol-busqueda-wrap');
   if (buscador) buscador.style.display = 'none';
 }
@@ -1167,7 +1147,6 @@ function recCambiarDireccion() { cambiarDireccion('rec'); }
 function recCambiarDepto() { cambiarDepto('rec'); }
 function recCambiarArea() { cambiarArea('rec'); }
 function recElegirLinea(l) { elegirLinea('rec', l); }
-
 function alVincularSolicitud() {
   const id = document.getElementById('rec-solicitud-vinculo').value;
   const info = document.getElementById('rec-vinculo-info');
@@ -1293,7 +1272,8 @@ async function registrarRecepcion() {
       responsable: nombreUsuario, monto_total: totalNeto, monto_total_bruto: totalBruto,
       iva_total: totalBruto - totalNeto, cuenta_id: cuentaId, departamento: deptoPadre,
       solicitud_id: solVinculo || null,
-      recibido_por_nombre: firma.nombre, recibido_por_cargo: firma.cargo
+      recibido_por_nombre: firma.nombre, recibido_por_cargo: firma.cargo,
+      despachada: false
     }).select().single();
     if (e1) throw e1;
     const items = carritoRecepcion.map(p => ({
@@ -1337,125 +1317,249 @@ async function registrarRecepcion() {
 }
 
 // ============================================================
-// SALIDA
+// SALIDA (NUEVA LÓGICA — BASADA EN RECEPCIONES)
 // ============================================================
-function salCambiarDireccion() { cambiarDireccion('sal'); }
-function salCambiarDepto() { cambiarDepto('sal'); }
-function salCambiarArea() { cambiarArea('sal'); }
-function salElegirLinea(l) { elegirLinea('sal', l); }
+function salCambiarDireccion() {
+  const direccion = document.getElementById('sal-depto-padre').value;
+  const wrapRecep = document.getElementById('sal-wrap-recepciones');
+  const selRecep = document.getElementById('sal-recepcion-sel');
+  const detalle = document.getElementById('sal-detalle');
+  detalle.style.display = 'none';
+  recepcionSeleccionadaSalida = null;
+  
+  if (!direccion) {
+    wrapRecep.style.display = 'none';
+    selRecep.innerHTML = '<option value="">— Selecciona una recepción —</option>';
+    return;
+  }
+  
+  // Buscar recepciones NO despachadas de esa dirección
+  const pendientes = recepciones.filter(r => 
+    !r.despachada && 
+    (r.departamento === direccion || r.departamento_padre === direccion)
+  );
+  
+  wrapRecep.style.display = 'block';
+  
+  if (!pendientes.length) {
+    selRecep.innerHTML = '<option value="">— No hay recepciones pendientes de despacho —</option>';
+    return;
+  }
+  
+  selRecep.innerHTML = '<option value="">— Selecciona una recepción —</option>' + pendientes.map(r => {
+    const totalItems = recepcionItems.filter(i => i.recepcion_id === r.id).reduce((s, i) => s + Number(i.cantidad||0), 0);
+    return `<option value="${r.id}">${escaparHtml(r.codigo)} · ${r.fecha_fmt} · ${totalItems} uds · ${formatearCLP(r.monto_total_bruto||0)}</option>`;
+  }).join('');
+}
 
-function filtrarDropdownSalida(texto) {
-  const list = document.getElementById('sal-prod-list');
-  list.style.display = 'block';
-  list.innerHTML = '';
-  const t = (texto||'').toLowerCase().trim();
-  const lista = productos.filter(p => p.linea === lineaSeleccionadaSal && (!t || p.nombre.toLowerCase().includes(t))).slice(0, 50);
-  if (!lista.length) { list.innerHTML = '<div class="dropdown-item">Sin resultados</div>'; return; }
-  lista.forEach(p => {
-    const ss = Number(p.stock||0) <= 0;
-    const div = document.createElement('div');
-    div.className = 'dropdown-item';
-    div.style.opacity = ss ? '0.45' : '1';
-    div.innerHTML = `<span>${escaparHtml(p.nombre)}</span>${ss ? '<span style="color:var(--rojo);font-size:10px;">SIN STOCK</span>' : `<span class="precio">Stock: ${p.stock}</span>`}`;
-    div.onclick = () => { if (ss) { mostrarToast('❌ Sin stock'); return; } document.getElementById('sal-prod-trigger').value = p.nombre; list.style.display = 'none'; seleccionarProductoSalida(p); };
-    list.appendChild(div);
-  });
-}
-function seleccionarProductoSalida(p) {
-  productoSeleccionadoSal = p;
-  document.getElementById('sal-prod-sel').style.display = 'block';
-  document.getElementById('sal-prod-nombre').textContent = p.nombre;
-  document.getElementById('sal-prod-info').innerHTML = `Stock: <strong>${p.stock}</strong> · ${formatearCLP(precioBruto(p.precio_neto))}`;
-  document.getElementById('sal-cantidad').value = '';
-}
-function agregarAlCarritoSalida() {
-  if (!productoSeleccionadoSal) { mostrarToast('❌ Selecciona'); return; }
-  const c = parseInt(document.getElementById('sal-cantidad').value);
-  if (isNaN(c) || c <= 0) { mostrarToast('❌ Cantidad inválida'); return; }
-  if (c > productoSeleccionadoSal.stock) { mostrarToast(`❌ Stock: ${productoSeleccionadoSal.stock}`); return; }
-  const ex = carritoSalida.find(p => p.producto_id === productoSeleccionadoSal.id);
-  if (ex) ex.cantidad += c;
-  else carritoSalida.push({ producto_id: productoSeleccionadoSal.id, nombre: productoSeleccionadoSal.nombre, linea: productoSeleccionadoSal.linea, precio_neto: Number(productoSeleccionadoSal.precio_neto), cantidad: c, stock_max: productoSeleccionadoSal.stock });
-  renderCarritoSalida();
-  productoSeleccionadoSal = null;
-  document.getElementById('sal-prod-trigger').value = '';
-  document.getElementById('sal-prod-sel').style.display = 'none';
-}
-function renderCarritoSalida() {
-  const cont = document.getElementById('sal-carrito-container');
-  document.getElementById('sal-carrito-count').textContent = carritoSalida.length;
-  if (!carritoSalida.length) { cont.innerHTML = '<div class="empty-state">Sin productos</div>'; return; }
-  cont.innerHTML = carritoSalida.map((p, i) => `
-    <div class="producto-agregado">
-      <div class="info"><div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div><div class="detalle">${formatearCLP(precioBruto(p.precio_neto))}</div></div>
-      <div class="cantidad">${p.cantidad}</div>
-      <button class="btn-eliminar-prod" onclick="carritoSalida.splice(${i},1);renderCarritoSalida();">✕</button>
+function salCargarRecepcion() {
+  const id = document.getElementById('sal-recepcion-sel').value;
+  const detalle = document.getElementById('sal-detalle');
+  const infoRecep = document.getElementById('sal-info-recepcion');
+  const bloqueL1 = document.getElementById('sal-bloque-l1');
+  const bloqueL2 = document.getElementById('sal-bloque-l2');
+  const listaL1 = document.getElementById('sal-lista-l1');
+  const listaL2 = document.getElementById('sal-lista-l2');
+  const totalL1 = document.getElementById('sal-total-l1');
+  const totalL2 = document.getElementById('sal-total-l2');
+  
+  if (!id) {
+    detalle.style.display = 'none';
+    recepcionSeleccionadaSalida = null;
+    return;
+  }
+  
+  const r = recepciones.find(x => x.id === id);
+  if (!r) return;
+  recepcionSeleccionadaSalida = r;
+  
+  const items = recepcionItems.filter(i => i.recepcion_id === id);
+  const cuenta = cuentas.find(c => c.id === r.cuenta_id);
+  
+  // Info de la recepción
+  infoRecep.innerHTML = `
+    <div style="font-weight:700; color:var(--azul); font-size:13px; margin-bottom:4px;">
+      📥 Recepción ${escaparHtml(r.codigo)}
     </div>
-  `).join('');
+    <div>📅 Fecha: <strong>${r.fecha_fmt}</strong></div>
+    <div>🏭 Proveedor: <strong>${escaparHtml(r.proveedor||'N/E')}</strong></div>
+    ${r.numero_guia ? `<div>📄 Guía: <strong>${escaparHtml(r.numero_guia)}</strong></div>` : ''}
+    ${cuenta ? `<div>💰 Cuenta: <strong>${escaparHtml(cuenta.direccion)} · ${escaparHtml(cuenta.subdepartamento)} · L${cuenta.linea}</strong></div>` : ''}
+    <div>💵 Monto bruto: <strong>${formatearCLP(r.monto_total_bruto||0)}</strong></div>
+  `;
+  
+  // Separar por línea
+  const itemsL1 = [];
+  const itemsL2 = [];
+  
+  items.forEach(it => {
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!p) return;
+    const row = {
+      producto_id: it.producto_id,
+      nombre: p.nombre,
+      cantidad: Number(it.cantidad),
+      precio_neto: Number(it.precio_neto || p.precio_neto),
+      subtotal_bruto: Number(it.subtotal_bruto || (Number(it.precio_neto || p.precio_neto) * 1.19 * Number(it.cantidad)))
+    };
+    if (p.linea === 1) itemsL1.push(row);
+    else itemsL2.push(row);
+  });
+  
+  const renderFila = (x) => `
+    <div class="articulo-fila">
+      <div class="nombre">${escaparHtml(x.nombre)}</div>
+      <div class="cant">${x.cantidad} ud${x.cantidad === 1 ? '' : 's'}</div>
+      <div class="monto">${formatearCLP(x.subtotal_bruto)}</div>
+    </div>
+  `;
+  
+  if (itemsL1.length) {
+    bloqueL1.style.display = 'block';
+    listaL1.innerHTML = itemsL1.map(renderFila).join('');
+    totalL1.textContent = 'Subtotal L1: ' + formatearCLP(itemsL1.reduce((s, x) => s + x.subtotal_bruto, 0));
+  } else {
+    bloqueL1.style.display = 'none';
+  }
+  
+  if (itemsL2.length) {
+    bloqueL2.style.display = 'block';
+    listaL2.innerHTML = itemsL2.map(renderFila).join('');
+    totalL2.textContent = 'Subtotal L2: ' + formatearCLP(itemsL2.reduce((s, x) => s + x.subtotal_bruto, 0));
+  } else {
+    bloqueL2.style.display = 'none';
+  }
+  
+  detalle.style.display = 'block';
 }
+
 async function registrarSalida() {
-  const depto = document.getElementById('sal-depto-padre').value;
-  const deptoPadre = document.getElementById('sal-depto').value || null;
-  const area = document.getElementById('sal-subdepto').value;
+  if (!recepcionSeleccionadaSalida) { mostrarToast('❌ Selecciona una recepción'); return; }
   const receptor = document.getElementById('sal-receptor').value.trim();
   const receptorRut = document.getElementById('sal-receptor-rut').value.trim();
-  if (!depto || !area) { mostrarToast('❌ Completa Dirección / Área'); return; }
-  if (!carritoSalida.length) { mostrarToast('❌ Agrega productos'); return; }
-  if (!receptor) { mostrarToast('❌ Nombre receptor'); return; }
-  if (!receptorRut) { mostrarToast('❌ RUT receptor'); return; }
-  const btn = event.target; btn.disabled = true;
+  const receptorEmail = document.getElementById('sal-receptor-email').value.trim();
+  const obs = document.getElementById('sal-obs').value.trim();
+  
+  if (!receptor) { mostrarToast('❌ Ingresa el nombre del receptor'); return; }
+  if (!receptorRut) { mostrarToast('❌ Ingresa el RUT del receptor'); return; }
+  
+  const r = recepcionSeleccionadaSalida;
+  const cuenta = cuentas.find(c => c.id === r.cuenta_id);
+  const items = recepcionItems.filter(i => i.recepcion_id === r.id);
+  
+  // Validar stock
+  for (const it of items) {
+    const prod = productos.find(x => x.id === it.producto_id);
+    if (!prod || Number(prod.stock||0) < Number(it.cantidad)) {
+      mostrarToast(`❌ Stock insuficiente: ${prod?.nombre||'producto'}`);
+      return;
+    }
+  }
+  
+  const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
+  
   try {
-    const totalNeto = carritoSalida.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
-    const totalBruto = carritoSalida.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+    const totalNeto = Number(r.monto_total || 0);
+    const totalBruto = Number(r.monto_total_bruto || 0);
     const firma = obtenerFirma(nombreUsuario);
-    const email = document.getElementById('sal-receptor-email').value.trim();
-    const obs = document.getElementById('sal-obs').value.trim();
+    
     const { data: sal, error: e1 } = await sb.from('lc_salidas').insert({
-      departamento: depto, receptor_nombre: receptor, receptor_email: email || null,
+      departamento: r.departamento,
+      departamento_padre: r.departamento_padre || r.departamento,
+      subdepartamento_padre: r.subdepartamento_padre || null,
+      subdepartamento: r.subdepartamento || cuenta?.subdepartamento || null,
+      receptor_nombre: receptor,
       receptor_rut: receptorRut,
-      observacion: obs || null, responsable: nombreUsuario,
-      monto_total: totalNeto, monto_total_bruto: totalBruto, iva_total: totalBruto - totalNeto,
-      entregado_por_nombre: firma.nombre, entregado_por_cargo: firma.cargo,
-      departamento_padre: depto,
-      subdepartamento_padre: deptoPadre,
-      subdepartamento: area
+      receptor_email: receptorEmail || null,
+      observacion: obs || null,
+      responsable: nombreUsuario,
+      monto_total: totalNeto,
+      monto_total_bruto: totalBruto,
+      iva_total: totalBruto - totalNeto,
+      entregado_por_nombre: firma.nombre,
+      entregado_por_cargo: firma.cargo,
+      recepcion_origen_id: r.id
     }).select().single();
     if (e1) throw e1;
-    const items = carritoSalida.map(p => ({
-      salida_id: sal.id, producto_id: p.producto_id, cantidad: p.cantidad,
-      precio_neto: p.precio_neto, precio_bruto: precioBruto(p.precio_neto),
-      subtotal: p.precio_neto * p.cantidad, subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad,
-      iva: (precioBruto(p.precio_neto) - p.precio_neto) * p.cantidad
+    
+    const itemsInsert = items.map(it => ({
+      salida_id: sal.id,
+      producto_id: it.producto_id,
+      cantidad: it.cantidad,
+      precio_neto: it.precio_neto,
+      precio_bruto: it.precio_bruto,
+      subtotal: it.subtotal,
+      subtotal_bruto: it.subtotal_bruto,
+      iva: it.iva
     }));
-    const { error: e2 } = await sb.from('lc_salida_items').insert(items);
+    const { error: e2 } = await sb.from('lc_salida_items').insert(itemsInsert);
     if (e2) throw e2;
-    for (const p of carritoSalida) {
-      const prod = productos.find(x => x.id === p.producto_id);
+    
+    // Descontar stock
+    for (const it of items) {
+      const prod = productos.find(x => x.id === it.producto_id);
       if (prod) {
-        const ns = Number(prod.stock||0) - p.cantidad;
-        await sb.from('lc_productos').update({ stock: ns }).eq('id', p.producto_id);
+        const ns = Number(prod.stock||0) - Number(it.cantidad);
+        await sb.from('lc_productos').update({ stock: ns }).eq('id', it.producto_id);
         prod.stock = ns;
       }
     }
+    
+    // Marcar recepción como despachada
+    const { error: e3 } = await sb.from('lc_recepciones').update({
+      despachada: true,
+      fecha_despacho: new Date().toISOString(),
+      salida_id: sal.id
+    }).eq('id', r.id);
+    if (e3) throw e3;
+    
     ultimaSalida = {
-      id: sal.id, codigo: sal.codigo,
-      productos: carritoSalida.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
-      departamento: depto, departamento_padre: depto,
-      subdepartamento_padre: deptoPadre,
-      subdepartamento: area,
-      receptor, receptor_email: email, receptor_rut: receptorRut, obs,
-      responsable: nombreUsuario, firma, monto_total: totalNeto, monto_total_bruto: totalBruto,
-      fecha: formatearFecha(sal.fecha)
+      id: sal.id,
+      codigo: sal.codigo,
+      productos: items.map(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        return {
+          producto_id: it.producto_id,
+          nombre: p?.nombre || 'N/E',
+          linea: p?.linea || 1,
+          cantidad: Number(it.cantidad),
+          precio_neto: Number(it.precio_neto),
+          precio_bruto: Number(it.precio_bruto),
+          subtotal_bruto: Number(it.subtotal_bruto)
+        };
+      }),
+      departamento: r.departamento,
+      departamento_padre: r.departamento_padre || r.departamento,
+      subdepartamento_padre: r.subdepartamento_padre,
+      subdepartamento: r.subdepartamento,
+      receptor, receptor_email: receptorEmail, receptor_rut: receptorRut, obs,
+      responsable: nombreUsuario, firma,
+      monto_total: totalNeto, monto_total_bruto: totalBruto,
+      fecha: formatearFecha(sal.fecha),
+      recepcion_origen: r.codigo
     };
-    mostrarToast(`✅ ${sal.codigo}`);
+    
+    mostrarToast(`✅ Salida ${sal.codigo} registrada`);
     const msg = document.getElementById('sal-mensaje');
     msg.style.display = 'block';
-    msg.innerHTML = `✅ Salida <strong>${sal.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFSalida()" style="margin-left:10px;">📄 PDF</button>`;
-    carritoSalida = []; renderCarritoSalida();
-    document.getElementById('sal-receptor').value = ''; document.getElementById('sal-receptor-rut').value = ''; document.getElementById('sal-receptor-email').value = ''; document.getElementById('sal-obs').value = '';
-    await cargarTodo(); renderStock(); actualizarResumenes();
+    msg.innerHTML = `✅ Salida <strong>${sal.codigo}</strong> desde recepción <strong>${r.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFSalida()" style="margin-left:10px;">📄 PDF</button>`;
+    
+    // Reset
+    document.getElementById('sal-receptor').value = '';
+    document.getElementById('sal-receptor-rut').value = '';
+    document.getElementById('sal-receptor-email').value = '';
+    document.getElementById('sal-obs').value = '';
+    document.getElementById('sal-detalle').style.display = 'none';
+    document.getElementById('sal-recepcion-sel').value = '';
+    
+    await cargarTodo();
+    renderStock();
+    actualizarResumenes();
+    // Refrescar selector de recepciones (la despachada ya no debe aparecer)
+    salCambiarDireccion();
+    
   } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
-  btn.disabled = false;
+  btn.disabled = false; btn.textContent = '✅ Registrar Salida';
 }
 
 // ============================================================
@@ -1754,6 +1858,7 @@ function descargarPDFSalida() {
       ['Dirección', s.departamento_padre || '—'],
       ['Departamento', s.subdepartamento_padre || '—'],
       ['Área', s.subdepartamento || '—'],
+      ['Recepción origen', s.recepcion_origen || '—'],
       ['Receptor', s.receptor],
       ['RUT', s.receptor_rut || 'N/E'],
       ['Email', s.receptor_email||'N/E']
@@ -1859,7 +1964,13 @@ function cambiarTab(tabId) {
   if (tab) tab.classList.add('active');
   if (tabId === 'tab-mi-solicitud') { renderMisSolicitudes(); actualizarBadgePendientes(); }
   if (tabId === 'tab-recepcion') { poblarVinculoSolicitud(); actualizarResumenes(); }
-  if (tabId === 'tab-salida') { actualizarResumenes(); }
+  if (tabId === 'tab-salida') { 
+    // Resetear al entrar
+    document.getElementById('sal-depto-padre').value = '';
+    document.getElementById('sal-wrap-recepciones').style.display = 'none';
+    document.getElementById('sal-detalle').style.display = 'none';
+    actualizarResumenes(); 
+  }
   if (tabId === 'tab-stock') renderStock();
   if (tabId === 'tab-solicitudes' && esAdmin()) renderSolicitudesAdmin();
   if (tabId === 'tab-cuentas' && esAdmin()) renderCuentas();
@@ -1901,11 +2012,7 @@ window.agregarAlCarritoRecepcion = agregarAlCarritoRecepcion;
 window.registrarRecepcion = registrarRecepcion;
 window.descargarPDFRecepcion = descargarPDFRecepcion;
 window.salCambiarDireccion = salCambiarDireccion;
-window.salCambiarDepto = salCambiarDepto;
-window.salCambiarArea = salCambiarArea;
-window.salElegirLinea = salElegirLinea;
-window.filtrarDropdownSalida = filtrarDropdownSalida;
-window.agregarAlCarritoSalida = agregarAlCarritoSalida;
+window.salCargarRecepcion = salCargarRecepcion;
 window.registrarSalida = registrarSalida;
 window.descargarPDFSalida = descargarPDFSalida;
 window.renderStock = renderStock;

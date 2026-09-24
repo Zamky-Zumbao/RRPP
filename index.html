@@ -467,7 +467,9 @@
 </footer>
 
 <script>
+// ============================================================
 // CONFIGURACIÓN
+// ============================================================
 const SUPABASE_URL = 'https://wxgboogoygogxrftsire.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_TMSNvBHNfonWB8kfEkiZDg_LvGpcYdG';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -488,7 +490,9 @@ const FIRMAS_OFICIALES = {
   'operador@lascondes.cl': { nombre: 'Operador de Bodega', cargo: 'Funcionario' }
 };
 
+// ============================================================
 // ESTADO GLOBAL
+// ============================================================
 let rolActual = null;
 let nombreUsuario = '';
 let nombreCompleto = '';
@@ -520,7 +524,18 @@ let ultimaSalida = null;
 let solicitudActual = null;
 let logoImageData = null;
 
+// ============================================================
 // HELPERS
+// ============================================================
+function norm(s) {
+  return String(s || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toUpperCase();
+}
+
 function formatearFecha(iso) {
   if (!iso) return '—';
   const d = new Date(iso);
@@ -550,7 +565,9 @@ function precargarLogoPDF() {
   img.src = 'https://i.ibb.co/Z6qxBJQZ/Logo-general-1.png';
 }
 
+// ============================================================
 // LOGIN
+// ============================================================
 async function aplicarSesion(session) {
   const email = (session.user.email || '').toLowerCase();
   const { data: perfil } = await sb.from('lc_perfiles').select('nombre, rol').eq('id', session.user.id).single();
@@ -579,7 +596,9 @@ document.getElementById('login-password').addEventListener('keypress', e => { if
   if (data.session) { await aplicarSesion(data.session); document.getElementById('login-overlay').style.display = 'none'; iniciarApp(); }
 })();
 
-// INICIO
+// ============================================================
+// INICIAR APP
+// ============================================================
 async function iniciarApp() {
   document.body.classList.remove('rol-admin','rol-operador','rol-solicitante');
   if (esAdmin()) document.body.classList.add('rol-admin');
@@ -626,13 +645,16 @@ async function cargarTodo() {
     solicitudes = (rSol.data || []).map(s => ({...s, fecha_fmt: formatearFecha(s.fecha_solicitud)}));
     solicitudItems = rSolI.data || [];
     solicitudAdjuntos = rSolA.data || [];
+    console.log(`📦 Cargados: ${productos.length} productos · ${cuentas.length} cuentas`);
     return true;
   } catch(e) { console.error(e); return false; }
 }
 
+// ============================================================
 // SELECTORES DE DIRECCIÓN
+// ============================================================
 function obtenerDirecciones() {
-  return [...new Set(cuentas.map(c => c.direccion))].filter(Boolean).sort();
+  return [...new Set(cuentas.map(c => c.direccion).filter(Boolean))].sort();
 }
 function poblarSelectoresDireccion() {
   const dirs = obtenerDirecciones();
@@ -643,22 +665,31 @@ function poblarSelectoresDireccion() {
   });
 }
 
-// CASCADA
+// ============================================================
+// CASCADA GENÉRICA
+// ============================================================
 function cambiarDireccion(prefijo) {
   const direccion = document.getElementById(`${prefijo}-depto-padre`).value;
   const selDepto = document.getElementById(`${prefijo}-depto`);
   const selArea = document.getElementById(`${prefijo}-subdepto`);
   const panelLinea = document.getElementById(`${prefijo}-linea-panel`);
   const wrapBusqueda = document.getElementById(`${prefijo}-busqueda-wrap`);
+  
   selArea.innerHTML = '<option value="">— Primero elige departamento —</option>';
   if (panelLinea) panelLinea.style.display = 'none';
   if (wrapBusqueda) wrapBusqueda.style.display = 'none';
+  
   if (!direccion) {
     selDepto.innerHTML = '<option value="">— Primero elige dirección —</option>';
+    selDepto.disabled = false;
     return;
   }
+  
   const filtradas = cuentas.filter(c => c.direccion === direccion);
   const deptos = [...new Set(filtradas.map(c => c.departamento_padre).filter(Boolean))].sort();
+  
+  console.log(`📍 Dirección "${direccion}" · ${filtradas.length} cuentas · ${deptos.length} deptos distintos`);
+  
   if (deptos.length === 0) {
     selDepto.innerHTML = '<option value="">— No aplica —</option>';
     selDepto.disabled = true;
@@ -685,6 +716,7 @@ function poblarAreas(prefijo, direccion, depto) {
   let filtradas = cuentas.filter(c => c.direccion === direccion);
   if (depto) filtradas = filtradas.filter(c => c.departamento_padre === depto);
   const areas = [...new Set(filtradas.map(c => c.subdepartamento).filter(Boolean))].sort();
+  console.log(`🏢 Depto "${depto || '(sin depto)'}" · ${areas.length} áreas`);
   selArea.innerHTML = '<option value="">— Selecciona área —</option>' + areas.map(a => `<option value="${escaparHtml(a)}">${escaparHtml(a)}</option>`).join('');
 }
 
@@ -694,26 +726,44 @@ function cambiarArea(prefijo) {
   const area = document.getElementById(`${prefijo}-subdepto`).value;
   const panelLinea = document.getElementById(`${prefijo}-linea-panel`);
   const wrapBusqueda = document.getElementById(`${prefijo}-busqueda-wrap`);
-  if (!direccion || !area) { if (panelLinea) panelLinea.style.display = 'none'; if (wrapBusqueda) wrapBusqueda.style.display = 'none'; return; }
-  const filtradas = cuentas.filter(c => c.direccion === direccion && c.subdepartamento === area && (depto === null || c.departamento_padre === depto));
+  if (!direccion || !area) {
+    if (panelLinea) panelLinea.style.display = 'none';
+    if (wrapBusqueda) wrapBusqueda.style.display = 'none';
+    return;
+  }
+  
+  const filtradas = cuentas.filter(c => 
+    c.direccion === direccion && 
+    c.subdepartamento === area &&
+    ((!depto && !c.departamento_padre) || (depto && c.departamento_padre === depto))
+  );
+  
   const cL1 = filtradas.find(c => c.linea === 1);
   const cL2 = filtradas.find(c => c.linea === 2);
+  
+  console.log(`📊 Área "${area}" · ${filtradas.length} cuentas · L1:${!!cL1} L2:${!!cL2}`);
+  
   if (prefijo === 'sol') subdeptoActualSol = { l1: cL1, l2: cL2 };
   if (prefijo === 'rec') subdeptoActualRec = { l1: cL1, l2: cL2 };
   if (prefijo === 'sal') subdeptoActualSal = { l1: cL1, l2: cL2 };
+  
   if (panelLinea) panelLinea.style.display = 'block';
   const btnL1 = document.getElementById(`${prefijo}-linea-l1`);
   const btnL2 = document.getElementById(`${prefijo}-linea-l2`);
   const subL1 = document.getElementById(`${prefijo}-l1-sub`);
   const subL2 = document.getElementById(`${prefijo}-l2-sub`);
+  
   const dL1 = cL1 ? calcularDisponibleCuenta(cL1.id) : 0;
   const dL2 = cL2 ? calcularDisponibleCuenta(cL2.id) : 0;
+  
   btnL1.classList.remove('bloqueado');
   btnL2.classList.remove('bloqueado');
   if (!cL1) btnL1.classList.add('bloqueado');
   if (!cL2) btnL2.classList.add('bloqueado');
   subL1.textContent = cL1 ? formatearCLP(dL1) : 'No disponible';
   subL2.textContent = cL2 ? formatearCLP(dL2) : 'No disponible';
+  
+  // Auto-seleccionar primera línea disponible
   if (cL1) elegirLinea(prefijo, 1);
   else if (cL2) elegirLinea(prefijo, 2);
 }
@@ -725,8 +775,10 @@ function elegirLinea(prefijo, linea) {
   if (prefijo === 'sol') lineaSeleccionadaSol = linea;
   if (prefijo === 'rec') lineaSeleccionadaRec = linea;
   if (prefijo === 'sal') lineaSeleccionadaSal = linea;
+  
   const wrap = document.getElementById(`${prefijo}-busqueda-wrap`);
   if (wrap) wrap.style.display = 'block';
+  
   const cuentaInfo = document.getElementById(`${prefijo}-cuenta-info`);
   if (cuentaInfo) {
     const cuentasLoc = prefijo === 'rec' ? subdeptoActualRec : (prefijo === 'sal' ? subdeptoActualSal : subdeptoActualSol);
@@ -736,16 +788,19 @@ function elegirLinea(prefijo, linea) {
       const cons = calcularConsumidoCuenta(c.id);
       const res = calcularReservadoCuenta(c.id);
       cuentaInfo.style.display = 'block';
-      cuentaInfo.innerHTML = `💰 Cuenta <strong>${escaparHtml(c.nombre)}</strong> · Asignado: <strong>${formatearCLP(c.monto_asignado)}</strong> · Reservado: <strong>${formatearCLP(res)}</strong> · Consumido: <strong>${formatearCLP(cons)}</strong> · Disponible: <strong style="color:${disp>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(disp)}</strong>`;
+      cuentaInfo.innerHTML = `💰 Cuenta <strong>${escaparHtml(c.nombre || c.codigo)}</strong> · Asignado: <strong>${formatearCLP(c.monto_asignado)}</strong> · Reservado: <strong>${formatearCLP(res)}</strong> · Consumido: <strong>${formatearCLP(cons)}</strong> · Disponible: <strong style="color:${disp>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(disp)}</strong>`;
     }
   }
+  
   const trigger = document.getElementById(`${prefijo}-prod-trigger`);
   if (trigger) trigger.value = '';
   const sel = document.getElementById(`${prefijo}-prod-sel`);
   if (sel) sel.style.display = 'none';
 }
 
+// ============================================================
 // CÁLCULOS
+// ============================================================
 function calcularConsumidoCuenta(cuentaId) {
   const items = recepcionItems.filter(ri => ri.cuenta_id === cuentaId);
   const totalNeto = items.reduce((s, ri) => s + Number(ri.subtotal || 0), 0);
@@ -761,7 +816,9 @@ function calcularDisponibleCuenta(cuentaId) {
   return Number(c.monto_asignado) - calcularConsumidoCuenta(cuentaId) - calcularReservadoCuenta(cuentaId);
 }
 
+// ============================================================
 // MI SOLICITUD
+// ============================================================
 function solCambiarDireccion() { cambiarDireccion('sol'); }
 function solCambiarDepto() { cambiarDepto('sol'); }
 function solCambiarArea() {
@@ -858,6 +915,7 @@ function elegirUrgencia(u) {
   urgenciaSolicitud = u;
   document.querySelectorAll('.urgencia-opcion').forEach(o => o.classList.toggle('activo', o.dataset.urg === u));
 }
+
 async function subirAdjuntoSolicitud(event) {
   const files = event.target.files;
   if (!files || !files.length) return;
@@ -1101,11 +1159,14 @@ function actualizarBadgePendientes() {
   if (b) { b.textContent = p; b.style.display = p > 0 ? 'inline-block' : 'none'; }
 }
 
+// ============================================================
 // RECEPCIÓN
+// ============================================================
 function recCambiarDireccion() { cambiarDireccion('rec'); }
 function recCambiarDepto() { cambiarDepto('rec'); }
 function recCambiarArea() { cambiarArea('rec'); }
 function recElegirLinea(l) { elegirLinea('rec', l); }
+
 function alVincularSolicitud() {
   const id = document.getElementById('rec-solicitud-vinculo').value;
   const info = document.getElementById('rec-vinculo-info');
@@ -1274,11 +1335,14 @@ async function registrarRecepcion() {
   btn.disabled = false; btn.textContent = '✅ Registrar Recepción';
 }
 
+// ============================================================
 // SALIDA
+// ============================================================
 function salCambiarDireccion() { cambiarDireccion('sal'); }
 function salCambiarDepto() { cambiarDepto('sal'); }
 function salCambiarArea() { cambiarArea('sal'); }
 function salElegirLinea(l) { elegirLinea('sal', l); }
+
 function filtrarDropdownSalida(texto) {
   const list = document.getElementById('sal-prod-list');
   list.style.display = 'block';
@@ -1393,7 +1457,9 @@ async function registrarSalida() {
   btn.disabled = false;
 }
 
+// ============================================================
 // STOCK
+// ============================================================
 function renderStock() {
   const tbody = document.getElementById('stock-tbody');
   if (!tbody) return;
@@ -1429,7 +1495,9 @@ function renderStock() {
   document.getElementById('stock-total').textContent = `${lista.length} prod · ${tu} unid · ${formatearCLP(tv)}`;
 }
 
+// ============================================================
 // CUENTAS
+// ============================================================
 function renderCuentas() {
   const tbody = document.getElementById('cuentas-tbody');
   if (!tbody) return;
@@ -1456,7 +1524,9 @@ function renderCuentas() {
   document.getElementById('cuentas-total').textContent = `${lista.length} cuentas · Asignado: ${formatearCLP(ta)} · Reservado: ${formatearCLP(tr)} · Consumido: ${formatearCLP(tc)}`;
 }
 
+// ============================================================
 // AUDITORÍA
+// ============================================================
 function renderAuditoria() {
   const tbody = document.getElementById('aud-tbody');
   if (!tbody) return;
@@ -1493,7 +1563,9 @@ function renderAuditoria() {
   document.getElementById('aud-total').textContent = `${fil.length} movimientos`;
 }
 
+// ============================================================
 // REPORTES
+// ============================================================
 function renderReportes() {
   const t = document.getElementById('rep-total-productos');
   if (!t) return;
@@ -1522,7 +1594,9 @@ function actualizarResumenes() {
   if (esAdmin()) renderReportes();
 }
 
+// ============================================================
 // PDF
+// ============================================================
 function generarPDFBase(config) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
@@ -1712,7 +1786,9 @@ function descargarPDFSolicitud(id) {
   mostrarToast('✅ PDF descargado');
 }
 
+// ============================================================
 // EXCEL
+// ============================================================
 function hojaExcel(data, cols) {
   const AZ = '1664C0', GR = 'F5F7FC', BO = 'E2E8F0', BL = 'FFFFFF';
   const bf = { style: 'thin', color: { rgb: BO } };
@@ -1770,7 +1846,9 @@ function exportarExcelSolicitudes() {
   XLSX.writeFile(wb, `Solicitudes_${fechaActual()}.xlsx`);
 }
 
+// ============================================================
 // CAMBIO DE PESTAÑA
+// ============================================================
 function cambiarTab(tabId) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   const sec = document.getElementById(tabId);
@@ -1788,7 +1866,9 @@ function cambiarTab(tabId) {
   if (tabId === 'tab-reportes' && esAdmin()) renderReportes();
 }
 
-// EXPONER FUNCIONES
+// ============================================================
+// EXPONER FUNCIONES GLOBALES
+// ============================================================
 window.intentarLogin = intentarLogin;
 window.cerrarSesion = cerrarSesion;
 window.cambiarTab = cambiarTab;

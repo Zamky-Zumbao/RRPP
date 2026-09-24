@@ -1006,8 +1006,9 @@ function nuevaSolicitudForm() {
   document.getElementById('sol-subdepto').innerHTML = '<option value="">— Primero elige departamento —</option>';
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
-  document.getElementById('sol-linea-panel').style.display = 'none';
-  document.getElementById('sol-busqueda-wrap').style.display = 'none';
+  // ✅ FIX: la búsqueda wrap en lugar de linea-panel
+  const buscador = document.getElementById('sol-busqueda-wrap');
+  if (buscador) buscador.style.display = 'none';
 }
 
 function renderMisSolicitudes() {

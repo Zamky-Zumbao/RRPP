@@ -205,11 +205,10 @@
 
 <div class="section solo-solicitante solo-admin" id="tab-mi-solicitud">
   <div class="section-label">📝 NUEVA SOLICITUD DE ARTÍCULOS</div>
-  <div class="aviso-info">ℹ️ <strong>Paso 1:</strong> Selecciona dirección y departamento. El sistema validará el tope de cada línea según el presupuesto asignado.</div>
-  <div class="row-2">
-    <div class="field"><label class="required">Dirección</label><select id="sol-depto-padre" onchange="alCambiarDeptoPadre()"><option value="">— Selecciona —</option></select></div>
-    <div class="field"><label class="required">Departamento</label><select id="sol-subdepto" onchange="alCambiarSubdepto()"><option value="">— Primero elige dirección —</option></select></div>
-  </div>
+  <div class="aviso-info">ℹ️ <strong>Paso 1:</strong> Selecciona Dirección → Departamento → Área. El sistema validará el tope de cada línea según el presupuesto asignado.</div>
+  <div class="field"><label class="required">Dirección</label><select id="sol-depto-padre" onchange="alCambiarDeptoPadre()"><option value="">— Selecciona —</option></select></div>
+  <div class="field"><label class="required">Departamento</label><select id="sol-depto" onchange="alCambiarDepartamento()"><option value="">— Primero elige dirección —</option></select></div>
+  <div class="field"><label class="required">Área</label><select id="sol-subdepto" onchange="alCambiarSubdepto()"><option value="">— Primero elige departamento —</option></select></div>
   <div id="sol-info-panel" class="info-panel" style="display:none;">
     <div class="titulo">Área seleccionada</div>
     <div class="nombre" id="sol-info-nombre">—</div>
@@ -288,9 +287,10 @@
     <div id="rec-vinculo-info" style="display:none; font-size:11px; background:#f0fdf4; border-left:3px solid var(--verde); padding:8px 12px; border-radius:8px; margin-top:6px;"></div>
   </div>
   <div id="rec-wrap-campos">
-    <div class="field"><label class="required">Dirección</label><select id="rec-depto"><option value="">— Selecciona —</option></select></div>
-    <div class="field"><label class="required">Departamento</label><select id="rec-subdepto"><option value="">— Primero elige dirección —</option></select></div>
-    <div class="field"><label class="required">Cuenta (L1 / L2)</label><select id="rec-cuenta"><option value="">— Primero elige departamento —</option></select></div>
+    <div class="field"><label class="required">Dirección</label><select id="rec-depto-padre"><option value="">— Selecciona —</option></select></div>
+    <div class="field"><label class="required">Departamento</label><select id="rec-depto"><option value="">— Primero elige dirección —</option></select></div>
+    <div class="field"><label class="required">Área</label><select id="rec-subdepto"><option value="">— Primero elige departamento —</option></select></div>
+    <div class="field"><label class="required">Cuenta (L1 / L2)</label><select id="rec-cuenta"><option value="">— Primero elige área —</option></select></div>
     <div id="rec-cuenta-info" style="display:none; font-size:11px; background:#f0f5ff; padding:8px 12px; border-radius:10px; margin-bottom:12px;"></div>
   </div>
   <div class="field" id="rec-wrap-busqueda">
@@ -382,7 +382,7 @@
 <div class="section solo-admin" id="tab-cuentas">
   <div class="section-label">💰 CUENTAS Y PRESUPUESTO</div>
   <div class="filtros"><input type="text" id="cuentas-filtro" placeholder="🔍 Buscar..." oninput="renderCuentas()"></div>
-  <div class="tabla-container"><table><thead><tr><th>Dirección</th><th>Depto/Área</th><th style="text-align:right;">Asignado</th><th style="text-align:right;">Reservado</th><th style="text-align:right;">Consumido</th><th style="text-align:right;">Disponible</th></tr></thead><tbody id="cuentas-tbody"></tbody></table></div>
+  <div class="tabla-container"><table><thead><tr><th>Dirección</th><th>Depto / Área</th><th style="text-align:right;">Asignado</th><th style="text-align:right;">Reservado</th><th style="text-align:right;">Consumido</th><th style="text-align:right;">Disponible</th></tr></thead><tbody id="cuentas-tbody"></tbody></table></div>
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="cuentas-total"></div>
 </div>
 
@@ -511,7 +511,7 @@ function precargarLogoPDF() {
 
 async function aplicarSesion(session) {
   const email = (session.user.email || '').toLowerCase();
-  const { data: perfil } = await sb.from('lc_perfiles').select('nombre, rol, departamento_padre, subdepartamento_padre, subdepartamento').eq('id', session.user.id).single();
+  const { data: perfil } = await sb.from('lc_perfiles').select('nombre, rol').eq('id', session.user.id).single();
   if (perfil) {
     rolActual = perfil.rol;
     nombreCompleto = perfil.nombre || email;
@@ -592,9 +592,77 @@ async function cargarTodo() {
 function poblarSelects() {
   const direcciones = [...new Set(cuentas.map(c => c.departamento_padre))].sort();
   const optD = '<option value="">— Selecciona —</option>' + direcciones.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
-  ['rec-depto','sal-depto','sol-depto-padre'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = optD; });
+  ['sal-depto','sol-depto-padre'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = optD; });
+  const rdp = document.getElementById('rec-depto-padre');
+  if (rdp) {
+    rdp.innerHTML = optD;
+    rdp.onchange = function() {
+      const deptoPadre = this.value;
+      const selDepto = document.getElementById('rec-depto');
+      const selSub = document.getElementById('rec-subdepto');
+      const selCuenta = document.getElementById('rec-cuenta');
+      selSub.innerHTML = '<option value="">— Primero elige departamento —</option>';
+      selCuenta.innerHTML = '<option value="">— Primero elige área —</option>';
+      if (!deptoPadre) { selDepto.innerHTML = '<option value="">— Primero elige dirección —</option>'; return; }
+      const deptos = [...new Set(cuentas.filter(c => c.departamento_padre === deptoPadre).map(c => c.subdepartamento_padre || ''))].sort();
+      if (deptos.length === 1 && deptos[0] === '') {
+        selDepto.innerHTML = '<option value="">— No aplica —</option>';
+        selDepto.disabled = true;
+        // Poblar áreas directamente
+        poblarAreasRecepcion(deptoPadre, '');
+      } else {
+        selDepto.disabled = false;
+        selDepto.innerHTML = '<option value="">— Selecciona —</option>' + deptos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+      }
+    };
+    rdp.onchange();
+  }
+  const rd = document.getElementById('rec-depto');
+  if (rd) {
+    rd.onchange = function() {
+      const deptoPadre = document.getElementById('rec-depto-padre').value;
+      const depto = this.value;
+      if (!depto) return;
+      poblarAreasRecepcion(deptoPadre, depto);
+    };
+  }
+  const rs = document.getElementById('rec-subdepto');
+  if (rs) {
+    rs.onchange = function() {
+      const deptoPadre = document.getElementById('rec-depto-padre').value;
+      const depto = document.getElementById('rec-depto').value || '';
+      const area = this.value;
+      const selC = document.getElementById('rec-cuenta');
+      if (!area) { selC.innerHTML = '<option value="">— Primero elige área —</option>'; return; }
+      const cs = cuentas.filter(c => c.departamento_padre === deptoPadre && (c.subdepartamento_padre||'') === depto && c.subdepartamento === area);
+      selC.innerHTML = '<option value="">— Selecciona —</option>' + cs.map(c => `<option value="${c.id}">L${c.linea} · ${escaparHtml(c.codigo)}</option>`).join('');
+    };
+  }
+  const rc = document.getElementById('rec-cuenta');
+  if (rc) {
+    rc.onchange = function() {
+      const info = document.getElementById('rec-cuenta-info');
+      const cid = this.value;
+      if (!cid) { info.style.display = 'none'; return; }
+      const c = cuentas.find(x => x.id === cid);
+      if (!c) return;
+      const cons = calcularConsumidoCuenta(cid);
+      const res = calcularReservadoCuenta(cid);
+      const disp = c.monto_asignado - cons - res;
+      info.style.display = 'block';
+      info.innerHTML = `💰 Asignado: <strong>${formatearCLP(c.monto_asignado)}</strong> · Reservado: <strong>${formatearCLP(res)}</strong> · Consumido: <strong>${formatearCLP(cons)}</strong> · Disponible: <strong style="color:${disp>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(disp)}</strong>`;
+    };
+  }
   const sd = document.getElementById('soladmin-depto');
   if (sd) sd.innerHTML = '<option value="">Todas las direcciones</option>' + direcciones.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+}
+
+function poblarAreasRecepcion(deptoPadre, depto) {
+  const selSub = document.getElementById('rec-subdepto');
+  let filtradas = cuentas.filter(c => c.departamento_padre === deptoPadre);
+  if (depto && depto !== '') filtradas = filtradas.filter(c => (c.subdepartamento_padre || '') === depto);
+  const areas = [...new Set(filtradas.map(c => c.subdepartamento || ''))].sort();
+  selSub.innerHTML = '<option value="">— Selecciona área —</option>' + areas.map(a => `<option value="${escaparHtml(a)}">${escaparHtml(a)}</option>`).join('');
 }
 
 function calcularConsumidoCuenta(cuentaId) {
@@ -614,31 +682,46 @@ function calcularDisponibleCuenta(cuentaId) {
 
 // MI SOLICITUD
 function alCambiarDeptoPadre() {
-  const depto = document.getElementById('sol-depto-padre').value;
-  const sel = document.getElementById('sol-subdepto');
+  const deptoPadre = document.getElementById('sol-depto-padre').value;
+  const selDepto = document.getElementById('sol-depto');
+  const selSub = document.getElementById('sol-subdepto');
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
-  if (!depto) { sel.innerHTML = '<option value="">— Primero elige dirección —</option>'; return; }
-  const combos = {};
-  cuentas.filter(c => c.departamento_padre === depto).forEach(c => {
-    const sp = c.subdepartamento_padre || '';
-    const s = c.subdepartamento || '';
-    const key = `${sp}|${s}`;
-    if (!combos[key]) combos[key] = { sp, s, label: sp ? `${sp} / ${s}` : s };
-  });
-  const opts = Object.values(combos).sort((a,b) => a.label.localeCompare(b.label));
-  sel.innerHTML = '<option value="">— Selecciona área —</option>' + opts.map(o => `<option value="${escaparHtml(o.sp)}|${escaparHtml(o.s)}">${escaparHtml(o.label)}</option>`).join('');
+  selSub.innerHTML = '<option value="">— Primero elige departamento —</option>';
+  if (!deptoPadre) { selDepto.innerHTML = '<option value="">— Primero elige dirección —</option>'; return; }
+  const deptos = [...new Set(cuentas.filter(c => c.departamento_padre === deptoPadre).map(c => c.subdepartamento_padre || ''))].sort();
+  if (deptos.length === 1 && deptos[0] === '') {
+    selDepto.innerHTML = '<option value="">— No aplica —</option>';
+    selDepto.disabled = true;
+    poblarAreasMiSolicitud(deptoPadre, '');
+  } else {
+    selDepto.disabled = false;
+    selDepto.innerHTML = '<option value="">— Selecciona —</option>' + deptos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+  }
+}
+function alCambiarDepartamento() {
+  const deptoPadre = document.getElementById('sol-depto-padre').value;
+  const depto = document.getElementById('sol-depto').value;
+  if (!depto) return;
+  poblarAreasMiSolicitud(deptoPadre, depto);
+}
+function poblarAreasMiSolicitud(deptoPadre, depto) {
+  const selSub = document.getElementById('sol-subdepto');
+  let filtradas = cuentas.filter(c => c.departamento_padre === deptoPadre);
+  if (depto && depto !== '') filtradas = filtradas.filter(c => (c.subdepartamento_padre || '') === depto);
+  const areas = [...new Set(filtradas.map(c => c.subdepartamento || ''))].sort();
+  selSub.innerHTML = '<option value="">— Selecciona área —</option>' + areas.map(a => `<option value="${escaparHtml(a)}">${escaparHtml(a)}</option>`).join('');
 }
 function alCambiarSubdepto() {
-  const depto = document.getElementById('sol-depto-padre').value;
-  const val = document.getElementById('sol-subdepto').value;
-  if (!depto || !val) { document.getElementById('sol-info-panel').style.display = 'none'; document.getElementById('sol-trabajo').style.display = 'none'; return; }
-  const [sp, s] = val.split('|');
-  const cL1 = cuentas.find(c => c.departamento_padre === depto && (c.subdepartamento_padre||'') === sp && c.subdepartamento === s && c.linea === 1);
-  const cL2 = cuentas.find(c => c.departamento_padre === depto && (c.subdepartamento_padre||'') === sp && c.subdepartamento === s && c.linea === 2);
+  const deptoPadre = document.getElementById('sol-depto-padre').value;
+  const depto = document.getElementById('sol-depto').value || '';
+  const area = document.getElementById('sol-subdepto').value;
+  if (!deptoPadre || !area) { document.getElementById('sol-info-panel').style.display = 'none'; document.getElementById('sol-trabajo').style.display = 'none'; return; }
+  const cL1 = cuentas.find(c => c.departamento_padre === deptoPadre && (c.subdepartamento_padre||'') === depto && c.subdepartamento === area && c.linea === 1);
+  const cL2 = cuentas.find(c => c.departamento_padre === deptoPadre && (c.subdepartamento_padre||'') === depto && c.subdepartamento === area && c.linea === 2);
   subdeptoActualCuentas = { l1: cL1, l2: cL2 };
-  const label = sp ? `${sp} / ${s}` : s;
-  document.getElementById('sol-info-nombre').textContent = `${depto} · ${label}`;
+  const label = depto ? `${depto} / ${area}` : area;
+  document.getElementById('sol-info-nombre').textContent = `${deptoPadre} · ${label}`;
   const dL1 = cL1 ? calcularDisponibleCuenta(cL1.id) : 0;
   const dL2 = cL2 ? calcularDisponibleCuenta(cL2.id) : 0;
   document.getElementById('sol-info-l1').style.display = cL1 ? 'flex' : 'none';
@@ -768,10 +851,10 @@ function renderAdjuntosSolicitud() {
 function eliminarAdjuntoTemporal(idx) { adjuntosTemporales.splice(idx, 1); renderAdjuntosSolicitud(); }
 
 async function enviarSolicitud() {
-  const depto = document.getElementById('sol-depto-padre').value;
-  const val = document.getElementById('sol-subdepto').value;
-  if (!depto || !val) { mostrarToast('❌ Elige dirección y área'); return; }
-  const [sp, s] = val.split('|');
+  const deptoPadre = document.getElementById('sol-depto-padre').value;
+  const depto = document.getElementById('sol-depto').value || '';
+  const area = document.getElementById('sol-subdepto').value;
+  if (!deptoPadre || !area) { mostrarToast('❌ Completa Dirección / Departamento / Área'); return; }
   if (!carritoSolicitud.length) { mostrarToast('❌ Agrega productos'); return; }
   const obs = document.getElementById('sol-obs').value.trim();
   const totalNeto = carritoSolicitud.reduce((s2, p) => s2 + p.precio_neto * p.cantidad, 0);
@@ -780,8 +863,8 @@ async function enviarSolicitud() {
   const btn = event.target; btn.disabled = true; btn.textContent = '⏳ Enviando...';
   try {
     const { data: solData, error: e1 } = await sb.from('lc_solicitudes').insert({
-      departamento: depto, departamento_padre: depto,
-      subdepartamento_padre: sp || null, subdepartamento: s,
+      departamento: deptoPadre, departamento_padre: deptoPadre,
+      subdepartamento_padre: depto || null, subdepartamento: area,
       solicitante_email: nombreUsuario, solicitante_nombre: nombreCompleto,
       estado: 'PENDIENTE', monto_estimado: totalNeto, monto_estimado_bruto: totalBruto,
       urgencia: urgenciaSolicitud, observacion: obs || null,
@@ -820,7 +903,8 @@ function nuevaSolicitudForm() {
   renderCarritoMiSolicitud(); renderAdjuntosSolicitud(); elegirUrgencia('NORMAL');
   document.getElementById('sol-obs').value = '';
   document.getElementById('sol-depto-padre').value = '';
-  document.getElementById('sol-subdepto').innerHTML = '<option value="">— Primero elige dirección —</option>';
+  document.getElementById('sol-depto').innerHTML = '<option value="">— Primero elige dirección —</option>';
+  document.getElementById('sol-subdepto').innerHTML = '<option value="">— Primero elige departamento —</option>';
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
 }
@@ -974,44 +1058,6 @@ function actualizarBadgePendientes() {
 }
 
 // RECEPCIÓN
-document.addEventListener('change', e => {
-  if (e.target.id === 'rec-depto') {
-    const d = e.target.value;
-    const s = document.getElementById('rec-subdepto');
-    if (!d) { s.innerHTML = '<option value="">— Primero elige dirección —</option>'; return; }
-    const combos = {};
-    cuentas.filter(c => c.departamento_padre === d).forEach(c => {
-      const sp = c.subdepartamento_padre || '';
-      const sub = c.subdepartamento || '';
-      const key = `${sp}|${sub}`;
-      if (!combos[key]) combos[key] = { sp, sub, label: sp ? `${sp} / ${sub}` : sub };
-    });
-    const opts = Object.values(combos).sort((a,b) => a.label.localeCompare(b.label));
-    s.innerHTML = '<option value="">— Selecciona —</option>' + opts.map(o => `<option value="${escaparHtml(o.sp)}|${escaparHtml(o.sub)}">${escaparHtml(o.label)}</option>`).join('');
-  }
-  if (e.target.id === 'rec-subdepto') {
-    const d = document.getElementById('rec-depto').value;
-    const v = e.target.value;
-    const selC = document.getElementById('rec-cuenta');
-    if (!v) { selC.innerHTML = '<option value="">— Primero elige área —</option>'; return; }
-    const [sp, sub] = v.split('|');
-    const cs = cuentas.filter(c => c.departamento_padre === d && (c.subdepartamento_padre||'') === sp && c.subdepartamento === sub);
-    selC.innerHTML = '<option value="">— Selecciona —</option>' + cs.map(c => `<option value="${c.id}">L${c.linea} · ${escaparHtml(c.codigo)}</option>`).join('');
-  }
-  if (e.target.id === 'rec-cuenta') {
-    const info = document.getElementById('rec-cuenta-info');
-    const cid = e.target.value;
-    if (!cid) { info.style.display = 'none'; return; }
-    const c = cuentas.find(x => x.id === cid);
-    if (!c) return;
-    const cons = calcularConsumidoCuenta(cid);
-    const res = calcularReservadoCuenta(cid);
-    const disp = c.monto_asignado - cons - res;
-    info.style.display = 'block';
-    info.innerHTML = `💰 Asignado: <strong>${formatearCLP(c.monto_asignado)}</strong> · Reservado: <strong>${formatearCLP(res)}</strong> · Consumido: <strong>${formatearCLP(cons)}</strong> · Disponible: <strong style="color:${disp>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(disp)}</strong>`;
-  }
-});
-
 function alVincularSolicitud() {
   const id = document.getElementById('rec-solicitud-vinculo').value;
   const info = document.getElementById('rec-vinculo-info');
@@ -1101,12 +1147,12 @@ function renderCarritoRecepcion() {
 async function registrarRecepcion() {
   const solVinculo = document.getElementById('rec-solicitud-vinculo').value;
   let cuentaId = document.getElementById('rec-cuenta').value;
-  let depto = document.getElementById('rec-depto').value;
+  let deptoPadre = document.getElementById('rec-depto-padre').value;
   if (solVinculo) {
     const s = solicitudes.find(x => x.id === solVinculo);
-    if (s) { depto = s.departamento_padre; cuentaId = s.cuenta_l1_id || s.cuenta_l2_id; }
+    if (s) { deptoPadre = s.departamento_padre; cuentaId = s.cuenta_l1_id || s.cuenta_l2_id; }
   }
-  if (!depto) { mostrarToast('❌ Sin dirección'); return; }
+  if (!deptoPadre) { mostrarToast('❌ Sin dirección'); return; }
   if (!cuentaId) { mostrarToast('❌ Sin cuenta'); return; }
   if (!carritoRecepcion.length) { mostrarToast('❌ Sin productos'); return; }
   const cuenta = cuentas.find(c => c.id === cuentaId);
@@ -1125,7 +1171,7 @@ async function registrarRecepcion() {
       proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
       numero_guia: guia || null, numero_factura: factura || null, observacion: obs || null,
       responsable: nombreUsuario, monto_total: totalNeto, monto_total_bruto: totalBruto,
-      iva_total: totalBruto - totalNeto, cuenta_id: cuentaId, departamento: depto,
+      iva_total: totalBruto - totalNeto, cuenta_id: cuentaId, departamento: deptoPadre,
       solicitud_id: solVinculo || null,
       recibido_por_nombre: firma.nombre, recibido_por_cargo: firma.cargo
     }).select().single();
@@ -1153,7 +1199,7 @@ async function registrarRecepcion() {
       id: rec.id, codigo: rec.codigo,
       productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
       proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
-      guia, factura, obs, departamento: depto, cuenta,
+      guia, factura, obs, departamento: deptoPadre, cuenta,
       monto_total: totalNeto, monto_total_bruto: totalBruto,
       responsable: nombreUsuario, firma, fecha: formatearFecha(rec.fecha)
     };
@@ -1233,7 +1279,6 @@ async function registrarSalida() {
     const firma = obtenerFirma(nombreUsuario);
     const email = document.getElementById('sal-receptor-email').value.trim();
     const obs = document.getElementById('sal-obs').value.trim();
-    // Obtener datos de la primera cuenta de la dirección para guardar jerarquía
     const c = cuentas.find(x => x.departamento_padre === depto) || {};
     const { data: sal, error: e1 } = await sb.from('lc_salidas').insert({
       departamento: depto, receptor_nombre: receptor, receptor_email: email || null,
@@ -1512,7 +1557,6 @@ function generarPDFBase(config) {
   if (y + 14 > yF) doc.addPage();
   y = yF;
   doc.setDrawColor(150,160,175); doc.setLineWidth(0.4);
-
   if (config.firmaUnica) {
     const wF = 80;
     const x1 = (pw - wF) / 2;
@@ -1698,6 +1742,7 @@ window.intentarLogin = intentarLogin;
 window.cerrarSesion = cerrarSesion;
 window.cambiarTab = cambiarTab;
 window.alCambiarDeptoPadre = alCambiarDeptoPadre;
+window.alCambiarDepartamento = alCambiarDepartamento;
 window.alCambiarSubdepto = alCambiarSubdepto;
 window.elegirLinea = elegirLinea;
 window.filtrarDropdownMiSolicitud = filtrarDropdownMiSolicitud;

@@ -162,7 +162,6 @@
 </head>
 <body>
 
-<!-- LOGIN -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-card">
     <img src="https://i.ibb.co/Z6qxBJQZ/Logo-general-1.png" alt="Municipalidad de Las Condes">
@@ -176,7 +175,6 @@
   </div>
 </div>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-top">
     <div class="logo-muni">
@@ -194,7 +192,6 @@
   </div>
 </div>
 
-<!-- NAV TABS -->
 <div class="nav-tabs">
   <div class="nav-tab solo-solicitante solo-admin" data-tab="tab-mi-solicitud" onclick="cambiarTab('tab-mi-solicitud')"><span class="icono">📝</span><span class="label">MI SOLICITUD</span></div>
   <div class="nav-tab solo-operador solo-admin" data-tab="tab-recepcion" onclick="cambiarTab('tab-recepcion')"><span class="icono">📥</span><span class="label">RECEPCIÓN</span></div>
@@ -206,24 +203,19 @@
   <div class="nav-tab solo-admin" data-tab="tab-reportes" onclick="cambiarTab('tab-reportes')"><span class="icono">📈</span><span class="label">REPORTES</span></div>
 </div>
 
-<!-- MI SOLICITUD -->
 <div class="section solo-solicitante solo-admin" id="tab-mi-solicitud">
   <div class="section-label">📝 NUEVA SOLICITUD DE ARTÍCULOS</div>
-
-  <div class="aviso-info">ℹ️ <strong>Paso 1:</strong> Selecciona departamento y subdepartamento. El sistema validará el tope de cada línea según el presupuesto asignado.</div>
-
+  <div class="aviso-info">ℹ️ <strong>Paso 1:</strong> Selecciona dirección y departamento. El sistema validará el tope de cada línea según el presupuesto asignado.</div>
   <div class="row-2">
-    <div class="field"><label class="required">Departamento</label><select id="sol-depto-padre" onchange="alCambiarDeptoPadre()"><option value="">— Selecciona —</option></select></div>
-    <div class="field"><label class="required">Subdepartamento</label><select id="sol-subdepto" onchange="alCambiarSubdepto()"><option value="">— Primero elige depto —</option></select></div>
+    <div class="field"><label class="required">Dirección</label><select id="sol-depto-padre" onchange="alCambiarDeptoPadre()"><option value="">— Selecciona —</option></select></div>
+    <div class="field"><label class="required">Departamento</label><select id="sol-subdepto" onchange="alCambiarSubdepto()"><option value="">— Primero elige dirección —</option></select></div>
   </div>
-
   <div id="sol-info-panel" class="info-panel" style="display:none;">
-    <div class="titulo">Subdepartamento seleccionado</div>
+    <div class="titulo">Área seleccionada</div>
     <div class="nombre" id="sol-info-nombre">—</div>
     <div class="disponible" id="sol-info-l1" style="display:none;">L1 (PVC): <strong id="sol-disponible-l1">$0</strong></div>
     <div class="disponible" id="sol-info-l2" style="display:none;">L2 (Papelería): <strong id="sol-disponible-l2">$0</strong></div>
   </div>
-
   <div id="sol-trabajo" style="display:none;">
     <div class="field">
       <label>Selecciona línea</label>
@@ -232,7 +224,6 @@
         <div class="linea-tab" id="sol-linea-l2" data-linea="2" onclick="elegirLinea(2)">L2 · Papelería<span class="sub" id="sol-l2-sub">—</span></div>
       </div>
     </div>
-
     <div class="field" id="sol-busqueda-wrap" style="display:none;">
       <label class="required">Buscar producto</label>
       <div class="custom-dropdown">
@@ -240,7 +231,6 @@
         <div class="dropdown-list" id="sol-prod-list"></div>
       </div>
     </div>
-
     <div id="sol-prod-sel" style="display:none; background:#f0f5ff; border-radius:12px; padding:10px 14px; margin-bottom:12px; border:1px solid var(--azul-claro);">
       <div style="font-size:14px; font-weight:700; color:var(--azul);" id="sol-prod-nombre">Producto</div>
       <div style="font-size:12px; color:var(--texto-gris);" id="sol-prod-info">—</div>
@@ -249,11 +239,9 @@
         <div class="field" style="margin-bottom:0; display:flex; align-items:flex-end;"><button class="btn-verde" onclick="agregarAlCarritoMiSolicitud()">+ Agregar</button></div>
       </div>
     </div>
-
     <div class="field"><label>Carrito — L1 (<span id="sol-cart-l1-count">0</span>) · Total: <strong id="sol-cart-l1-total">$0</strong></label><div id="sol-cart-l1"></div></div>
     <div class="field"><label>Carrito — L2 (<span id="sol-cart-l2-count">0</span>) · Total: <strong id="sol-cart-l2-total">$0</strong></label><div id="sol-cart-l2"></div></div>
     <div class="field"><label>Total solicitud: <strong id="sol-total-general" style="color:var(--verde); font-size:14px;">$0</strong></label></div>
-
     <div class="field">
       <label class="required">Urgencia</label>
       <div class="urgencia-grupo">
@@ -262,27 +250,22 @@
         <div class="urgencia-opcion" data-urg="URGENTE" onclick="elegirUrgencia('URGENTE')"><span class="icono-urg">🔴</span>Urgente</div>
       </div>
     </div>
-
     <div class="field"><label>Observación (opcional)</label><textarea id="sol-obs" rows="2"></textarea></div>
-
     <div class="field">
       <label>📎 Adjuntos (opcional) — PDF/JPG/PNG, máx 5 MB c/u</label>
       <label for="sol-file-input" class="btn-file">➕ Subir archivo</label>
       <input type="file" id="sol-file-input" class="input-file" accept=".pdf,.jpg,.jpeg,.png,.webp" multiple onchange="subirAdjuntoSolicitud(event)">
       <div class="adjuntos-grid" id="sol-adjuntos-grid"></div>
     </div>
-
     <button class="btn-primario" onclick="enviarSolicitud()">📨 ENVIAR SOLICITUD</button>
     <div id="sol-mensaje" class="aviso-info" style="display:none; margin-top:14px;"></div>
   </div>
-
   <div style="margin-top:20px;">
     <div class="section-label">📋 MIS SOLICITUDES</div>
     <div id="mis-solicitudes-container"></div>
   </div>
 </div>
 
-<!-- RECEPCIÓN -->
 <div class="section solo-operador solo-admin" id="tab-recepcion">
   <div class="section-label">📥 RECEPCIÓN DE PRODUCTOS</div>
   <div class="resumen-grid">
@@ -291,7 +274,6 @@
     <div class="resumen-card naranja"><div class="num" id="res-rec-monto">$0</div><div class="lbl">Monto hoy</div></div>
     <div class="resumen-card rojo"><div class="num" id="res-stock-critico">0</div><div class="lbl">Stock crítico</div></div>
   </div>
-
   <div style="background:#f8fafc; border:1px solid var(--borde); border-radius:14px; padding:14px 16px; margin-bottom:14px;">
     <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--texto-gris); font-weight:700; margin-bottom:8px;">🏭 Proveedor adjudicado</div>
     <div style="font-size:14px; font-weight:700;">Sociedad de Inversiones Publicitarias S&S Spa</div>
@@ -300,20 +282,17 @@
     <div style="font-size:11px; color:var(--texto-gris); padding:2px 0;"><strong>Dirección:</strong> Mac Iver N°323, Santiago</div>
     <div style="font-size:11px; color:var(--texto-gris); padding:2px 0;"><strong>Contacto:</strong> sugeysiccha@ssgrafica.cl · +569 7779 5120</div>
   </div>
-
   <div class="field">
     <label>Vincular a solicitud (opcional)</label>
     <select id="rec-solicitud-vinculo" onchange="alVincularSolicitud()"><option value="">— Recepción sin vincular —</option></select>
     <div id="rec-vinculo-info" style="display:none; font-size:11px; background:#f0fdf4; border-left:3px solid var(--verde); padding:8px 12px; border-radius:8px; margin-top:6px;"></div>
   </div>
-
   <div id="rec-wrap-campos">
-    <div class="field"><label class="required">Departamento</label><select id="rec-depto"><option value="">— Selecciona —</option></select></div>
-    <div class="field"><label class="required">Subdepartamento</label><select id="rec-subdepto"><option value="">— Primero elige depto —</option></select></div>
-    <div class="field"><label class="required">Cuenta (L1 / L2)</label><select id="rec-cuenta"><option value="">— Primero elige subdepto —</option></select></div>
+    <div class="field"><label class="required">Dirección</label><select id="rec-depto"><option value="">— Selecciona —</option></select></div>
+    <div class="field"><label class="required">Departamento</label><select id="rec-subdepto"><option value="">— Primero elige dirección —</option></select></div>
+    <div class="field"><label class="required">Cuenta (L1 / L2)</label><select id="rec-cuenta"><option value="">— Primero elige departamento —</option></select></div>
     <div id="rec-cuenta-info" style="display:none; font-size:11px; background:#f0f5ff; padding:8px 12px; border-radius:10px; margin-bottom:12px;"></div>
   </div>
-
   <div class="field" id="rec-wrap-busqueda">
     <label class="required">Buscar producto</label>
     <div class="custom-dropdown">
@@ -321,7 +300,6 @@
       <div class="dropdown-list" id="rec-prod-list"></div>
     </div>
   </div>
-
   <div id="rec-prod-sel" style="display:none; background:#f0f5ff; border-radius:12px; padding:10px 14px; margin-bottom:12px; border:1px solid var(--azul-claro);">
     <div style="font-size:14px; font-weight:700; color:var(--azul);" id="rec-prod-nombre">—</div>
     <div style="font-size:12px; color:var(--texto-gris);" id="rec-prod-precio">—</div>
@@ -330,7 +308,6 @@
       <div class="field" style="margin-bottom:0; display:flex; align-items:flex-end;"><button class="btn-verde" onclick="agregarAlCarritoRecepcion()">+ Agregar</button></div>
     </div>
   </div>
-
   <div class="field"><label>Carrito (<span id="rec-carrito-count">0</span>)</label><div id="rec-carrito-container"></div></div>
   <div class="field"><label>Total: <strong id="rec-total-estimado">$0</strong></label></div>
   <div class="row-2">
@@ -342,7 +319,6 @@
   <div id="rec-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
 </div>
 
-<!-- SALIDA -->
 <div class="section solo-operador solo-admin" id="tab-salida">
   <div class="section-label">📤 SALIDA DE PRODUCTOS</div>
   <div class="resumen-grid">
@@ -351,7 +327,7 @@
     <div class="resumen-card verde"><div class="num" id="res-sal-prods">0</div><div class="lbl">Productos</div></div>
     <div class="resumen-card naranja"><div class="num" id="res-stock-critico2">0</div><div class="lbl">Stock crítico</div></div>
   </div>
-  <div class="field"><label class="required">Departamento</label><select id="sal-depto"><option value="">— Selecciona —</option></select></div>
+  <div class="field"><label class="required">Dirección</label><select id="sal-depto"><option value="">— Selecciona —</option></select></div>
   <div class="field">
     <label class="required">Buscar producto</label>
     <div class="custom-dropdown">
@@ -377,7 +353,6 @@
   <div id="sal-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
 </div>
 
-<!-- STOCK -->
 <div class="section solo-operador solo-admin" id="tab-stock">
   <div class="section-label">📊 INVENTARIO</div>
   <div class="filtros">
@@ -389,7 +364,6 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="stock-total"></div>
 </div>
 
-<!-- SOLICITUDES -->
 <div class="section solo-admin" id="tab-solicitudes">
   <div class="section-label">📋 SOLICITUDES</div>
   <div class="filtros">
@@ -399,21 +373,19 @@
       <option value="ENVIADA">Enviadas</option><option value="RECIBIDA">Recibidas</option><option value="RECHAZADA">Rechazadas</option>
       <option value="CANCELADA">Canceladas</option>
     </select>
-    <select id="soladmin-depto" onchange="renderSolicitudesAdmin()"><option value="">Todos deptos</option></select>
+    <select id="soladmin-depto" onchange="renderSolicitudesAdmin()"><option value="">Todas las direcciones</option></select>
   </div>
-  <div class="tabla-container"><table><thead><tr><th>Código</th><th>Depto</th><th>Solicitante</th><th>Fecha</th><th style="text-align:right;">Monto</th><th style="text-align:center;">Estado</th><th style="text-align:center;">Acción</th></tr></thead><tbody id="soladmin-tbody"></tbody></table></div>
+  <div class="tabla-container"><table><thead><tr><th>Código</th><th>Dirección</th><th>Solicitante</th><th>Fecha</th><th style="text-align:right;">Monto</th><th style="text-align:center;">Estado</th><th style="text-align:center;">Acción</th></tr></thead><tbody id="soladmin-tbody"></tbody></table></div>
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="soladmin-total"></div>
 </div>
 
-<!-- CUENTAS -->
 <div class="section solo-admin" id="tab-cuentas">
   <div class="section-label">💰 CUENTAS Y PRESUPUESTO</div>
   <div class="filtros"><input type="text" id="cuentas-filtro" placeholder="🔍 Buscar..." oninput="renderCuentas()"></div>
-  <div class="tabla-container"><table><thead><tr><th>Depto</th><th>Subdepto</th><th style="text-align:right;">Asignado</th><th style="text-align:right;">Reservado</th><th style="text-align:right;">Consumido</th><th style="text-align:right;">Disponible</th></tr></thead><tbody id="cuentas-tbody"></tbody></table></div>
+  <div class="tabla-container"><table><thead><tr><th>Dirección</th><th>Depto/Área</th><th style="text-align:right;">Asignado</th><th style="text-align:right;">Reservado</th><th style="text-align:right;">Consumido</th><th style="text-align:right;">Disponible</th></tr></thead><tbody id="cuentas-tbody"></tbody></table></div>
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="cuentas-total"></div>
 </div>
 
-<!-- AUDITORÍA -->
 <div class="section solo-admin" id="tab-auditoria">
   <div class="section-label">🔍 AUDITORÍA</div>
   <div class="filtros">
@@ -424,7 +396,6 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="aud-total"></div>
 </div>
 
-<!-- REPORTES -->
 <div class="section solo-admin" id="tab-reportes">
   <div class="section-label">📈 REPORTES</div>
   <div class="field"><label>📊 Excel</label>
@@ -444,7 +415,6 @@
   </div>
 </div>
 
-<!-- MODALES -->
 <div class="modal-overlay" id="modal-detalle-solicitud">
   <div class="modal modal-ancho">
     <div class="modal-header"><h2 id="modal-sol-titulo">📋 Solicitud</h2><button class="btn-cerrar-modal" onclick="cerrarModalSolicitud()">✕</button></div>
@@ -486,8 +456,6 @@ const FIRMAS_OFICIALES = {
 let rolActual = null;
 let nombreUsuario = '';
 let nombreCompleto = '';
-let departamentoPadreUsuario = null;
-let subdepartamentoUsuario = null;
 let productos = [];
 let cuentas = [];
 let recepciones = [];
@@ -541,15 +509,12 @@ function precargarLogoPDF() {
   img.src = 'https://i.ibb.co/Z6qxBJQZ/Logo-general-1.png';
 }
 
-// LOGIN
 async function aplicarSesion(session) {
   const email = (session.user.email || '').toLowerCase();
-  const { data: perfil } = await sb.from('lc_perfiles').select('nombre, rol, departamento_padre, subdepartamento').eq('id', session.user.id).single();
+  const { data: perfil } = await sb.from('lc_perfiles').select('nombre, rol, departamento_padre, subdepartamento_padre, subdepartamento').eq('id', session.user.id).single();
   if (perfil) {
     rolActual = perfil.rol;
     nombreCompleto = perfil.nombre || email;
-    departamentoPadreUsuario = perfil.departamento_padre || null;
-    subdepartamentoUsuario = perfil.subdepartamento || null;
   } else { rolActual = 'OPERADOR'; nombreCompleto = email; }
   nombreUsuario = email;
 }
@@ -625,11 +590,11 @@ async function cargarTodo() {
 }
 
 function poblarSelects() {
-  const deptosUnicos = [...new Set(cuentas.map(c => c.departamento_padre))].sort();
-  const optD = '<option value="">— Selecciona —</option>' + deptosUnicos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+  const direcciones = [...new Set(cuentas.map(c => c.departamento_padre))].sort();
+  const optD = '<option value="">— Selecciona —</option>' + direcciones.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
   ['rec-depto','sal-depto','sol-depto-padre'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = optD; });
   const sd = document.getElementById('soladmin-depto');
-  if (sd) sd.innerHTML = '<option value="">Todos deptos</option>' + deptosUnicos.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+  if (sd) sd.innerHTML = '<option value="">Todas las direcciones</option>' + direcciones.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
 }
 
 function calcularConsumidoCuenta(cuentaId) {
@@ -653,18 +618,27 @@ function alCambiarDeptoPadre() {
   const sel = document.getElementById('sol-subdepto');
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
-  if (!depto) { sel.innerHTML = '<option value="">— Primero elige depto —</option>'; return; }
-  const subs = [...new Set(cuentas.filter(c => c.departamento_padre === depto).map(c => c.subdepartamento))].sort();
-  sel.innerHTML = '<option value="">— Selecciona subdepto —</option>' + subs.map(s => `<option value="${escaparHtml(s)}">${escaparHtml(s)}</option>`).join('');
+  if (!depto) { sel.innerHTML = '<option value="">— Primero elige dirección —</option>'; return; }
+  const combos = {};
+  cuentas.filter(c => c.departamento_padre === depto).forEach(c => {
+    const sp = c.subdepartamento_padre || '';
+    const s = c.subdepartamento || '';
+    const key = `${sp}|${s}`;
+    if (!combos[key]) combos[key] = { sp, s, label: sp ? `${sp} / ${s}` : s };
+  });
+  const opts = Object.values(combos).sort((a,b) => a.label.localeCompare(b.label));
+  sel.innerHTML = '<option value="">— Selecciona área —</option>' + opts.map(o => `<option value="${escaparHtml(o.sp)}|${escaparHtml(o.s)}">${escaparHtml(o.label)}</option>`).join('');
 }
 function alCambiarSubdepto() {
   const depto = document.getElementById('sol-depto-padre').value;
-  const sub = document.getElementById('sol-subdepto').value;
-  if (!depto || !sub) { document.getElementById('sol-info-panel').style.display = 'none'; document.getElementById('sol-trabajo').style.display = 'none'; return; }
-  const cL1 = cuentas.find(c => c.departamento_padre === depto && c.subdepartamento === sub && c.linea === 1);
-  const cL2 = cuentas.find(c => c.departamento_padre === depto && c.subdepartamento === sub && c.linea === 2);
+  const val = document.getElementById('sol-subdepto').value;
+  if (!depto || !val) { document.getElementById('sol-info-panel').style.display = 'none'; document.getElementById('sol-trabajo').style.display = 'none'; return; }
+  const [sp, s] = val.split('|');
+  const cL1 = cuentas.find(c => c.departamento_padre === depto && (c.subdepartamento_padre||'') === sp && c.subdepartamento === s && c.linea === 1);
+  const cL2 = cuentas.find(c => c.departamento_padre === depto && (c.subdepartamento_padre||'') === sp && c.subdepartamento === s && c.linea === 2);
   subdeptoActualCuentas = { l1: cL1, l2: cL2 };
-  document.getElementById('sol-info-nombre').textContent = `${depto} · ${sub}`;
+  const label = sp ? `${sp} / ${s}` : s;
+  document.getElementById('sol-info-nombre').textContent = `${depto} · ${label}`;
   const dL1 = cL1 ? calcularDisponibleCuenta(cL1.id) : 0;
   const dL2 = cL2 ? calcularDisponibleCuenta(cL2.id) : 0;
   document.getElementById('sol-info-l1').style.display = cL1 ? 'flex' : 'none';
@@ -690,8 +664,8 @@ function filtrarDropdownMiSolicitud(texto) {
   const list = document.getElementById('sol-prod-list');
   list.style.display = 'block';
   list.innerHTML = '';
-  const t = texto.toLowerCase().trim();
-  const lista = productos.filter(p => p.linea === lineaSeleccionada && (!t || p.nombre.toLowerCase().includes(t))).slice(0, 30);
+  const t = (texto||'').toLowerCase().trim();
+  const lista = productos.filter(p => p.linea === lineaSeleccionada && (!t || p.nombre.toLowerCase().includes(t))).slice(0, 50);
   if (!lista.length) { list.innerHTML = '<div class="dropdown-item">Sin resultados</div>'; return; }
   lista.forEach(p => {
     const div = document.createElement('div');
@@ -795,17 +769,19 @@ function eliminarAdjuntoTemporal(idx) { adjuntosTemporales.splice(idx, 1); rende
 
 async function enviarSolicitud() {
   const depto = document.getElementById('sol-depto-padre').value;
-  const sub = document.getElementById('sol-subdepto').value;
-  if (!depto || !sub) { mostrarToast('❌ Elige depto y subdepto'); return; }
+  const val = document.getElementById('sol-subdepto').value;
+  if (!depto || !val) { mostrarToast('❌ Elige dirección y área'); return; }
+  const [sp, s] = val.split('|');
   if (!carritoSolicitud.length) { mostrarToast('❌ Agrega productos'); return; }
   const obs = document.getElementById('sol-obs').value.trim();
-  const totalNeto = carritoSolicitud.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
-  const totalBruto = carritoSolicitud.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  const totalNeto = carritoSolicitud.reduce((s2, p) => s2 + p.precio_neto * p.cantidad, 0);
+  const totalBruto = carritoSolicitud.reduce((s2, p) => s2 + precioBruto(p.precio_neto) * p.cantidad, 0);
   if (!confirm(`¿Enviar solicitud por ${formatearCLP(totalBruto)}?`)) return;
   const btn = event.target; btn.disabled = true; btn.textContent = '⏳ Enviando...';
   try {
     const { data: solData, error: e1 } = await sb.from('lc_solicitudes').insert({
-      departamento: depto, departamento_padre: depto, subdepartamento: sub,
+      departamento: depto, departamento_padre: depto,
+      subdepartamento_padre: sp || null, subdepartamento: s,
       solicitante_email: nombreUsuario, solicitante_nombre: nombreCompleto,
       estado: 'PENDIENTE', monto_estimado: totalNeto, monto_estimado_bruto: totalBruto,
       urgencia: urgenciaSolicitud, observacion: obs || null,
@@ -844,7 +820,7 @@ function nuevaSolicitudForm() {
   renderCarritoMiSolicitud(); renderAdjuntosSolicitud(); elegirUrgencia('NORMAL');
   document.getElementById('sol-obs').value = '';
   document.getElementById('sol-depto-padre').value = '';
-  document.getElementById('sol-subdepto').innerHTML = '<option value="">— Primero elige depto —</option>';
+  document.getElementById('sol-subdepto').innerHTML = '<option value="">— Primero elige dirección —</option>';
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
 }
@@ -858,10 +834,11 @@ function renderMisSolicitudes() {
     const items = solicitudItems.filter(i => i.solicitud_id === s.id);
     const adj = solicitudAdjuntos.filter(a => a.solicitud_id === s.id);
     const puede = s.estado === 'PENDIENTE';
+    const label = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : s.subdepartamento;
     return `<div class="solicitud-card">
       <div class="fila-top"><span class="codigo">${escaparHtml(s.codigo)}</span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></div>
       <div class="fila-info">
-        <span>🏢 <strong>${escaparHtml(s.departamento_padre||s.departamento)} / ${escaparHtml(s.subdepartamento||'—')}</strong></span>
+        <span>🏢 <strong>${escaparHtml(s.departamento_padre||s.departamento)} / ${escaparHtml(label||'—')}</strong></span>
         <span>📅 ${s.fecha_fmt}</span>
         <span>📦 ${items.length} prod.</span>
         <span>💰 ${formatearCLP(s.monto_estimado_bruto||0)}</span>
@@ -917,11 +894,13 @@ function verDetalleSolicitud(id) {
   } else if (esAdmin()) {
     acciones = `<div style="display:flex; gap:8px; margin-top:14px;"><button class="btn-primario" onclick="descargarPDFSolicitud('${s.id}')">📄 PDF</button></div>`;
   }
+  const labelSub = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
   document.getElementById('modal-sol-titulo').textContent = `📋 ${s.codigo}`;
   document.getElementById('modal-sol-contenido').innerHTML = `
     <div style="background:#f8fafc; border-radius:12px; padding:12px; margin-bottom:10px;">
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Estado</span><span><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></span></div>
-      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Depto / Subdepto</span><span style="font-weight:600;">${escaparHtml(s.departamento_padre||s.departamento)} / ${escaparHtml(s.subdepartamento||'—')}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Dirección</span><span style="font-weight:600;">${escaparHtml(s.departamento_padre||s.departamento)}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Área</span><span style="font-weight:600;">${escaparHtml(labelSub)}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Solicitante</span><span style="font-weight:600;">${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Fecha</span><span>${s.fecha_fmt}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Urgencia</span><span>${s.urgencia}</span></div>
@@ -974,17 +953,18 @@ function renderSolicitudesAdmin() {
   });
   actualizarBadgePendientes();
   if (!lista.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin solicitudes</td></tr>'; document.getElementById('soladmin-total').textContent = '0'; return; }
-  tbody.innerHTML = lista.map(s => `
-    <tr>
+  tbody.innerHTML = lista.map(s => {
+    const label = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
+    return `<tr>
       <td><strong style="font-family:'Courier New',monospace;">${escaparHtml(s.codigo)}</strong></td>
-      <td style="font-size:11px;">${escaparHtml(s.departamento_padre)}<br><span style="color:var(--texto-gris);font-size:10px;">${escaparHtml(s.subdepartamento||'—')}</span></td>
+      <td style="font-size:11px;">${escaparHtml(s.departamento_padre)}<br><span style="color:var(--texto-gris);font-size:10px;">${escaparHtml(label)}</span></td>
       <td style="font-size:11px;">${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</td>
       <td style="font-size:11px;">${s.fecha_fmt}</td>
       <td style="text-align:right;font-size:11px;">${formatearCLP(s.monto_estimado_bruto||0)}</td>
       <td style="text-align:center;"><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span></td>
       <td style="text-align:center;"><button class="btn-pequeno azul" onclick="verDetalleSolicitud('${s.id}')">👁️</button></td>
-    </tr>
-  `).join('');
+    </tr>`;
+  }).join('');
   document.getElementById('soladmin-total').textContent = `${lista.length} solicitudes`;
 }
 function actualizarBadgePendientes() {
@@ -998,16 +978,24 @@ document.addEventListener('change', e => {
   if (e.target.id === 'rec-depto') {
     const d = e.target.value;
     const s = document.getElementById('rec-subdepto');
-    if (!d) { s.innerHTML = '<option value="">— Primero elige depto —</option>'; return; }
-    const subs = [...new Set(cuentas.filter(c => c.departamento_padre === d).map(c => c.subdepartamento))].sort();
-    s.innerHTML = '<option value="">— Selecciona —</option>' + subs.map(x => `<option value="${escaparHtml(x)}">${escaparHtml(x)}</option>`).join('');
+    if (!d) { s.innerHTML = '<option value="">— Primero elige dirección —</option>'; return; }
+    const combos = {};
+    cuentas.filter(c => c.departamento_padre === d).forEach(c => {
+      const sp = c.subdepartamento_padre || '';
+      const sub = c.subdepartamento || '';
+      const key = `${sp}|${sub}`;
+      if (!combos[key]) combos[key] = { sp, sub, label: sp ? `${sp} / ${sub}` : sub };
+    });
+    const opts = Object.values(combos).sort((a,b) => a.label.localeCompare(b.label));
+    s.innerHTML = '<option value="">— Selecciona —</option>' + opts.map(o => `<option value="${escaparHtml(o.sp)}|${escaparHtml(o.sub)}">${escaparHtml(o.label)}</option>`).join('');
   }
   if (e.target.id === 'rec-subdepto') {
     const d = document.getElementById('rec-depto').value;
-    const s = e.target.value;
+    const v = e.target.value;
     const selC = document.getElementById('rec-cuenta');
-    if (!s) { selC.innerHTML = '<option value="">— Primero elige subdepto —</option>'; return; }
-    const cs = cuentas.filter(c => c.departamento_padre === d && c.subdepartamento === s);
+    if (!v) { selC.innerHTML = '<option value="">— Primero elige área —</option>'; return; }
+    const [sp, sub] = v.split('|');
+    const cs = cuentas.filter(c => c.departamento_padre === d && (c.subdepartamento_padre||'') === sp && c.subdepartamento === sub);
     selC.innerHTML = '<option value="">— Selecciona —</option>' + cs.map(c => `<option value="${c.id}">L${c.linea} · ${escaparHtml(c.codigo)}</option>`).join('');
   }
   if (e.target.id === 'rec-cuenta') {
@@ -1040,8 +1028,9 @@ function alVincularSolicitud() {
   }
   const s = solicitudes.find(x => x.id === id);
   if (!s) return;
+  const label = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
   info.style.display = 'block';
-  info.innerHTML = `✅ <strong>${escaparHtml(s.codigo)}</strong> · ${escaparHtml(s.departamento_padre)} / ${escaparHtml(s.subdepartamento)}`;
+  info.innerHTML = `✅ <strong>${escaparHtml(s.codigo)}</strong> · ${escaparHtml(s.departamento_padre)} / ${escaparHtml(label)}`;
   wrapCampos.style.display = 'none';
   wrapBusqueda.style.display = 'none';
   prodSel.style.display = 'none';
@@ -1062,8 +1051,8 @@ function filtrarDropdownRecepcion(texto) {
   const list = document.getElementById('rec-prod-list');
   list.style.display = 'block';
   list.innerHTML = '';
-  const t = texto.toLowerCase().trim();
-  const lista = productos.filter(p => !t || p.nombre.toLowerCase().includes(t)).slice(0, 30);
+  const t = (texto||'').toLowerCase().trim();
+  const lista = productos.filter(p => !t || p.nombre.toLowerCase().includes(t)).slice(0, 50);
   if (!lista.length) { list.innerHTML = '<div class="dropdown-item">Sin resultados</div>'; return; }
   lista.forEach(p => {
     const div = document.createElement('div');
@@ -1100,11 +1089,11 @@ function renderCarritoRecepcion() {
   cont.innerHTML = carritoRecepcion.map((p, i) => {
     const sub = precioBruto(p.precio_neto) * p.cantidad;
     total += sub;
-    const bloqueado = p.bloqueado === true;
+    const bloq = p.bloqueado === true;
     return `<div class="producto-agregado">
       <div class="info"><div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div><div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = ${formatearCLP(sub)}</div></div>
       <div class="cantidad">${p.cantidad}</div>
-      ${bloqueado ? '' : `<button class="btn-eliminar-prod" onclick="carritoRecepcion.splice(${i},1);renderCarritoRecepcion();">✕</button>`}
+      ${bloq ? '' : `<button class="btn-eliminar-prod" onclick="carritoRecepcion.splice(${i},1);renderCarritoRecepcion();">✕</button>`}
     </div>`;
   }).join('');
   document.getElementById('rec-total-estimado').textContent = formatearCLP(total);
@@ -1117,7 +1106,7 @@ async function registrarRecepcion() {
     const s = solicitudes.find(x => x.id === solVinculo);
     if (s) { depto = s.departamento_padre; cuentaId = s.cuenta_l1_id || s.cuenta_l2_id; }
   }
-  if (!depto) { mostrarToast('❌ Sin depto'); return; }
+  if (!depto) { mostrarToast('❌ Sin dirección'); return; }
   if (!cuentaId) { mostrarToast('❌ Sin cuenta'); return; }
   if (!carritoRecepcion.length) { mostrarToast('❌ Sin productos'); return; }
   const cuenta = cuentas.find(c => c.id === cuentaId);
@@ -1164,7 +1153,8 @@ async function registrarRecepcion() {
       id: rec.id, codigo: rec.codigo,
       productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
       proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
-      guia, factura, obs, departamento: depto, cuenta, monto_total: totalNeto, monto_total_bruto: totalBruto,
+      guia, factura, obs, departamento: depto, cuenta,
+      monto_total: totalNeto, monto_total_bruto: totalBruto,
       responsable: nombreUsuario, firma, fecha: formatearFecha(rec.fecha)
     };
     mostrarToast(`✅ ${rec.codigo}`);
@@ -1185,8 +1175,8 @@ function filtrarDropdownSalida(texto) {
   const list = document.getElementById('sal-prod-list');
   list.style.display = 'block';
   list.innerHTML = '';
-  const t = texto.toLowerCase().trim();
-  const lista = productos.filter(p => !t || p.nombre.toLowerCase().includes(t)).slice(0, 30);
+  const t = (texto||'').toLowerCase().trim();
+  const lista = productos.filter(p => !t || p.nombre.toLowerCase().includes(t)).slice(0, 50);
   if (!lista.length) { list.innerHTML = '<div class="dropdown-item">Sin resultados</div>'; return; }
   lista.forEach(p => {
     const ss = Number(p.stock||0) <= 0;
@@ -1233,7 +1223,7 @@ function renderCarritoSalida() {
 async function registrarSalida() {
   const depto = document.getElementById('sal-depto').value;
   const receptor = document.getElementById('sal-receptor').value.trim();
-  if (!depto) { mostrarToast('❌ Elige depto'); return; }
+  if (!depto) { mostrarToast('❌ Elige dirección'); return; }
   if (!carritoSalida.length) { mostrarToast('❌ Agrega productos'); return; }
   if (!receptor) { mostrarToast('❌ Nombre receptor'); return; }
   const btn = event.target; btn.disabled = true;
@@ -1243,11 +1233,16 @@ async function registrarSalida() {
     const firma = obtenerFirma(nombreUsuario);
     const email = document.getElementById('sal-receptor-email').value.trim();
     const obs = document.getElementById('sal-obs').value.trim();
+    // Obtener datos de la primera cuenta de la dirección para guardar jerarquía
+    const c = cuentas.find(x => x.departamento_padre === depto) || {};
     const { data: sal, error: e1 } = await sb.from('lc_salidas').insert({
       departamento: depto, receptor_nombre: receptor, receptor_email: email || null,
       observacion: obs || null, responsable: nombreUsuario,
       monto_total: totalNeto, monto_total_bruto: totalBruto, iva_total: totalBruto - totalNeto,
-      entregado_por_nombre: firma.nombre, entregado_por_cargo: firma.cargo
+      entregado_por_nombre: firma.nombre, entregado_por_cargo: firma.cargo,
+      departamento_padre: depto,
+      subdepartamento_padre: c.subdepartamento_padre || null,
+      subdepartamento: c.subdepartamento || null
     }).select().single();
     if (e1) throw e1;
     const items = carritoSalida.map(p => ({
@@ -1269,7 +1264,10 @@ async function registrarSalida() {
     ultimaSalida = {
       id: sal.id, codigo: sal.codigo,
       productos: carritoSalida.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
-      departamento: depto, receptor, receptor_email: email, obs,
+      departamento: depto, departamento_padre: depto,
+      subdepartamento_padre: c.subdepartamento_padre || null,
+      subdepartamento: c.subdepartamento || null,
+      receptor, receptor_email: email, obs,
       responsable: nombreUsuario, firma, monto_total: totalNeto, monto_total_bruto: totalBruto,
       fecha: formatearFecha(sal.fecha)
     };
@@ -1325,7 +1323,7 @@ function renderCuentas() {
   const tbody = document.getElementById('cuentas-tbody');
   if (!tbody) return;
   const filtro = document.getElementById('cuentas-filtro').value.toLowerCase().trim();
-  let lista = cuentas.filter(c => !filtro || `${c.departamento_padre} ${c.subdepartamento} ${c.codigo}`.toLowerCase().includes(filtro));
+  let lista = cuentas.filter(c => !filtro || `${c.departamento_padre} ${c.subdepartamento_padre||''} ${c.subdepartamento} ${c.codigo}`.toLowerCase().includes(filtro));
   if (!lista.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">Sin cuentas</td></tr>'; document.getElementById('cuentas-total').textContent = '0'; return; }
   let ta = 0, tr = 0, tc = 0;
   tbody.innerHTML = lista.map(c => {
@@ -1333,9 +1331,10 @@ function renderCuentas() {
     const res = calcularReservadoCuenta(c.id);
     const disp = c.monto_asignado - cons - res;
     ta += Number(c.monto_asignado); tr += res; tc += cons;
+    const label = c.subdepartamento_padre ? `${c.subdepartamento_padre} / ${c.subdepartamento}` : c.subdepartamento;
     return `<tr>
       <td style="font-size:11px;">${escaparHtml(c.departamento_padre)}</td>
-      <td style="font-size:11px;">${escaparHtml(c.subdepartamento)} <span class="badge-linea l${c.linea}">L${c.linea}</span></td>
+      <td style="font-size:11px;">${escaparHtml(label)} <span class="badge-linea l${c.linea}">L${c.linea}</span></td>
       <td style="text-align:right;font-size:11px;">${formatearCLP(c.monto_asignado)}</td>
       <td style="text-align:right;font-size:11px;color:var(--naranja);">${formatearCLP(res)}</td>
       <td style="text-align:right;font-size:11px;color:var(--azul);">${formatearCLP(cons)}</td>
@@ -1513,23 +1512,34 @@ function generarPDFBase(config) {
   if (y + 14 > yF) doc.addPage();
   y = yF;
   doc.setDrawColor(150,160,175); doc.setLineWidth(0.4);
-  const wF = 70;
-  const x1 = m+5, x2 = pw-m-5-wF;
-  if (config.firmaIzq) {
-    doc.line(x1, y, x1+wF, y);
-    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...gris);
-    doc.text(config.firmaIzq.cargo||'', x1+wF/2, y+5, { align:'center' });
-    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(20,30,45);
-    doc.text(config.firmaIzq.nombre||'', x1+wF/2, y+10, { align:'center' });
-    if (config.firmaIzq.extra) { doc.setFontSize(7.5); doc.setTextColor(...gris); doc.text(config.firmaIzq.extra, x1+wF/2, y+14, { align:'center' }); }
-  }
-  if (config.firmaDer) {
-    doc.line(x2, y, x2+wF, y);
-    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...gris);
-    doc.text(config.firmaDer.cargo||'', x2+wF/2, y+5, { align:'center' });
-    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(20,30,45);
-    doc.text(config.firmaDer.nombre||'', x2+wF/2, y+10, { align:'center' });
-    if (config.firmaDer.extra) { doc.setFontSize(7.5); doc.setTextColor(...gris); doc.text(config.firmaDer.extra, x2+wF/2, y+14, { align:'center' }); }
+
+  if (config.firmaUnica) {
+    const wF = 80;
+    const x1 = (pw - wF) / 2;
+    doc.line(x1, y, x1 + wF, y);
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(20,30,45);
+    doc.text(config.firmaUnica.cargo || '', pw/2, y + 5, { align:'center' });
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...gris);
+    doc.text(config.firmaUnica.institucion || '', pw/2, y + 10, { align:'center' });
+  } else {
+    const wF = 70;
+    const x1 = m+5, x2 = pw-m-5-wF;
+    if (config.firmaIzq) {
+      doc.line(x1, y, x1+wF, y);
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...gris);
+      doc.text(config.firmaIzq.cargo||'', x1+wF/2, y+5, { align:'center' });
+      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(20,30,45);
+      doc.text(config.firmaIzq.nombre||'', x1+wF/2, y+10, { align:'center' });
+      if (config.firmaIzq.extra) { doc.setFontSize(7.5); doc.setTextColor(...gris); doc.text(config.firmaIzq.extra, x1+wF/2, y+14, { align:'center' }); }
+    }
+    if (config.firmaDer) {
+      doc.line(x2, y, x2+wF, y);
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...gris);
+      doc.text(config.firmaDer.cargo||'', x2+wF/2, y+5, { align:'center' });
+      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(20,30,45);
+      doc.text(config.firmaDer.nombre||'', x2+wF/2, y+10, { align:'center' });
+      if (config.firmaDer.extra) { doc.setFontSize(7.5); doc.setTextColor(...gris); doc.text(config.firmaDer.extra, x2+wF/2, y+14, { align:'center' }); }
+    }
   }
   const total = doc.internal.getNumberOfPages();
   for (let i = 1; i <= total; i++) {
@@ -1543,34 +1553,22 @@ function generarPDFBase(config) {
   return doc;
 }
 
-function descargarPDFSolicitud(id) {
-  const s = solicitudes.find(x => x.id === id);
-  if (!s) return;
-  const items = solicitudItems.filter(i => i.solicitud_id === id);
-  const firmaSol = obtenerFirma(s.solicitante_email);
-  const firmaAdm = FIRMAS_OFICIALES[s.aprobado_por] || obtenerFirma(nombreUsuario);
-  const doc = generarPDFBase({
-    titulo: 'SOLICITUD', numero: s.codigo,
-    filas: [['Fecha', s.fecha_fmt], ['Departamento', `${s.departamento_padre||s.departamento} / ${s.subdepartamento||''}`], ['Solicitante', s.solicitante_nombre||s.solicitante_email], ['Urgencia', s.urgencia], ['Estado', s.estado]],
-    productos: items.map(it => { const p = productos.find(x => x.id === it.producto_id); return { nombre: p?.nombre||'N/E', precio_neto: it.precio_estimado, cantidad: it.cantidad }; }),
-    tituloProd: 'PRODUCTOS SOLICITADOS', mostrarProveedor: true, desglose: true,
-    firmaIzq: { cargo: 'SOLICITANTE', nombre: firmaSol.nombre, extra: firmaSol.cargo },
-    firmaDer: { cargo: 'AUTORIZADO POR', nombre: firmaAdm.nombre||'Pendiente', extra: s.aprobado_por_cargo || firmaAdm.cargo }
-  });
-  doc.save(`Solicitud_${s.codigo}.pdf`);
-  mostrarToast('✅ PDF descargado');
-}
-
 function descargarPDFRecepcion() {
   if (!ultimaRecepcion) return;
   const r = ultimaRecepcion;
-  const sup = r.firma && r.firma.nombre ? r.firma : FIRMAS_OFICIALES['nvera@lascondes.cl'];
+  const c = r.cuenta || {};
   const doc = generarPDFBase({
     titulo: 'RECEPCIÓN', numero: r.codigo,
-    filas: [['Fecha', r.fecha], ['Departamento', r.departamento], ['Cuenta', `${r.cuenta.departamento_padre} / ${r.cuenta.subdepartamento} · L${r.cuenta.linea}`], ['N° Guía', r.guia||'N/E'], ['N° Factura', r.factura||'N/E']],
+    filas: [
+      ['Fecha', r.fecha],
+      ['Dirección', c.departamento_padre || '—'],
+      ['Departamento', c.subdepartamento_padre || '—'],
+      ['Área', c.subdepartamento || '—'],
+      ['N° Guía', r.guia||'N/E'],
+      ['N° Factura', r.factura||'N/E']
+    ],
     productos: r.productos, tituloProd: 'PRODUCTOS RECEPCIONADOS', desglose: false,
-    firmaIzq: { cargo: 'PROVEEDOR', nombre: PROVEEDOR_OFICIAL.representante_legal, extra: 'Rep. Legal · ' + PROVEEDOR_OFICIAL.rut },
-    firmaDer: { cargo: 'RECIBIDO POR', nombre: sup.nombre, extra: sup.cargo }
+    firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
   });
   doc.save(`Recepcion_${r.codigo}.pdf`);
   mostrarToast('✅ PDF descargado');
@@ -1579,15 +1577,46 @@ function descargarPDFRecepcion() {
 function descargarPDFSalida() {
   if (!ultimaSalida) return;
   const s = ultimaSalida;
-  const firma = s.firma || obtenerFirma(nombreUsuario);
   const doc = generarPDFBase({
     titulo: 'SALIDA', numero: s.codigo,
-    filas: [['Fecha', s.fecha], ['Departamento', s.departamento], ['Receptor', s.receptor], ['Email', s.receptor_email||'N/E']],
+    filas: [
+      ['Fecha', s.fecha],
+      ['Dirección', s.departamento_padre || s.departamento || '—'],
+      ['Departamento', s.subdepartamento_padre || '—'],
+      ['Área', s.subdepartamento || '—'],
+      ['Receptor', s.receptor],
+      ['Email', s.receptor_email||'N/E']
+    ],
     productos: s.productos, tituloProd: 'PRODUCTOS ENTREGADOS', desglose: true,
-    firmaIzq: { cargo: 'ENTREGADO POR', nombre: firma.nombre, extra: firma.cargo },
-    firmaDer: { cargo: 'RECIBIDO POR', nombre: s.receptor, extra: s.departamento }
+    firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
   });
   doc.save(`Salida_${s.codigo}.pdf`);
+  mostrarToast('✅ PDF descargado');
+}
+
+function descargarPDFSolicitud(id) {
+  const s = solicitudes.find(x => x.id === id);
+  if (!s) return;
+  const items = solicitudItems.filter(i => i.solicitud_id === id);
+  const firmaSol = obtenerFirma(s.solicitante_email);
+  const firmaAdm = FIRMAS_OFICIALES[s.aprobado_por] || obtenerFirma(nombreUsuario);
+  const doc = generarPDFBase({
+    titulo: 'SOLICITUD', numero: s.codigo,
+    filas: [
+      ['Fecha', s.fecha_fmt],
+      ['Dirección', s.departamento_padre || s.departamento || '—'],
+      ['Departamento', s.subdepartamento_padre || '—'],
+      ['Área', s.subdepartamento || '—'],
+      ['Solicitante', s.solicitante_nombre||s.solicitante_email],
+      ['Urgencia', s.urgencia],
+      ['Estado', s.estado]
+    ],
+    productos: items.map(it => { const p = productos.find(x => x.id === it.producto_id); return { nombre: p?.nombre||'N/E', precio_neto: it.precio_estimado, cantidad: it.cantidad }; }),
+    tituloProd: 'PRODUCTOS SOLICITADOS', mostrarProveedor: true, desglose: true,
+    firmaIzq: { cargo: 'SOLICITANTE', nombre: firmaSol.nombre, extra: firmaSol.cargo },
+    firmaDer: { cargo: 'AUTORIZADO POR', nombre: firmaAdm.nombre||'Pendiente', extra: s.aprobado_por_cargo || firmaAdm.cargo }
+  });
+  doc.save(`Solicitud_${s.codigo}.pdf`);
   mostrarToast('✅ PDF descargado');
 }
 
@@ -1622,28 +1651,28 @@ function exportarExcelStock() {
 function exportarExcelRecepciones() {
   const data = recepciones.map(r => ({ codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento||'', proveedor: r.proveedor||'', neto: Number(r.monto_total||0), bruto: Number(r.monto_total_bruto||0), responsable: r.responsable||'' }));
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Depto', width:30 }, { key:'proveedor', label:'Proveedor', width:30 }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'responsable', label:'Responsable', width:28 }]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Dirección', width:30 }, { key:'proveedor', label:'Proveedor', width:30 }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'responsable', label:'Responsable', width:28 }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Recepciones');
   XLSX.writeFile(wb, `Recepciones_${fechaActual()}.xlsx`);
 }
 function exportarExcelSalidas() {
   const data = salidas.map(s => ({ codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento||'', receptor: s.receptor_nombre||'', neto: Number(s.monto_total||0), bruto: Number(s.monto_total_bruto||0) }));
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Depto', width:30 }, { key:'receptor', label:'Receptor', width:28 }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Dirección', width:30 }, { key:'receptor', label:'Receptor', width:28 }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Salidas');
   XLSX.writeFile(wb, `Salidas_${fechaActual()}.xlsx`);
 }
 function exportarExcelCuentas() {
-  const data = cuentas.map(c => { const cons = calcularConsumidoCuenta(c.id); const res = calcularReservadoCuenta(c.id); return { depto: c.departamento_padre, sub: c.subdepartamento, linea: 'L'+c.linea, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: Number(c.monto_asignado) - cons - res }; });
+  const data = cuentas.map(c => { const cons = calcularConsumidoCuenta(c.id); const res = calcularReservadoCuenta(c.id); return { depto: c.departamento_padre, subpadre: c.subdepartamento_padre||'—', sub: c.subdepartamento, linea: 'L'+c.linea, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: Number(c.monto_asignado) - cons - res }; });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'depto', label:'Depto', width:30 }, { key:'sub', label:'Subdepto', width:35 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'asignado', label:'Asignado', width:16, align:'right', money:true }, { key:'reservado', label:'Reservado', width:16, align:'right', money:true }, { key:'consumido', label:'Consumido', width:16, align:'right', money:true }, { key:'disponible', label:'Disponible', width:16, align:'right', money:true }]);
+  const ws = hojaExcel(data, [{ key:'depto', label:'Dirección', width:30 }, { key:'subpadre', label:'Departamento', width:35 }, { key:'sub', label:'Área', width:35 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'asignado', label:'Asignado', width:16, align:'right', money:true }, { key:'reservado', label:'Reservado', width:16, align:'right', money:true }, { key:'consumido', label:'Consumido', width:16, align:'right', money:true }, { key:'disponible', label:'Disponible', width:16, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Cuentas');
   XLSX.writeFile(wb, `Cuentas_${fechaActual()}.xlsx`);
 }
 function exportarExcelSolicitudes() {
-  const data = solicitudes.map(s => ({ codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento_padre||'', sub: s.subdepartamento||'', solicitante: s.solicitante_nombre||s.solicitante_email, estado: s.estado, bruto: Number(s.monto_estimado_bruto||0) }));
+  const data = solicitudes.map(s => ({ codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento_padre||'', subpadre: s.subdepartamento_padre||'', sub: s.subdepartamento||'', solicitante: s.solicitante_nombre||s.solicitante_email, estado: s.estado, bruto: Number(s.monto_estimado_bruto||0) }));
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:18, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Depto', width:30 }, { key:'sub', label:'Subdepto', width:30 }, { key:'solicitante', label:'Solicitante', width:28 }, { key:'estado', label:'Estado', width:14, align:'center' }, { key:'bruto', label:'Monto (IVA)', width:16, align:'right', money:true }]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:18, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Dirección', width:30 }, { key:'subpadre', label:'Departamento', width:30 }, { key:'sub', label:'Área', width:30 }, { key:'solicitante', label:'Solicitante', width:28 }, { key:'estado', label:'Estado', width:14, align:'center' }, { key:'bruto', label:'Monto (IVA)', width:16, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Solicitudes');
   XLSX.writeFile(wb, `Solicitudes_${fechaActual()}.xlsx`);
 }
@@ -1665,7 +1694,6 @@ function cambiarTab(tabId) {
   if (tabId === 'tab-reportes' && esAdmin()) renderReportes();
 }
 
-// EXPONER GLOBALES
 window.intentarLogin = intentarLogin;
 window.cerrarSesion = cerrarSesion;
 window.cambiarTab = cambiarTab;

@@ -325,7 +325,7 @@
     </div>
   </div>
   <div class="field"><label>Carrito (<span id="rec-carrito-count">0</span>)</label><div id="rec-carrito-container"></div></div>
-  <div class="field"><label>Total: <strong id="rec-total-estimado">$0</strong></label></div>
+  <div class="field"><label>Total:</label><div id="rec-total-estimado" style="font-size:14px;">$0</div></div>
   <div class="row-2">
     <div class="field"><label>N° Guía</label><input type="text" id="rec-guia"></div>
     <div class="field"><label>N° Factura</label><input type="text" id="rec-factura"></div>
@@ -1222,11 +1222,15 @@ function agregarAlCarritoRecepcion() {
 function renderCarritoRecepcion() {
   const cont = document.getElementById('rec-carrito-container');
   document.getElementById('rec-carrito-count').textContent = carritoRecepcion.length;
-  if (!carritoRecepcion.length) { cont.innerHTML = '<div class="empty-state">Sin productos</div>'; document.getElementById('rec-total-estimado').textContent = '$0'; return; }
-  let total = 0;
+  if (!carritoRecepcion.length) {
+    cont.innerHTML = '<div class="empty-state">Sin productos</div>';
+    document.getElementById('rec-total-estimado').innerHTML = '$0';
+    return;
+  }
+  let totalL1 = 0, totalL2 = 0;
   cont.innerHTML = carritoRecepcion.map((p, i) => {
     const sub = precioBruto(p.precio_neto) * p.cantidad;
-    total += sub;
+    if (p.linea === 1) totalL1 += sub; else totalL2 += sub;
     const bloq = p.bloqueado === true;
     return `<div class="producto-agregado">
       <div class="info"><div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div><div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = ${formatearCLP(sub)}</div></div>
@@ -1234,56 +1238,107 @@ function renderCarritoRecepcion() {
       ${bloq ? '' : `<button class="btn-eliminar-prod" onclick="carritoRecepcion.splice(${i},1);renderCarritoRecepcion();">✕</button>`}
     </div>`;
   }).join('');
-  document.getElementById('rec-total-estimado').textContent = formatearCLP(total);
+  let html = '';
+  if (totalL1 > 0) html += `<div style="display:flex; justify-content:space-between; padding:4px 0;"><span>L1 · PVC:</span><strong style="color:var(--azul);">${formatearCLP(totalL1)}</strong></div>`;
+  if (totalL2 > 0) html += `<div style="display:flex; justify-content:space-between; padding:4px 0;"><span>L2 · Papelería:</span><strong style="color:var(--morado);">${formatearCLP(totalL2)}</strong></div>`;
+  html += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-top:1px solid var(--borde); margin-top:4px; font-size:14px;"><span><strong>TOTAL:</strong></span><strong style="color:var(--verde);">${formatearCLP(totalL1 + totalL2)}</strong></div>`;
+  document.getElementById('rec-total-estimado').innerHTML = html;
 }
 async function registrarRecepcion() {
   const solVinculo = document.getElementById('rec-solicitud-vinculo').value;
-  let cuentaId, deptoPadre, lineaUsada;
+  let cuentaL1, cuentaL2, deptoPadre;
+  let subdeptoPadre = null;
+  let subdeptoArea = null;
+  
   if (solVinculo) {
     const s = solicitudes.find(x => x.id === solVinculo);
-    if (s) {
-      deptoPadre = s.departamento_padre;
-      const items = solicitudItems.filter(i => i.solicitud_id === solVinculo);
-      lineaUsada = items.length > 0 ? items[0].linea : 1;
-      cuentaId = lineaUsada === 1 ? s.cuenta_l1_id : s.cuenta_l2_id;
-    }
+    if (!s) { mostrarToast('❌ Solicitud no encontrada'); return; }
+    deptoPadre = s.departamento_padre || s.departamento;
+    subdeptoPadre = s.subdepartamento_padre;
+    subdeptoArea = s.subdepartamento;
+    cuentaL1 = cuentas.find(c => c.id === s.cuenta_l1_id) || null;
+    cuentaL2 = cuentas.find(c => c.id === s.cuenta_l2_id) || null;
   } else {
     deptoPadre = document.getElementById('rec-depto-padre').value;
-    cuentaId = lineaSeleccionadaRec === 1 ? subdeptoActualRec.l1?.id : subdeptoActualRec.l2?.id;
+    subdeptoPadre = document.getElementById('rec-depto').value || null;
+    subdeptoArea = document.getElementById('rec-subdepto').value;
+    cuentaL1 = subdeptoActualRec.l1 || null;
+    cuentaL2 = subdeptoActualRec.l2 || null;
   }
+  
   if (!deptoPadre) { mostrarToast('❌ Sin dirección'); return; }
-  if (!cuentaId) { mostrarToast('❌ Sin cuenta'); return; }
+  if (!subdeptoArea) { mostrarToast('❌ Sin área'); return; }
   if (!carritoRecepcion.length) { mostrarToast('❌ Sin productos'); return; }
-  const cuenta = cuentas.find(c => c.id === cuentaId);
-  if (!cuenta) { mostrarToast('❌ Cuenta no encontrada'); return; }
-  const disp = calcularDisponibleCuenta(cuentaId);
+  
+  const itemsL1 = carritoRecepcion.filter(p => p.linea === 1);
+  const itemsL2 = carritoRecepcion.filter(p => p.linea === 2);
+  const totalL1 = itemsL1.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  const totalL2 = itemsL2.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
+  const totalBruto = totalL1 + totalL2;
   const totalNeto = carritoRecepcion.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
-  const totalBruto = carritoRecepcion.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
-  if (totalBruto > disp) { mostrarToast(`⛔ Excede ${formatearCLP(disp)}`, 6000); return; }
+  
+  if (itemsL1.length > 0) {
+    if (!cuentaL1) { mostrarToast('❌ No hay cuenta asignada para L1'); return; }
+    const dispL1 = calcularDisponibleCuenta(cuentaL1.id);
+    if (totalL1 > dispL1) {
+      mostrarToast(`⛔ Excede disponible L1 · PVC. Cuenta ${cuentaL1.codigo} · Disponible: ${formatearCLP(dispL1)} · Intentado: ${formatearCLP(totalL1)}`, 8000);
+      return;
+    }
+  }
+  
+  if (itemsL2.length > 0) {
+    if (!cuentaL2) { mostrarToast('❌ No hay cuenta asignada para L2'); return; }
+    const dispL2 = calcularDisponibleCuenta(cuentaL2.id);
+    if (totalL2 > dispL2) {
+      mostrarToast(`⛔ Excede disponible L2 · Papelería. Cuenta ${cuentaL2.codigo} · Disponible: ${formatearCLP(dispL2)} · Intentado: ${formatearCLP(totalL2)}`, 8000);
+      return;
+    }
+  }
+  
   const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
   try {
     const guia = document.getElementById('rec-guia').value.trim();
     const factura = document.getElementById('rec-factura').value.trim();
     const obs = document.getElementById('rec-obs').value.trim();
     const firma = obtenerFirma(nombreUsuario);
+    const cuentaPrincipal = cuentaL1 || cuentaL2;
+    
     const { data: rec, error: e1 } = await sb.from('lc_recepciones').insert({
-      proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
-      numero_guia: guia || null, numero_factura: factura || null, observacion: obs || null,
-      responsable: nombreUsuario, monto_total: totalNeto, monto_total_bruto: totalBruto,
-      iva_total: totalBruto - totalNeto, cuenta_id: cuentaId, departamento: deptoPadre,
+      proveedor: PROVEEDOR_OFICIAL.razon_social,
+      proveedor_rut: PROVEEDOR_OFICIAL.rut,
+      numero_guia: guia || null,
+      numero_factura: factura || null,
+      observacion: obs || null,
+      responsable: nombreUsuario,
+      monto_total: totalNeto,
+      monto_total_bruto: totalBruto,
+      iva_total: totalBruto - totalNeto,
+      cuenta_id: cuentaPrincipal?.id || null,
+      departamento: deptoPadre,
       solicitud_id: solVinculo || null,
-      recibido_por_nombre: firma.nombre, recibido_por_cargo: firma.cargo,
+      recibido_por_nombre: firma.nombre,
+      recibido_por_cargo: firma.cargo,
       despachada: false
     }).select().single();
     if (e1) throw e1;
-    const items = carritoRecepcion.map(p => ({
-      recepcion_id: rec.id, producto_id: p.producto_id, cantidad: p.cantidad,
-      precio_neto: p.precio_neto, precio_bruto: precioBruto(p.precio_neto),
-      subtotal: p.precio_neto * p.cantidad, subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad,
-      iva: (precioBruto(p.precio_neto) - p.precio_neto) * p.cantidad, cuenta_id: cuentaId
-    }));
+    
+    const items = carritoRecepcion.map(p => {
+      const cuentaItem = p.linea === 1 ? cuentaL1 : cuentaL2;
+      return {
+        recepcion_id: rec.id,
+        producto_id: p.producto_id,
+        cantidad: p.cantidad,
+        precio_neto: p.precio_neto,
+        precio_bruto: precioBruto(p.precio_neto),
+        subtotal: p.precio_neto * p.cantidad,
+        subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad,
+        iva: (precioBruto(p.precio_neto) - p.precio_neto) * p.cantidad,
+        cuenta_id: cuentaItem?.id || null
+      };
+    });
     const { error: e2 } = await sb.from('lc_recepcion_items').insert(items);
     if (e2) throw e2;
+    
     for (const p of carritoRecepcion) {
       const prod = productos.find(x => x.id === p.producto_id);
       if (prod) {
@@ -1292,32 +1347,63 @@ async function registrarRecepcion() {
         prod.stock = ns;
       }
     }
+    
     if (solVinculo) {
-      await sb.from('lc_solicitudes').update({ estado: 'RECIBIDA', fecha_recepcion: new Date().toISOString(), recepcion_id: rec.id }).eq('id', solVinculo);
+      await sb.from('lc_solicitudes').update({
+        estado: 'RECIBIDA',
+        fecha_recepcion: new Date().toISOString(),
+        recepcion_id: rec.id
+      }).eq('id', solVinculo);
     }
+    
     ultimaRecepcion = {
-      id: rec.id, codigo: rec.codigo,
+      id: rec.id,
+      codigo: rec.codigo,
       productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
-      proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
-      guia, factura, obs, departamento: deptoPadre, cuenta,
-      monto_total: totalNeto, monto_total_bruto: totalBruto,
+      proveedor: PROVEEDOR_OFICIAL.razon_social,
+      proveedor_rut: PROVEEDOR_OFICIAL.rut,
+      guia, factura, obs, departamento: deptoPadre,
+      cuenta: cuentaPrincipal,
+      cuentas: { l1: cuentaL1, l2: cuentaL2 },
+      monto_total: totalNeto,
+      monto_total_bruto: totalBruto,
+      monto_l1: totalL1,
+      monto_l2: totalL2,
       responsable: nombreUsuario, firma, fecha: formatearFecha(rec.fecha)
     };
-    mostrarToast(`✅ ${rec.codigo}`);
+    
+    mostrarToast(`✅ Recepción ${rec.codigo} registrada`);
     const msg = document.getElementById('rec-mensaje');
     msg.style.display = 'block';
-    msg.innerHTML = `✅ Recepción <strong>${rec.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFRecepcion()" style="margin-left:10px;">📄 PDF</button>`;
-    carritoRecepcion = []; renderCarritoRecepcion();
-    document.getElementById('rec-guia').value = ''; document.getElementById('rec-factura').value = ''; document.getElementById('rec-obs').value = '';
+    msg.innerHTML = `
+      ✅ Recepción <strong>${rec.codigo}</strong> registrada
+      ${totalL1 > 0 ? `<br>📦 L1 · PVC: <strong>${formatearCLP(totalL1)}</strong>` : ''}
+      ${totalL2 > 0 ? `<br>📦 L2 · Papelería: <strong>${formatearCLP(totalL2)}</strong>` : ''}
+      <br>💰 Total: <strong>${formatearCLP(totalBruto)}</strong>
+      <button class="btn-pequeno azul" onclick="descargarPDFRecepcion()" style="margin-left:10px;">📄 PDF</button>
+    `;
+    
+    carritoRecepcion = [];
+    renderCarritoRecepcion();
+    document.getElementById('rec-guia').value = '';
+    document.getElementById('rec-factura').value = '';
+    document.getElementById('rec-obs').value = '';
     document.getElementById('rec-solicitud-vinculo').value = '';
     alVincularSolicitud();
-    await cargarTodo(); renderStock(); actualizarResumenes();
-  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
-  btn.disabled = false; btn.textContent = '✅ Registrar Recepción';
+    await cargarTodo();
+    renderStock();
+    actualizarResumenes();
+    
+  } catch(e) {
+    console.error(e);
+    mostrarToast('❌ ' + (e.message||'Error'));
+  }
+  btn.disabled = false;
+  btn.textContent = '✅ Registrar Recepción';
 }
 
 // ============================================================
-// SALIDA (NUEVA LÓGICA — BASADA EN RECEPCIONES)
+// SALIDA (BASADA EN RECEPCIONES)
 // ============================================================
 function salCambiarDireccion() {
   const direccion = document.getElementById('sal-depto-padre').value;
@@ -1333,7 +1419,6 @@ function salCambiarDireccion() {
     return;
   }
   
-  // Buscar recepciones NO despachadas de esa dirección
   const pendientes = recepciones.filter(r => 
     !r.despachada && 
     (r.departamento === direccion || r.departamento_padre === direccion)
@@ -1374,9 +1459,12 @@ function salCargarRecepcion() {
   recepcionSeleccionadaSalida = r;
   
   const items = recepcionItems.filter(i => i.recepcion_id === id);
-  const cuenta = cuentas.find(c => c.id === r.cuenta_id);
+  const cuentasRecepcion = [...new Set(items.map(i => i.cuenta_id).filter(Boolean))].map(cid => cuentas.find(c => c.id === cid)).filter(Boolean);
   
-  // Info de la recepción
+  const cuentasInfo = cuentasRecepcion.map(c => 
+    `💰 <strong>${escaparHtml(c.direccion)} · ${escaparHtml(c.subdepartamento)} · L${c.linea}</strong> (${escaparHtml(c.codigo)})`
+  ).join('<br>');
+  
   infoRecep.innerHTML = `
     <div style="font-weight:700; color:var(--azul); font-size:13px; margin-bottom:4px;">
       📥 Recepción ${escaparHtml(r.codigo)}
@@ -1384,11 +1472,10 @@ function salCargarRecepcion() {
     <div>📅 Fecha: <strong>${r.fecha_fmt}</strong></div>
     <div>🏭 Proveedor: <strong>${escaparHtml(r.proveedor||'N/E')}</strong></div>
     ${r.numero_guia ? `<div>📄 Guía: <strong>${escaparHtml(r.numero_guia)}</strong></div>` : ''}
-    ${cuenta ? `<div>💰 Cuenta: <strong>${escaparHtml(cuenta.direccion)} · ${escaparHtml(cuenta.subdepartamento)} · L${cuenta.linea}</strong></div>` : ''}
+    ${cuentasInfo}
     <div>💵 Monto bruto: <strong>${formatearCLP(r.monto_total_bruto||0)}</strong></div>
   `;
   
-  // Separar por línea
   const itemsL1 = [];
   const itemsL2 = [];
   
@@ -1444,10 +1531,8 @@ async function registrarSalida() {
   if (!receptorRut) { mostrarToast('❌ Ingresa el RUT del receptor'); return; }
   
   const r = recepcionSeleccionadaSalida;
-  const cuenta = cuentas.find(c => c.id === r.cuenta_id);
   const items = recepcionItems.filter(i => i.recepcion_id === r.id);
   
-  // Validar stock
   for (const it of items) {
     const prod = productos.find(x => x.id === it.producto_id);
     if (!prod || Number(prod.stock||0) < Number(it.cantidad)) {
@@ -1467,7 +1552,7 @@ async function registrarSalida() {
       departamento: r.departamento,
       departamento_padre: r.departamento_padre || r.departamento,
       subdepartamento_padre: r.subdepartamento_padre || null,
-      subdepartamento: r.subdepartamento || cuenta?.subdepartamento || null,
+      subdepartamento: r.subdepartamento || null,
       receptor_nombre: receptor,
       receptor_rut: receptorRut,
       receptor_email: receptorEmail || null,
@@ -1495,7 +1580,6 @@ async function registrarSalida() {
     const { error: e2 } = await sb.from('lc_salida_items').insert(itemsInsert);
     if (e2) throw e2;
     
-    // Descontar stock
     for (const it of items) {
       const prod = productos.find(x => x.id === it.producto_id);
       if (prod) {
@@ -1505,7 +1589,6 @@ async function registrarSalida() {
       }
     }
     
-    // Marcar recepción como despachada
     const { error: e3 } = await sb.from('lc_recepciones').update({
       despachada: true,
       fecha_despacho: new Date().toISOString(),
@@ -1544,7 +1627,6 @@ async function registrarSalida() {
     msg.style.display = 'block';
     msg.innerHTML = `✅ Salida <strong>${sal.codigo}</strong> desde recepción <strong>${r.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFSalida()" style="margin-left:10px;">📄 PDF</button>`;
     
-    // Reset
     document.getElementById('sal-receptor').value = '';
     document.getElementById('sal-receptor-rut').value = '';
     document.getElementById('sal-receptor-email').value = '';
@@ -1555,7 +1637,6 @@ async function registrarSalida() {
     await cargarTodo();
     renderStock();
     actualizarResumenes();
-    // Refrescar selector de recepciones (la despachada ya no debe aparecer)
     salCambiarDireccion();
     
   } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
@@ -1965,7 +2046,6 @@ function cambiarTab(tabId) {
   if (tabId === 'tab-mi-solicitud') { renderMisSolicitudes(); actualizarBadgePendientes(); }
   if (tabId === 'tab-recepcion') { poblarVinculoSolicitud(); actualizarResumenes(); }
   if (tabId === 'tab-salida') { 
-    // Resetear al entrar
     document.getElementById('sal-depto-padre').value = '';
     document.getElementById('sal-wrap-recepciones').style.display = 'none';
     document.getElementById('sal-detalle').style.display = 'none';

@@ -1987,8 +1987,17 @@ function hojaExcel(data, cols) {
     filas.push(cols.map(c => {
       const val = row[c.key];
       const money = c.money === true && typeof val === 'number';
-      return { v: val == null ? '' : val, t: typeof val === 'number' ? 'n' : 's', z: money ? '#.##0' : undefined,
-        s: { font: { sz:10, name:'Century Gothic', color:{rgb:'141E2D'} }, fill: { patternType:'solid', fgColor:{rgb: par?GR:BL} }, alignment: { vertical:'center', horizontal: c.align||'left' }, border: b } };
+      return {
+        v: val == null ? '' : val,
+        t: typeof val === 'number' ? 'n' : 's',
+        z: money ? '"$"#.##0' : undefined,
+        s: {
+          font: { sz:10, name:'Century Gothic', color:{rgb:'141E2D'} },
+          fill: { patternType:'solid', fgColor:{rgb: par?GR:BL} },
+          alignment: { vertical:'center', horizontal: c.align||'left', wrapText: false },
+          border: b
+        }
+      };
     }));
   });
   const ws = XLSX.utils.aoa_to_sheet(filas);
@@ -1997,40 +2006,243 @@ function hojaExcel(data, cols) {
   if (data.length) { const l = String.fromCharCode(65 + cols.length - 1); ws['!autofilter'] = { ref: `A1:${l}${data.length+1}` }; }
   return ws;
 }
+
 function exportarExcelStock() {
-  const data = productos.map(p => { const pB = precioBruto(p.precio_neto); const st = Number(p.stock); return { nombre: p.nombre, linea: 'L'+p.linea, neto: Number(p.precio_neto), iva: pB - Number(p.precio_neto), bruto: pB, stock: st, valor: st*pB }; });
+  if (!productos.length) { mostrarToast('❌ Sin productos'); return; }
+  const data = productos.map(p => {
+    const pB = precioBruto(p.precio_neto);
+    const st = Number(p.stock);
+    return {
+      producto: p.nombre,
+      linea: 'L' + p.linea,
+      neto: Number(p.precio_neto),
+      iva: pB - Number(p.precio_neto),
+      bruto: pB,
+      stock: st,
+      valor: st * pB
+    };
+  });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'nombre', label:'Producto', width:50 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'stock', label:'Stock', width:10, align:'center' }, { key:'valor', label:'Valor Total', width:16, align:'right', money:true }]);
+  const ws = hojaExcel(data, [
+    { key:'producto', label:'Producto', width:55 },
+    { key:'linea', label:'L', width:6, align:'center' },
+    { key:'neto', label:'Neto', width:16, align:'right', money:true },
+    { key:'iva', label:'IVA', width:14, align:'right', money:true },
+    { key:'bruto', label:'Bruto', width:16, align:'right', money:true },
+    { key:'stock', label:'Stock', width:10, align:'center' },
+    { key:'valor', label:'Valor Total', width:18, align:'right', money:true }
+  ]);
   XLSX.utils.book_append_sheet(wb, ws, 'Stock');
   XLSX.writeFile(wb, `Stock_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
 }
+
 function exportarExcelRecepciones() {
-  const data = recepciones.map(r => ({ codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento||'', proveedor: r.proveedor||'', neto: Number(r.monto_total||0), bruto: Number(r.monto_total_bruto||0), responsable: r.responsable||'' }));
+  if (!recepciones.length) { mostrarToast('❌ Sin recepciones'); return; }
+  const data = [];
+  recepciones.forEach(r => {
+    const items = recepcionItems.filter(i => i.recepcion_id === r.id);
+    if (!items.length) {
+      data.push({
+        codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '',
+        proveedor: r.proveedor || '', guia: r.numero_guia || '', factura: r.numero_factura || '',
+        linea: '—', producto: '(sin items)', cantidad: 0,
+        neto: Number(r.monto_total || 0), iva: Number(r.iva_total || 0), bruto: Number(r.monto_total_bruto || 0),
+        responsable: r.responsable || ''
+      });
+      return;
+    }
+    items.forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      const linea = p?.linea || 1;
+      data.push({
+        codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '',
+        proveedor: r.proveedor || '', guia: r.numero_guia || '', factura: r.numero_factura || '',
+        linea: 'L' + linea,
+        producto: p?.nombre || 'N/E',
+        cantidad: Number(it.cantidad || 0),
+        neto: Number(it.subtotal || 0),
+        iva: Number(it.iva || 0),
+        bruto: Number(it.subtotal_bruto || 0),
+        responsable: r.responsable || ''
+      });
+    });
+  });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Dirección', width:30 }, { key:'proveedor', label:'Proveedor', width:30 }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'responsable', label:'Responsable', width:28 }]);
+  const ws = hojaExcel(data, [
+    { key:'codigo', label:'Recepción', width:14, align:'center' },
+    { key:'fecha', label:'Fecha', width:18, align:'center' },
+    { key:'depto', label:'Dirección', width:30 },
+    { key:'proveedor', label:'Proveedor', width:30 },
+    { key:'guia', label:'Guía', width:12, align:'center' },
+    { key:'factura', label:'Factura', width:12, align:'center' },
+    { key:'linea', label:'L', width:6, align:'center' },
+    { key:'producto', label:'Producto', width:50 },
+    { key:'cantidad', label:'Cantidad', width:10, align:'center' },
+    { key:'neto', label:'Neto', width:14, align:'right', money:true },
+    { key:'iva', label:'IVA', width:12, align:'right', money:true },
+    { key:'bruto', label:'Bruto', width:14, align:'right', money:true },
+    { key:'responsable', label:'Responsable', width:28 }
+  ]);
   XLSX.utils.book_append_sheet(wb, ws, 'Recepciones');
   XLSX.writeFile(wb, `Recepciones_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
 }
+
 function exportarExcelSalidas() {
-  const data = salidas.map(s => ({ codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento||'', receptor: s.receptor_nombre||'', rut: s.receptor_rut||'', neto: Number(s.monto_total||0), bruto: Number(s.monto_total_bruto||0) }));
+  if (!salidas.length) { mostrarToast('❌ Sin salidas'); return; }
+  const data = [];
+  salidas.forEach(s => {
+    const items = salidaItems.filter(i => i.salida_id === s.id);
+    if (!items.length) {
+      data.push({
+        codigo: s.codigo, fecha: s.fecha_fmt,
+        direccion: s.departamento_padre || s.departamento || '',
+        depto: s.subdepartamento_padre || '', area: s.subdepartamento || '',
+        receptor: s.receptor_nombre || '', rut: s.receptor_rut || '', email: s.receptor_email || '',
+        linea: '—', producto: '(sin items)', cantidad: 0,
+        neto: Number(s.monto_total || 0), iva: Number(s.iva_total || 0), bruto: Number(s.monto_total_bruto || 0),
+        responsable: s.responsable || ''
+      });
+      return;
+    }
+    items.forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      const linea = p?.linea || 1;
+      data.push({
+        codigo: s.codigo, fecha: s.fecha_fmt,
+        direccion: s.departamento_padre || s.departamento || '',
+        depto: s.subdepartamento_padre || '',
+        area: s.subdepartamento || '',
+        receptor: s.receptor_nombre || '',
+        rut: s.receptor_rut || '',
+        email: s.receptor_email || '',
+        linea: 'L' + linea,
+        producto: p?.nombre || 'N/E',
+        cantidad: Number(it.cantidad || 0),
+        neto: Number(it.subtotal || 0),
+        iva: Number(it.iva || 0),
+        bruto: Number(it.subtotal_bruto || 0),
+        responsable: s.responsable || ''
+      });
+    });
+  });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'depto', label:'Dirección', width:30 }, { key:'receptor', label:'Receptor', width:28 }, { key:'rut', label:'RUT', width:14 }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }]);
+  const ws = hojaExcel(data, [
+    { key:'codigo', label:'Salida', width:14, align:'center' },
+    { key:'fecha', label:'Fecha', width:18, align:'center' },
+    { key:'direccion', label:'Dirección', width:28 },
+    { key:'depto', label:'Departamento', width:28 },
+    { key:'area', label:'Área', width:28 },
+    { key:'receptor', label:'Receptor', width:25 },
+    { key:'rut', label:'RUT', width:14 },
+    { key:'email', label:'Email', width:25 },
+    { key:'linea', label:'L', width:6, align:'center' },
+    { key:'producto', label:'Producto', width:50 },
+    { key:'cantidad', label:'Cantidad', width:10, align:'center' },
+    { key:'neto', label:'Neto', width:14, align:'right', money:true },
+    { key:'iva', label:'IVA', width:12, align:'right', money:true },
+    { key:'bruto', label:'Bruto', width:14, align:'right', money:true },
+    { key:'responsable', label:'Responsable', width:25 }
+  ]);
   XLSX.utils.book_append_sheet(wb, ws, 'Salidas');
   XLSX.writeFile(wb, `Salidas_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
 }
+
 function exportarExcelCuentas() {
-  const data = cuentas.map(c => { const cons = calcularConsumidoCuenta(c.id); const res = calcularReservadoCuenta(c.id); return { direccion: c.direccion, depto: c.departamento_padre||'—', area: c.subdepartamento, linea: 'L'+c.linea, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: Number(c.monto_asignado) - cons - res }; });
+  if (!cuentas.length) { mostrarToast('❌ Sin cuentas'); return; }
+  const data = cuentas.map(c => {
+    const cons = calcularConsumidoCuenta(c.id);
+    const res = calcularReservadoCuenta(c.id);
+    return {
+      direccion: c.direccion,
+      depto: c.departamento_padre || '—',
+      area: c.subdepartamento,
+      linea: 'L' + c.linea,
+      cuenta: c.codigo,
+      asignado: Number(c.monto_asignado),
+      reservado: res,
+      consumido: cons,
+      disponible: Number(c.monto_asignado) - cons - res
+    };
+  });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'direccion', label:'Dirección', width:30 }, { key:'depto', label:'Departamento', width:35 }, { key:'area', label:'Área', width:35 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'asignado', label:'Asignado', width:16, align:'right', money:true }, { key:'reservado', label:'Reservado', width:16, align:'right', money:true }, { key:'consumido', label:'Consumido', width:16, align:'right', money:true }, { key:'disponible', label:'Disponible', width:16, align:'right', money:true }]);
+  const ws = hojaExcel(data, [
+    { key:'direccion', label:'Dirección', width:32 },
+    { key:'depto', label:'Departamento', width:38 },
+    { key:'area', label:'Área', width:38 },
+    { key:'linea', label:'L', width:6, align:'center' },
+    { key:'cuenta', label:'Cuenta', width:14, align:'center' },
+    { key:'asignado', label:'Asignado', width:18, align:'right', money:true },
+    { key:'reservado', label:'Reservado', width:18, align:'right', money:true },
+    { key:'consumido', label:'Consumido', width:18, align:'right', money:true },
+    { key:'disponible', label:'Disponible', width:18, align:'right', money:true }
+  ]);
   XLSX.utils.book_append_sheet(wb, ws, 'Cuentas');
   XLSX.writeFile(wb, `Cuentas_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
 }
+
 function exportarExcelSolicitudes() {
-  const data = solicitudes.map(s => ({ codigo: s.codigo, fecha: s.fecha_fmt, dir: s.departamento_padre||'', depto: s.subdepartamento_padre||'', area: s.subdepartamento||'', solicitante: s.solicitante_nombre||s.solicitante_email, estado: s.estado, bruto: Number(s.monto_estimado_bruto||0) }));
+  if (!solicitudes.length) { mostrarToast('❌ Sin solicitudes'); return; }
+  const data = [];
+  solicitudes.forEach(s => {
+    const items = solicitudItems.filter(i => i.solicitud_id === s.id);
+    if (!items.length) {
+      data.push({
+        codigo: s.codigo, fecha: s.fecha_fmt,
+        direccion: s.departamento_padre || s.departamento || '',
+        depto: s.subdepartamento_padre || '',
+        area: s.subdepartamento || '',
+        solicitante: s.solicitante_nombre || s.solicitante_email || '',
+        estado: s.estado, urgencia: s.urgencia || '',
+        linea: '—', producto: '(sin items)', cantidad: 0,
+        neto: Number(s.monto_estimado || 0), iva: 0, bruto: Number(s.monto_estimado_bruto || 0)
+      });
+      return;
+    }
+    items.forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      const linea = it.linea || p?.linea || 1;
+      const pNeto = Number(it.precio_estimado || 0);
+      const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
+      data.push({
+        codigo: s.codigo, fecha: s.fecha_fmt,
+        direccion: s.departamento_padre || s.departamento || '',
+        depto: s.subdepartamento_padre || '',
+        area: s.subdepartamento || '',
+        solicitante: s.solicitante_nombre || s.solicitante_email || '',
+        estado: s.estado, urgencia: s.urgencia || '',
+        linea: 'L' + linea,
+        producto: p?.nombre || 'N/E',
+        cantidad: Number(it.cantidad || 0),
+        neto: pNeto * Number(it.cantidad || 0),
+        iva: (pBruto - pNeto) * Number(it.cantidad || 0),
+        bruto: Number(it.subtotal_bruto || pBruto * Number(it.cantidad || 0))
+      });
+    });
+  });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [{ key:'codigo', label:'Código', width:18, align:'center' }, { key:'fecha', label:'Fecha', width:18 }, { key:'dir', label:'Dirección', width:30 }, { key:'depto', label:'Departamento', width:30 }, { key:'area', label:'Área', width:30 }, { key:'solicitante', label:'Solicitante', width:28 }, { key:'estado', label:'Estado', width:14, align:'center' }, { key:'bruto', label:'Monto (IVA)', width:16, align:'right', money:true }]);
+  const ws = hojaExcel(data, [
+    { key:'codigo', label:'Solicitud', width:14, align:'center' },
+    { key:'fecha', label:'Fecha', width:18, align:'center' },
+    { key:'direccion', label:'Dirección', width:28 },
+    { key:'depto', label:'Departamento', width:28 },
+    { key:'area', label:'Área', width:28 },
+    { key:'solicitante', label:'Solicitante', width:28 },
+    { key:'estado', label:'Estado', width:14, align:'center' },
+    { key:'urgencia', label:'Urgencia', width:12, align:'center' },
+    { key:'linea', label:'L', width:6, align:'center' },
+    { key:'producto', label:'Producto', width:50 },
+    { key:'cantidad', label:'Cantidad', width:10, align:'center' },
+    { key:'neto', label:'Neto', width:14, align:'right', money:true },
+    { key:'iva', label:'IVA', width:12, align:'right', money:true },
+    { key:'bruto', label:'Bruto', width:14, align:'right', money:true }
+  ]);
   XLSX.utils.book_append_sheet(wb, ws, 'Solicitudes');
   XLSX.writeFile(wb, `Solicitudes_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
 }
 
 // ============================================================

@@ -152,6 +152,52 @@
   .articulo-fila .nombre { font-weight:600; font-size:12.5px; }
   .articulo-fila .cant { font-weight:700; font-size:13px; color:var(--azul); text-align:center; white-space:nowrap; }
   .articulo-fila .monto { font-weight:700; font-size:12.5px; color:var(--texto-oscuro); text-align:right; white-space:nowrap; }
+  /* Auditoría: árbol y timeline */
+  .aud-filtros { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:8px; margin-bottom:14px; }
+  .aud-filtros input, .aud-filtros select { padding:8px 10px; font-size:12px; border-radius:10px; }
+  .aud-resumen { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px; margin-bottom:16px; }
+  .aud-resumen-card { background:white; border:1px solid var(--borde); border-radius:14px; padding:12px; }
+  .aud-resumen-card .titulo { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--texto-gris); font-weight:700; margin-bottom:6px; }
+  .aud-resumen-card .num { font-size:22px; font-weight:800; color:var(--azul); line-height:1; }
+  .aud-resumen-card .detalle { font-size:10px; color:var(--texto-gris); margin-top:4px; }
+  .aud-arbol { border:1px solid var(--borde); border-radius:14px; overflow:hidden; }
+  .aud-item { border-bottom:1px solid var(--borde); }
+  .aud-item:last-child { border-bottom:none; }
+  .aud-dir { background:#f8fafc; padding:12px 16px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.15s; }
+  .aud-dir:hover { background:#eff6ff; }
+  .aud-dir.expandido { background:#dbeafe; }
+  .aud-dir .nombre { font-weight:700; font-size:13px; color:#1e3a8a; display:flex; align-items:center; gap:8px; }
+  .aud-dir .chev { font-size:14px; color:#1e40af; transition:0.2s; }
+  .aud-dir.expandido .chev { transform:rotate(90deg); }
+  .aud-dir .stats { font-size:11px; color:var(--texto-gris); font-weight:600; }
+  .aud-depto { background:white; padding:10px 16px 10px 32px; cursor:pointer; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center; transition:0.15s; }
+  .aud-depto:hover { background:#f0f5ff; }
+  .aud-depto .nombre { font-weight:600; font-size:12px; color:#334155; display:flex; align-items:center; gap:8px; }
+  .aud-depto .chev { font-size:12px; color:#64748b; transition:0.2s; }
+  .aud-depto.expandido .chev { transform:rotate(90deg); }
+  .aud-depto .stats { font-size:10px; color:var(--texto-gris); }
+  .aud-area { background:#fafbfc; padding:10px 16px 10px 48px; cursor:pointer; border-top:1px solid #f1f5f9; transition:0.15s; }
+  .aud-area:hover { background:#eff6ff; }
+  .aud-area .nombre { font-weight:600; font-size:12px; color:#475569; }
+  .aud-area .stats { font-size:10px; color:var(--texto-gris); margin-left:8px; }
+  .aud-sol-lista { background:white; padding:8px 16px 12px 64px; border-top:1px solid #f1f5f9; }
+  .aud-sol-item { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:8px 12px; background:#f8fafc; border:1px solid var(--borde); border-radius:8px; margin-bottom:6px; cursor:pointer; transition:0.15s; }
+  .aud-sol-item:hover { background:#eff6ff; border-color:var(--azul-claro); }
+  .aud-sol-item .cod { font-family:'Courier New',monospace; font-weight:700; font-size:11px; color:var(--azul); }
+  .aud-sol-item .info { font-size:11px; color:var(--texto-gris); }
+  .aud-sol-item .monto { font-weight:700; font-size:12px; text-align:right; }
+  .timeline-aud { position:relative; padding-left:32px; margin-top:16px; }
+  .timeline-aud::before { content:""; position:absolute; left:14px; top:0; bottom:0; width:2px; background:#dbeafe; }
+  .timeline-aud-item { position:relative; padding:12px 14px; background:#f8fafc; border:1px solid var(--borde); border-radius:10px; margin-bottom:10px; }
+  .timeline-aud-item::before { content:""; position:absolute; left:-24px; top:16px; width:14px; height:14px; border-radius:50%; background:var(--azul); border:3px solid white; box-shadow:0 0 0 2px var(--azul); }
+  .timeline-aud-item.solicitud::before { background:var(--naranja); box-shadow:0 0 0 2px var(--naranja); }
+  .timeline-aud-item.aprobacion::before { background:#3b82f6; box-shadow:0 0 0 2px #3b82f6; }
+  .timeline-aud-item.recepcion::before { background:var(--verde); box-shadow:0 0 0 2px var(--verde); }
+  .timeline-aud-item.salida::before { background:var(--rojo); box-shadow:0 0 0 2px var(--rojo); }
+  .timeline-aud-item .tl-titulo { font-weight:700; font-size:13px; color:var(--texto-oscuro); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+  .timeline-aud-item .tl-fecha { font-size:10.5px; color:var(--texto-gris); margin-bottom:6px; }
+  .timeline-aud-item .tl-detalle { font-size:11.5px; color:var(--texto-oscuro); }
+  .timeline-aud-item .tl-monto { font-weight:700; color:var(--azul); font-size:12px; }
   .solo-admin.nav-tab, .solo-operador.nav-tab, .solo-solicitante.nav-tab, .solo-admin.section, .solo-operador.section, .solo-solicitante.section { display:none !important; }
   body.rol-admin .nav-tab.solo-admin { display:block !important; }
   body.rol-admin .section.solo-admin.active { display:block !important; }
@@ -165,6 +211,7 @@
     .nav-tab { font-size:9px; padding:8px 2px; min-width:70px; }
     .nav-tab .icono { font-size:14px; }
     .nav-tab .label { font-size:7.5px; }
+    .aud-resumen, .aud-filtros { grid-template-columns:1fr 1fr; }
   }
 </style>
 </head>
@@ -200,17 +247,19 @@
   </div>
 </div>
 
+<!-- ORDEN NUEVO DE PESTAÑAS -->
 <div class="nav-tabs">
-  <div class="nav-tab solo-solicitante solo-admin" data-tab="tab-mi-solicitud" onclick="cambiarTab('tab-mi-solicitud')"><span class="icono">📝</span><span class="label">MI SOLICITUD</span></div>
+  <div class="nav-tab solo-solicitante solo-admin" data-tab="tab-mi-solicitud" onclick="cambiarTab('tab-mi-solicitud')"><span class="icono">📝</span><span class="label">SOLICITUD</span></div>
+  <div class="nav-tab solo-admin" data-tab="tab-solicitudes" onclick="cambiarTab('tab-solicitudes')"><span class="icono">📋</span><span class="label">SOLICITUDES<span class="tab-badge" id="badge-sol-pend" style="display:none;">0</span></span></div>
   <div class="nav-tab solo-operador solo-admin" data-tab="tab-recepcion" onclick="cambiarTab('tab-recepcion')"><span class="icono">📥</span><span class="label">RECEPCIÓN</span></div>
   <div class="nav-tab solo-operador solo-admin" data-tab="tab-salida" onclick="cambiarTab('tab-salida')"><span class="icono">📤</span><span class="label">SALIDA</span></div>
   <div class="nav-tab solo-operador solo-admin" data-tab="tab-stock" onclick="cambiarTab('tab-stock')"><span class="icono">📊</span><span class="label">STOCK</span></div>
-  <div class="nav-tab solo-admin" data-tab="tab-solicitudes" onclick="cambiarTab('tab-solicitudes')"><span class="icono">📋</span><span class="label">SOLICITUDES<span class="tab-badge" id="badge-sol-pend" style="display:none;">0</span></span></div>
   <div class="nav-tab solo-admin" data-tab="tab-cuentas" onclick="cambiarTab('tab-cuentas')"><span class="icono">💰</span><span class="label">CUENTAS</span></div>
-  <div class="nav-tab solo-admin" data-tab="tab-auditoria" onclick="cambiarTab('tab-auditoria')"><span class="icono">🔍</span><span class="label">AUDITORÍA</span></div>
   <div class="nav-tab solo-admin" data-tab="tab-reportes" onclick="cambiarTab('tab-reportes')"><span class="icono">📈</span><span class="label">REPORTES</span></div>
+  <div class="nav-tab solo-admin" data-tab="tab-auditoria" onclick="cambiarTab('tab-auditoria')"><span class="icono">🔍</span><span class="label">AUDITORÍA</span></div>
 </div>
 
+<!-- SOLICITUD -->
 <div class="section solo-solicitante solo-admin" id="tab-mi-solicitud">
   <div class="section-label">📝 NUEVA SOLICITUD DE ARTÍCULOS</div>
   <div class="aviso-info">ℹ️ <strong>Paso 1:</strong> Selecciona Dirección → Departamento → Área. El sistema mostrará las líneas disponibles y validará el tope del presupuesto.</div>
@@ -273,6 +322,25 @@
   </div>
 </div>
 
+<!-- SOLICITUDES (ADMIN) -->
+<div class="section solo-admin" id="tab-solicitudes">
+  <div class="section-label">📋 GESTIÓN DE SOLICITUDES</div>
+  <div class="filtros">
+    <input type="text" id="soladmin-filtro" placeholder="🔍 Buscar..." oninput="renderSolicitudesAdmin()">
+    <select id="soladmin-estado" onchange="renderSolicitudesAdmin()">
+      <option value="PENDIENTE" selected>Pendientes</option>
+      <option value="">Todas</option>
+      <option value="APROBADA">Aprobadas</option>
+      <option value="RECIBIDA">Recibidas</option>
+      <option value="RECHAZADA">Rechazadas</option>
+      <option value="CANCELADA">Canceladas</option>
+    </select>
+  </div>
+  <div class="tabla-container"><table><thead><tr><th>Código</th><th>Dirección</th><th>Solicitante</th><th>Fecha</th><th style="text-align:right;">Monto</th><th style="text-align:center;">Estado</th><th style="text-align:center;">Acciones</th></tr></thead><tbody id="soladmin-tbody"></tbody></table></div>
+  <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="soladmin-total"></div>
+</div>
+
+<!-- RECEPCIÓN -->
 <div class="section solo-operador solo-admin" id="tab-recepcion">
   <div class="section-label">📥 RECEPCIÓN DE PRODUCTOS</div>
   <div class="resumen-grid">
@@ -335,69 +403,47 @@
   <div id="rec-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
 </div>
 
+<!-- SALIDA -->
 <div class="section solo-operador solo-admin" id="tab-salida">
   <div class="section-label">📤 SALIDA DE PRODUCTOS</div>
-
   <div class="resumen-grid">
     <div class="resumen-card"><div class="num" id="res-sal-hoy">0</div><div class="lbl">Salidas hoy</div></div>
     <div class="resumen-card rojo"><div class="num" id="res-sal-unidades">0</div><div class="lbl">Unidades</div></div>
     <div class="resumen-card verde"><div class="num" id="res-sal-prods">0</div><div class="lbl">Productos</div></div>
     <div class="resumen-card naranja"><div class="num" id="res-stock-critico2">0</div><div class="lbl">Stock crítico</div></div>
   </div>
-
   <div class="field">
     <label class="required">Dirección</label>
     <select id="sal-depto-padre" onchange="salCambiarDireccion()"><option value="">— Selecciona —</option></select>
   </div>
-
   <div id="sal-wrap-recepciones" style="display:none;">
     <div class="field">
       <label class="required">Recepción a despachar</label>
       <select id="sal-recepcion-sel" onchange="salCargarRecepcion()"><option value="">— Selecciona una recepción —</option></select>
     </div>
   </div>
-
   <div id="sal-detalle" style="display:none;">
     <div id="sal-info-recepcion" class="cuenta-info-box" style="margin-bottom:12px;"></div>
-
     <div id="sal-bloque-l1" style="display:none; margin-bottom:16px;">
-      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--azul); padding-left:8px; margin-bottom:8px;">
-        📦 ARTÍCULOS L1 · PVC
-      </div>
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--azul); padding-left:8px; margin-bottom:8px;">📦 ARTÍCULOS L1 · PVC</div>
       <div id="sal-lista-l1"></div>
       <div style="text-align:right; font-weight:700; margin-top:6px; color:var(--azul);" id="sal-total-l1"></div>
     </div>
-
     <div id="sal-bloque-l2" style="display:none; margin-bottom:16px;">
-      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--morado); padding-left:8px; margin-bottom:8px;">
-        📦 ARTÍCULOS L2 · PAPELERÍA
-      </div>
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--morado); padding-left:8px; margin-bottom:8px;">📦 ARTÍCULOS L2 · PAPELERÍA</div>
       <div id="sal-lista-l2"></div>
       <div style="text-align:right; font-weight:700; margin-top:6px; color:var(--morado);" id="sal-total-l2"></div>
     </div>
-
-    <div class="field">
-      <label class="required">Nombre receptor</label>
-      <input type="text" id="sal-receptor" placeholder="Ej: Juan Pérez">
-    </div>
-    <div class="field">
-      <label class="required">RUT receptor</label>
-      <input type="text" id="sal-receptor-rut" placeholder="Ej: 12.345.678-9">
-    </div>
-    <div class="field">
-      <label>Correo (opcional)</label>
-      <input type="email" id="sal-receptor-email" placeholder="Ej: juan@lascondes.cl">
-    </div>
-    <div class="field">
-      <label>Observación (opcional)</label>
-      <textarea id="sal-obs" rows="2"></textarea>
-    </div>
-
+    <div class="field"><label class="required">Nombre receptor</label><input type="text" id="sal-receptor" placeholder="Ej: Juan Pérez"></div>
+    <div class="field"><label class="required">RUT receptor</label><input type="text" id="sal-receptor-rut" placeholder="Ej: 12.345.678-9"></div>
+    <div class="field"><label>Correo (opcional)</label><input type="email" id="sal-receptor-email" placeholder="Ej: juan@lascondes.cl"></div>
+    <div class="field"><label>Observación (opcional)</label><textarea id="sal-obs" rows="2"></textarea></div>
     <button class="btn-primario" onclick="registrarSalida()">✅ Registrar Salida</button>
     <div id="sal-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
   </div>
 </div>
 
+<!-- STOCK -->
 <div class="section solo-operador solo-admin" id="tab-stock">
   <div class="section-label">📊 INVENTARIO</div>
   <div class="filtros">
@@ -409,23 +455,7 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="stock-total"></div>
 </div>
 
-<div class="section solo-admin" id="tab-solicitudes">
-  <div class="section-label">📋 SOLICITUDES</div>
-  <div class="filtros">
-    <input type="text" id="soladmin-filtro" placeholder="🔍 Buscar..." oninput="renderSolicitudesAdmin()">
-    <select id="soladmin-estado" onchange="renderSolicitudesAdmin()">
-      <option value="PENDIENTE" selected>Pendientes</option>
-      <option value="">Todas</option>
-      <option value="APROBADA">Aprobadas</option>
-      <option value="RECIBIDA">Recibidas</option>
-      <option value="RECHAZADA">Rechazadas</option>
-      <option value="CANCELADA">Canceladas</option>
-    </select>
-  </div>
-  <div class="tabla-container"><table><thead><tr><th>Código</th><th>Dirección</th><th>Solicitante</th><th>Fecha</th><th style="text-align:right;">Monto</th><th style="text-align:center;">Estado</th><th style="text-align:center;">Acciones</th></tr></thead><tbody id="soladmin-tbody"></tbody></table></div>
-  <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="soladmin-total"></div>
-</div>
-
+<!-- CUENTAS -->
 <div class="section solo-admin" id="tab-cuentas">
   <div class="section-label">💰 CUENTAS Y PRESUPUESTO</div>
   <div class="filtros"><input type="text" id="cuentas-filtro" placeholder="🔍 Buscar..." oninput="renderCuentas()"></div>
@@ -433,24 +463,7 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="cuentas-total"></div>
 </div>
 
-<div class="section solo-admin" id="tab-auditoria">
-  <div class="section-label">🔍 AUDITORÍA</div>
-  <div class="filtros">
-    <input type="text" id="aud-filtro" placeholder="🔍 Buscar..." oninput="renderAuditoria()">
-    <select id="aud-tipo" onchange="renderAuditoria()"><option value="">Todos</option><option value="recepcion">📥 Recepciones</option><option value="salida">📤 Salidas</option><option value="solicitud">📋 Solicitudes</option></select>
-    <select id="aud-estado" onchange="renderAuditoria()">
-      <option value="">Todos los estados</option>
-      <option value="PENDIENTE">Pendiente</option>
-      <option value="APROBADA">Aprobada</option>
-      <option value="RECIBIDA">Recibida</option>
-      <option value="RECHAZADA">Rechazada</option>
-      <option value="CANCELADA">Cancelada</option>
-    </select>
-  </div>
-  <div class="tabla-container"><table><thead><tr><th>Tipo</th><th>Código</th><th>Fecha</th><th>Detalle</th><th>Responsable</th><th>Estado</th><th style="text-align:right;">Monto</th></tr></thead><tbody id="aud-tbody"></tbody></table></div>
-  <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="aud-total"></div>
-</div>
-
+<!-- REPORTES -->
 <div class="section solo-admin" id="tab-reportes">
   <div class="section-label">📈 REPORTES</div>
   <div class="field">
@@ -463,18 +476,103 @@
       <button class="btn-verde" style="flex:1; min-width:140px;" onclick="exportarExcelSolicitudes()">📋 Solicitudes</button>
     </div>
   </div>
+  <div class="field">
+    <label>👁️ Ver detalle en pantalla</label>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('stock')">📊 Stock</button>
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('recepciones')">📥 Recepciones</button>
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('salidas')">📤 Salidas</button>
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('cuentas')">💰 Cuentas</button>
+      <button class="btn-primario" style="flex:1; min-width:140px;" onclick="verReporte('solicitudes')">📋 Solicitudes</button>
+    </div>
+  </div>
   <div class="resumen-grid">
     <div class="resumen-card"><div class="num" id="rep-total-productos">0</div><div class="lbl">Productos</div></div>
     <div class="resumen-card verde"><div class="num" id="rep-total-unidades">0</div><div class="lbl">Unidades</div></div>
     <div class="resumen-card naranja"><div class="num" id="rep-valor-stock">$0</div><div class="lbl">Valor stock</div></div>
     <div class="resumen-card morado"><div class="num" id="rep-total-cuentas">0</div><div class="lbl">Cuentas</div></div>
   </div>
+  <div id="rep-detalle" style="display:none; margin-top:20px;">
+    <div class="section-label" id="rep-detalle-titulo">Detalle</div>
+    <div class="filtros">
+      <input type="text" id="rep-detalle-filtro" placeholder="🔍 Buscar..." oninput="filtrarReporte()">
+    </div>
+    <div class="tabla-container">
+      <table>
+        <thead id="rep-detalle-thead"></thead>
+        <tbody id="rep-detalle-tbody"></tbody>
+      </table>
+    </div>
+    <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="rep-detalle-total"></div>
+  </div>
 </div>
 
+<!-- AUDITORÍA (NUEVA) -->
+<div class="section solo-admin" id="tab-auditoria">
+  <div class="section-label">🔍 AUDITORÍA Y TRAZABILIDAD</div>
+
+  <div class="aud-resumen" id="aud-resumen">
+    <div class="aud-resumen-card">
+      <div class="titulo">📝 Solicitudes</div>
+      <div class="num" id="aud-num-sol">0</div>
+      <div class="detalle" id="aud-det-sol">—</div>
+    </div>
+    <div class="aud-resumen-card">
+      <div class="titulo">📥 Recepciones</div>
+      <div class="num" id="aud-num-rec" style="color:var(--verde);">0</div>
+      <div class="detalle" id="aud-det-rec">—</div>
+    </div>
+    <div class="aud-resumen-card">
+      <div class="titulo">📤 Salidas</div>
+      <div class="num" id="aud-num-sal" style="color:var(--rojo);">0</div>
+      <div class="detalle" id="aud-det-sal">—</div>
+    </div>
+    <div class="aud-resumen-card">
+      <div class="titulo">⏳ Pendientes</div>
+      <div class="num" id="aud-num-pend" style="color:var(--naranja);">0</div>
+      <div class="detalle" id="aud-det-pend">—</div>
+    </div>
+  </div>
+
+  <div class="aud-filtros">
+    <input type="text" id="aud-filtro-texto" placeholder="🔍 Buscar código, solicitante, producto..." oninput="renderAuditoriaArbol()">
+    <select id="aud-filtro-estado" onchange="renderAuditoriaArbol()">
+      <option value="">Todos los estados</option>
+      <option value="PENDIENTE">Pendiente</option>
+      <option value="APROBADA">Aprobada</option>
+      <option value="RECIBIDA">Recibida</option>
+      <option value="RECHAZADA">Rechazada</option>
+      <option value="CANCELADA">Cancelada</option>
+    </select>
+    <select id="aud-filtro-fecha" onchange="renderAuditoriaArbol()">
+      <option value="">Todo el histórico</option>
+      <option value="7">Últimos 7 días</option>
+      <option value="30">Últimos 30 días</option>
+      <option value="90">Últimos 90 días</option>
+    </select>
+    <select id="aud-filtro-urgencia" onchange="renderAuditoriaArbol()">
+      <option value="">Todas las urgencias</option>
+      <option value="NORMAL">Normal</option>
+      <option value="ALTA">Alta</option>
+      <option value="URGENTE">Urgente</option>
+    </select>
+  </div>
+
+  <div class="aud-arbol" id="aud-arbol"></div>
+</div>
+
+<!-- MODALES -->
 <div class="modal-overlay" id="modal-detalle-solicitud">
   <div class="modal modal-ancho">
     <div class="modal-header"><h2 id="modal-sol-titulo">📋 Solicitud</h2><button class="btn-cerrar-modal" onclick="cerrarModalSolicitud()">✕</button></div>
     <div id="modal-sol-contenido"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-trazabilidad">
+  <div class="modal modal-ancho">
+    <div class="modal-header"><h2 id="modal-traz-titulo">🔍 Trazabilidad</h2><button class="btn-cerrar-modal" onclick="cerrarModalTraz()">✕</button></div>
+    <div id="modal-traz-contenido"></div>
   </div>
 </div>
 
@@ -526,7 +624,6 @@ let solicitudes = [];
 let solicitudItems = [];
 let solicitudAdjuntos = [];
 let carritoRecepcion = [];
-let carritoSalida = [];
 let carritoSolicitud = [];
 let adjuntosTemporales = [];
 let productoSeleccionadoRec = null;
@@ -541,6 +638,9 @@ let ultimaSalida = null;
 let solicitudActual = null;
 let logoImageData = null;
 let recepcionSeleccionadaSalida = null;
+let reporteActual = null;
+let reporteDatos = [];
+let auditoriaExpandidos = { dirs: new Set(), deptos: new Set(), areas: new Set() };
 
 // ============================================================
 // HELPERS
@@ -1024,6 +1124,10 @@ async function cancelarSolicitud(id) {
   mostrarToast('✅ Cancelada');
   await cargarTodo(); renderMisSolicitudes(); actualizarBadgePendientes();
 }
+
+// ============================================================
+// VER DETALLE SOLICITUD (modal)
+// ============================================================
 function verDetalleSolicitud(id) {
   const s = solicitudes.find(x => x.id === id);
   if (!s) return;
@@ -1041,9 +1145,11 @@ function verDetalleSolicitud(id) {
       <span style="font-weight:700; text-align:right;">${formatearCLP(pb * it.cantidad)}</span>
     </div>`;
   }).join('');
-  const totalNeto = items.reduce((sum, it) => sum + Number(it.precio_estimado||0) * it.cantidad, 0);
-  const totalBruto = items.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
-  const iva = totalBruto - totalNeto;
+  const subL1 = l1.reduce((s, it) => s + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  const subL2 = l2.reduce((s, it) => s + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  const totalBruto = subL1 + subL2;
+  const iva = totalBruto - (totalBruto / (1 + IVA));
+  const totalNeto = totalBruto - iva;
   const adjHTML = adj.length ? `<div style="margin-top:12px;"><div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris);">📎 Adjuntos (${adj.length})</div><div class="adjuntos-grid">${adj.map(a => {
     const esImg = a.archivo_tipo && a.archivo_tipo.startsWith('image/');
     return `<a href="${a.archivo_url}" target="_blank" class="adjunto-item" style="text-decoration:none;">${esImg ? `<img src="${a.archivo_url}">` : `<div class="pdf-icon">📄</div>`}<div class="nombre">${escaparHtml(a.archivo_nombre || 'archivo')}</div></a>`;
@@ -1068,14 +1174,12 @@ function verDetalleSolicitud(id) {
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Solicitante</span><span style="font-weight:600;">${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Fecha</span><span>${s.fecha_fmt}</span></div>
       <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Urgencia</span><span>${s.urgencia}</span></div>
-      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">Neto</span><span>${formatearCLP(totalNeto)}</span></div>
-      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:12px;"><span style="color:var(--texto-gris);">IVA</span><span>${formatearCLP(iva)}</span></div>
-      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:13px; border-top:1px solid var(--borde);"><span><strong>Total (IVA inc.)</strong></span><span style="color:var(--azul); font-weight:700;">${formatearCLP(totalBruto)}</span></div>
+      <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:13px; border-top:1px solid var(--borde); margin-top:6px;"><span><strong>Total (IVA inc.)</strong></span><span style="color:var(--azul); font-weight:700;">${formatearCLP(totalBruto)}</span></div>
       ${s.observacion ? `<div style="padding:5px 0; font-size:12px; border-top:1px dotted var(--borde); margin-top:6px;"><div style="color:var(--texto-gris);">Observación</div><div>${escaparHtml(s.observacion)}</div></div>` : ''}
       ${s.motivo_rechazo ? `<div style="padding:5px 0; font-size:12px; color:var(--rojo);"><strong>Motivo:</strong> ${escaparHtml(s.motivo_rechazo)}</div>` : ''}
     </div>
-    ${l1.length ? `<div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); margin-top:8px;">L1 · PVC (${l1.length})</div><div style="background:white; border:1px solid var(--borde); border-radius:10px; overflow:hidden; margin-top:6px;">${renderItems(l1)}</div>` : ''}
-    ${l2.length ? `<div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); margin-top:12px;">L2 · Papelería (${l2.length})</div><div style="background:white; border:1px solid var(--borde); border-radius:10px; overflow:hidden; margin-top:6px;">${renderItems(l2)}</div>` : ''}
+    ${l1.length ? `<div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--azul); margin-top:12px;">📦 ARTÍCULOS L1 · PVC (${l1.length})</div><div style="background:white; border:1px solid var(--borde); border-radius:10px; overflow:hidden; margin-top:6px;">${renderItems(l1)}<div style="padding:8px 12px; background:#eff6ff; font-weight:700; text-align:right; color:var(--azul);">Subtotal L1: ${formatearCLP(subL1)}</div></div>` : ''}
+    ${l2.length ? `<div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--morado); margin-top:12px;">📦 ARTÍCULOS L2 · Papelería (${l2.length})</div><div style="background:white; border:1px solid var(--borde); border-radius:10px; overflow:hidden; margin-top:6px;">${renderItems(l2)}<div style="padding:8px 12px; background:#f3e8ff; font-weight:700; text-align:right; color:var(--morado);">Subtotal L2: ${formatearCLP(subL2)}</div></div>` : ''}
     ${adjHTML}
     ${acciones}
   `;
@@ -1357,18 +1461,13 @@ async function registrarRecepcion() {
     }
     
     ultimaRecepcion = {
-      id: rec.id,
-      codigo: rec.codigo,
+      id: rec.id, codigo: rec.codigo,
       productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
-      proveedor: PROVEEDOR_OFICIAL.razon_social,
-      proveedor_rut: PROVEEDOR_OFICIAL.rut,
+      proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
       guia, factura, obs, departamento: deptoPadre,
       cuenta: cuentaPrincipal,
-      cuentas: { l1: cuentaL1, l2: cuentaL2 },
-      monto_total: totalNeto,
-      monto_total_bruto: totalBruto,
-      monto_l1: totalL1,
-      monto_l2: totalL2,
+      monto_total: totalNeto, monto_total_bruto: totalBruto,
+      monto_l1: totalL1, monto_l2: totalL2,
       responsable: nombreUsuario, firma, fecha: formatearFecha(rec.fecha)
     };
     
@@ -1403,7 +1502,7 @@ async function registrarRecepcion() {
 }
 
 // ============================================================
-// SALIDA (BASADA EN RECEPCIONES)
+// SALIDA
 // ============================================================
 function salCambiarDireccion() {
   const direccion = document.getElementById('sal-depto-padre').value;
@@ -1436,7 +1535,6 @@ function salCambiarDireccion() {
     return `<option value="${r.id}">${escaparHtml(r.codigo)} · ${r.fecha_fmt} · ${totalItems} uds · ${formatearCLP(r.monto_total_bruto||0)}</option>`;
   }).join('');
 }
-
 function salCargarRecepcion() {
   const id = document.getElementById('sal-recepcion-sel').value;
   const detalle = document.getElementById('sal-detalle');
@@ -1448,27 +1546,19 @@ function salCargarRecepcion() {
   const totalL1 = document.getElementById('sal-total-l1');
   const totalL2 = document.getElementById('sal-total-l2');
   
-  if (!id) {
-    detalle.style.display = 'none';
-    recepcionSeleccionadaSalida = null;
-    return;
-  }
-  
+  if (!id) { detalle.style.display = 'none'; recepcionSeleccionadaSalida = null; return; }
   const r = recepciones.find(x => x.id === id);
   if (!r) return;
   recepcionSeleccionadaSalida = r;
   
   const items = recepcionItems.filter(i => i.recepcion_id === id);
   const cuentasRecepcion = [...new Set(items.map(i => i.cuenta_id).filter(Boolean))].map(cid => cuentas.find(c => c.id === cid)).filter(Boolean);
-  
   const cuentasInfo = cuentasRecepcion.map(c => 
     `💰 <strong>${escaparHtml(c.direccion)} · ${escaparHtml(c.subdepartamento)} · L${c.linea}</strong> (${escaparHtml(c.codigo)})`
   ).join('<br>');
   
   infoRecep.innerHTML = `
-    <div style="font-weight:700; color:var(--azul); font-size:13px; margin-bottom:4px;">
-      📥 Recepción ${escaparHtml(r.codigo)}
-    </div>
+    <div style="font-weight:700; color:var(--azul); font-size:13px; margin-bottom:4px;">📥 Recepción ${escaparHtml(r.codigo)}</div>
     <div>📅 Fecha: <strong>${r.fecha_fmt}</strong></div>
     <div>🏭 Proveedor: <strong>${escaparHtml(r.proveedor||'N/E')}</strong></div>
     ${r.numero_guia ? `<div>📄 Guía: <strong>${escaparHtml(r.numero_guia)}</strong></div>` : ''}
@@ -1478,7 +1568,6 @@ function salCargarRecepcion() {
   
   const itemsL1 = [];
   const itemsL2 = [];
-  
   items.forEach(it => {
     const p = productos.find(x => x.id === it.producto_id);
     if (!p) return;
@@ -1489,8 +1578,7 @@ function salCargarRecepcion() {
       precio_neto: Number(it.precio_neto || p.precio_neto),
       subtotal_bruto: Number(it.subtotal_bruto || (Number(it.precio_neto || p.precio_neto) * 1.19 * Number(it.cantidad)))
     };
-    if (p.linea === 1) itemsL1.push(row);
-    else itemsL2.push(row);
+    if (p.linea === 1) itemsL1.push(row); else itemsL2.push(row);
   });
   
   const renderFila = (x) => `
@@ -1505,44 +1593,35 @@ function salCargarRecepcion() {
     bloqueL1.style.display = 'block';
     listaL1.innerHTML = itemsL1.map(renderFila).join('');
     totalL1.textContent = 'Subtotal L1: ' + formatearCLP(itemsL1.reduce((s, x) => s + x.subtotal_bruto, 0));
-  } else {
-    bloqueL1.style.display = 'none';
-  }
+  } else bloqueL1.style.display = 'none';
   
   if (itemsL2.length) {
     bloqueL2.style.display = 'block';
     listaL2.innerHTML = itemsL2.map(renderFila).join('');
     totalL2.textContent = 'Subtotal L2: ' + formatearCLP(itemsL2.reduce((s, x) => s + x.subtotal_bruto, 0));
-  } else {
-    bloqueL2.style.display = 'none';
-  }
+  } else bloqueL2.style.display = 'none';
   
   detalle.style.display = 'block';
 }
-
 async function registrarSalida() {
   if (!recepcionSeleccionadaSalida) { mostrarToast('❌ Selecciona una recepción'); return; }
   const receptor = document.getElementById('sal-receptor').value.trim();
   const receptorRut = document.getElementById('sal-receptor-rut').value.trim();
   const receptorEmail = document.getElementById('sal-receptor-email').value.trim();
   const obs = document.getElementById('sal-obs').value.trim();
-  
   if (!receptor) { mostrarToast('❌ Ingresa el nombre del receptor'); return; }
   if (!receptorRut) { mostrarToast('❌ Ingresa el RUT del receptor'); return; }
   
   const r = recepcionSeleccionadaSalida;
   const items = recepcionItems.filter(i => i.recepcion_id === r.id);
-  
   for (const it of items) {
     const prod = productos.find(x => x.id === it.producto_id);
     if (!prod || Number(prod.stock||0) < Number(it.cantidad)) {
-      mostrarToast(`❌ Stock insuficiente: ${prod?.nombre||'producto'}`);
-      return;
+      mostrarToast(`❌ Stock insuficiente: ${prod?.nombre||'producto'}`); return;
     }
   }
   
   const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
-  
   try {
     const totalNeto = Number(r.monto_total || 0);
     const totalBruto = Number(r.monto_total_bruto || 0);
@@ -1568,14 +1647,9 @@ async function registrarSalida() {
     if (e1) throw e1;
     
     const itemsInsert = items.map(it => ({
-      salida_id: sal.id,
-      producto_id: it.producto_id,
-      cantidad: it.cantidad,
-      precio_neto: it.precio_neto,
-      precio_bruto: it.precio_bruto,
-      subtotal: it.subtotal,
-      subtotal_bruto: it.subtotal_bruto,
-      iva: it.iva
+      salida_id: sal.id, producto_id: it.producto_id, cantidad: it.cantidad,
+      precio_neto: it.precio_neto, precio_bruto: it.precio_bruto,
+      subtotal: it.subtotal, subtotal_bruto: it.subtotal_bruto, iva: it.iva
     }));
     const { error: e2 } = await sb.from('lc_salida_items').insert(itemsInsert);
     if (e2) throw e2;
@@ -1597,19 +1671,10 @@ async function registrarSalida() {
     if (e3) throw e3;
     
     ultimaSalida = {
-      id: sal.id,
-      codigo: sal.codigo,
+      id: sal.id, codigo: sal.codigo,
       productos: items.map(it => {
         const p = productos.find(x => x.id === it.producto_id);
-        return {
-          producto_id: it.producto_id,
-          nombre: p?.nombre || 'N/E',
-          linea: p?.linea || 1,
-          cantidad: Number(it.cantidad),
-          precio_neto: Number(it.precio_neto),
-          precio_bruto: Number(it.precio_bruto),
-          subtotal_bruto: Number(it.subtotal_bruto)
-        };
+        return { producto_id: it.producto_id, nombre: p?.nombre || 'N/E', linea: p?.linea || 1, cantidad: Number(it.cantidad), precio_neto: Number(it.precio_neto), precio_bruto: Number(it.precio_bruto), subtotal_bruto: Number(it.subtotal_bruto) };
       }),
       departamento: r.departamento,
       departamento_padre: r.departamento_padre || r.departamento,
@@ -1711,46 +1776,7 @@ function renderCuentas() {
 }
 
 // ============================================================
-// AUDITORÍA
-// ============================================================
-function renderAuditoria() {
-  const tbody = document.getElementById('aud-tbody');
-  if (!tbody) return;
-  const filtro = document.getElementById('aud-filtro').value.toLowerCase().trim();
-  const tipo = document.getElementById('aud-tipo').value;
-  const estadoFiltro = document.getElementById('aud-estado') ? document.getElementById('aud-estado').value : '';
-  const lista = [];
-  if (!tipo || tipo === 'solicitud') {
-    solicitudes.forEach(s => {
-      if (estadoFiltro && s.estado !== estadoFiltro) return;
-      lista.push({ tipo:'solicitud', icono:'📋', codigo: s.codigo, fecha: s.fecha_fmt, timestamp: new Date(s.fecha_solicitud).getTime(), detalle: `${s.departamento_padre||''} / ${s.subdepartamento||''}`, responsable: s.solicitante_nombre||s.solicitante_email||'N/E', monto: Number(s.monto_estimado_bruto||0), estado: s.estado });
-    });
-  }
-  if (!tipo || tipo === 'recepcion') {
-    recepciones.forEach(r => lista.push({ tipo:'recepcion', icono:'📥', codigo: r.codigo, fecha: r.fecha_fmt, timestamp: new Date(r.fecha).getTime(), detalle: `${r.departamento||''}`, responsable: r.responsable||'N/E', monto: Number(r.monto_total_bruto||0), estado: '—' }));
-  }
-  if (!tipo || tipo === 'salida') {
-    salidas.forEach(s => lista.push({ tipo:'salida', icono:'📤', codigo: s.codigo, fecha: s.fecha_fmt, timestamp: new Date(s.fecha).getTime(), detalle: `${s.departamento||''} · ${s.receptor_nombre||''}`, responsable: s.responsable||'N/E', monto: Number(s.monto_total_bruto||0), estado: '—' }));
-  }
-  lista.sort((a, b) => b.timestamp - a.timestamp);
-  const fil = lista.filter(m => !filtro || `${m.codigo} ${m.detalle} ${m.responsable}`.toLowerCase().includes(filtro));
-  if (!fil.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;">Sin movimientos</td></tr>'; document.getElementById('aud-total').textContent = '0'; return; }
-  tbody.innerHTML = fil.slice(0, 300).map(m => `
-    <tr>
-      <td>${m.icono}</td>
-      <td><strong>${escaparHtml(m.codigo)}</strong></td>
-      <td style="font-size:11px;">${m.fecha}</td>
-      <td style="font-size:11px;">${escaparHtml(m.detalle)}</td>
-      <td style="font-size:11px;">${escaparHtml(m.responsable)}</td>
-      <td style="text-align:center;font-size:10px;">${m.estado !== '—' ? `<span class="badge-estado ${claseEstado(m.estado)}">${iconoEstado(m.estado)} ${m.estado}</span>` : '—'}</td>
-      <td style="text-align:right;font-size:11px;">${formatearCLP(m.monto)}</td>
-    </tr>
-  `).join('');
-  document.getElementById('aud-total').textContent = `${fil.length} movimientos`;
-}
-
-// ============================================================
-// REPORTES
+// REPORTES (con vista previa en pantalla)
 // ============================================================
 function renderReportes() {
   const t = document.getElementById('rep-total-productos');
@@ -1761,6 +1787,168 @@ function renderReportes() {
   document.getElementById('rep-total-unidades').textContent = tu;
   document.getElementById('rep-valor-stock').textContent = formatearCLP(tv);
   document.getElementById('rep-total-cuentas').textContent = cuentas.length;
+}
+function verReporte(tipo) {
+  reporteActual = tipo;
+  const cont = document.getElementById('rep-detalle');
+  const titulo = document.getElementById('rep-detalle-titulo');
+  const thead = document.getElementById('rep-detalle-thead');
+  const tbody = document.getElementById('rep-detalle-tbody');
+  const filtro = document.getElementById('rep-detalle-filtro');
+  filtro.value = '';
+  cont.style.display = 'block';
+
+  if (tipo === 'stock') {
+    titulo.textContent = '📊 STOCK ACTUAL';
+    thead.innerHTML = '<tr><th>Producto</th><th>L</th><th style="text-align:right;">Neto</th><th style="text-align:right;">IVA</th><th style="text-align:right;">Bruto</th><th style="text-align:right;">Stock</th><th style="text-align:right;">Valor Total</th></tr>';
+    reporteDatos = productos.map(p => {
+      const pb = precioBruto(p.precio_neto);
+      const st = Number(p.stock);
+      return { tipo:'stock', nombre: p.nombre, linea: 'L' + p.linea, neto: Number(p.precio_neto), iva: pb - Number(p.precio_neto), bruto: pb, stock: st, valor: st * pb, txt: `${p.nombre} L${p.linea}` };
+    });
+  } else if (tipo === 'recepciones') {
+    titulo.textContent = '📥 RECEPCIONES';
+    thead.innerHTML = '<tr><th>Recepción</th><th>Fecha</th><th>Dirección</th><th>Proveedor</th><th>L</th><th>Producto</th><th style="text-align:right;">Cant.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
+    reporteDatos = [];
+    recepciones.forEach(r => {
+      const its = recepcionItems.filter(i => i.recepcion_id === r.id);
+      its.forEach(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        reporteDatos.push({
+          tipo:'recepciones',
+          codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '', proveedor: r.proveedor || '',
+          linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E',
+          cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0),
+          responsable: r.responsable || '',
+          txt: `${r.codigo} ${r.departamento} ${r.proveedor} ${p?.nombre||''}`
+        });
+      });
+    });
+  } else if (tipo === 'salidas') {
+    titulo.textContent = '📤 SALIDAS';
+    thead.innerHTML = '<tr><th>Salida</th><th>Fecha</th><th>Dirección</th><th>Receptor</th><th>L</th><th>Producto</th><th style="text-align:right;">Cant.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
+    reporteDatos = [];
+    salidas.forEach(s => {
+      const its = salidaItems.filter(i => i.salida_id === s.id);
+      its.forEach(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        reporteDatos.push({
+          tipo:'salidas',
+          codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento || '', receptor: s.receptor_nombre || '',
+          linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E',
+          cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0),
+          txt: `${s.codigo} ${s.departamento} ${s.receptor_nombre} ${p?.nombre||''}`
+        });
+      });
+    });
+  } else if (tipo === 'cuentas') {
+    titulo.textContent = '💰 CUENTAS Y PRESUPUESTO';
+    thead.innerHTML = '<tr><th>Dirección</th><th>Depto</th><th>Área</th><th>L</th><th>Cuenta</th><th style="text-align:right;">Asignado</th><th style="text-align:right;">Reservado</th><th style="text-align:right;">Consumido</th><th style="text-align:right;">Disponible</th></tr>';
+    reporteDatos = cuentas.map(c => {
+      const cons = calcularConsumidoCuenta(c.id);
+      const res = calcularReservadoCuenta(c.id);
+      const disp = Number(c.monto_asignado) - cons - res;
+      return {
+        tipo: 'cuentas',
+        direccion: c.direccion, depto: c.departamento_padre || '—', area: c.subdepartamento,
+        linea: 'L' + c.linea, cuenta: c.codigo,
+        asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: disp,
+        txt: `${c.direccion} ${c.subdepartamento} L${c.linea}`
+      };
+    });
+  } else if (tipo === 'solicitudes') {
+    titulo.textContent = '📋 SOLICITUDES';
+    thead.innerHTML = '<tr><th>Solicitud</th><th>Fecha</th><th>Dirección</th><th>Solicitante</th><th>Estado</th><th>L</th><th>Producto</th><th style="text-align:right;">Cant.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
+    reporteDatos = [];
+    solicitudes.forEach(s => {
+      const its = solicitudItems.filter(i => i.solicitud_id === s.id);
+      its.forEach(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        const pNeto = Number(it.precio_estimado||0);
+        const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
+        reporteDatos.push({
+          tipo:'solicitudes',
+          codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento_padre || '', solicitante: s.solicitante_nombre||s.solicitante_email, estado: s.estado,
+          linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E',
+          cantidad: Number(it.cantidad||0), neto: pNeto * Number(it.cantidad||0), bruto: pBruto * Number(it.cantidad||0),
+          txt: `${s.codigo} ${s.departamento_padre} ${s.solicitante_nombre} ${s.estado} ${p?.nombre||''}`
+        });
+      });
+    });
+  }
+  filtrarReporte();
+}
+function filtrarReporte() {
+  if (!reporteActual) return;
+  const filtro = document.getElementById('rep-detalle-filtro').value.toLowerCase().trim();
+  const tbody = document.getElementById('rep-detalle-tbody');
+  let lista = reporteDatos.filter(d => !filtro || (d.txt||'').toLowerCase().includes(filtro));
+  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin datos</td></tr>'; document.getElementById('rep-detalle-total').textContent = '0'; return; }
+  if (reporteActual === 'stock') {
+    let tu = 0, tv = 0;
+    tbody.innerHTML = lista.map(d => {
+      tu += d.stock; tv += d.valor;
+      const color = d.stock === 0 ? 'var(--rojo)' : d.stock <= 3 ? 'var(--naranja)' : 'var(--texto-oscuro)';
+      return `<tr><td><strong>${escaparHtml(d.nombre)}</strong></td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td>
+        <td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;">${formatearCLP(d.iva)}</td><td style="text-align:right;">${formatearCLP(d.bruto)}</td>
+        <td style="text-align:right;font-weight:700;color:${color};">${d.stock}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.valor)}</td></tr>`;
+    }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} productos · ${tu} unid · ${formatearCLP(tv)}`;
+  } else if (reporteActual === 'recepciones' || reporteActual === 'salidas') {
+    let tc = 0, tn = 0, tb = 0;
+    tbody.innerHTML = lista.map(d => {
+      tc += d.cantidad; tn += d.neto; tb += d.bruto;
+      const col = reporteActual === 'recepciones' ? 'recepcion' : 'salida';
+      const receptorOProv = d.receptor || d.proveedor || '';
+      return `<tr>
+        <td><strong>${escaparHtml(d.codigo)}</strong></td>
+        <td style="font-size:11px;">${d.fecha}</td>
+        <td style="font-size:11px;">${escaparHtml(d.depto)}</td>
+        <td style="font-size:11px;">${escaparHtml(receptorOProv)}</td>
+        <td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td>
+        <td style="font-size:11px;">${escaparHtml(d.producto)}</td>
+        <td style="text-align:right;">${d.cantidad}</td>
+        <td style="text-align:right;">${formatearCLP(d.neto)}</td>
+        <td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} uds · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
+  } else if (reporteActual === 'cuentas') {
+    let ta = 0, tr = 0, tc = 0;
+    tbody.innerHTML = lista.map(d => {
+      ta += d.asignado; tr += d.reservado; tc += d.consumido;
+      return `<tr>
+        <td style="font-size:11px;">${escaparHtml(d.direccion)}</td>
+        <td style="font-size:11px;">${escaparHtml(d.depto)}</td>
+        <td style="font-size:11px;">${escaparHtml(d.area)}</td>
+        <td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td>
+        <td style="font-size:11px;">${escaparHtml(d.cuenta)}</td>
+        <td style="text-align:right;">${formatearCLP(d.asignado)}</td>
+        <td style="text-align:right;color:var(--naranja);">${formatearCLP(d.reservado)}</td>
+        <td style="text-align:right;color:var(--azul);">${formatearCLP(d.consumido)}</td>
+        <td style="text-align:right;font-weight:700;color:${d.disponible>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(d.disponible)}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} cuentas · Asignado: ${formatearCLP(ta)} · Reservado: ${formatearCLP(tr)} · Consumido: ${formatearCLP(tc)}`;
+  } else if (reporteActual === 'solicitudes') {
+    let tc = 0, tn = 0, tb = 0;
+    tbody.innerHTML = lista.map(d => {
+      tc += d.cantidad; tn += d.neto; tb += d.bruto;
+      return `<tr>
+        <td><strong>${escaparHtml(d.codigo)}</strong></td>
+        <td style="font-size:11px;">${d.fecha}</td>
+        <td style="font-size:11px;">${escaparHtml(d.depto)}</td>
+        <td style="font-size:11px;">${escaparHtml(d.solicitante)}</td>
+        <td style="text-align:center;"><span class="badge-estado ${claseEstado(d.estado)}">${iconoEstado(d.estado)} ${d.estado}</span></td>
+        <td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td>
+        <td style="font-size:11px;">${escaparHtml(d.producto)}</td>
+        <td style="text-align:right;">${d.cantidad}</td>
+        <td style="text-align:right;">${formatearCLP(d.neto)}</td>
+        <td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} uds · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
+  }
 }
 function actualizarResumenes() {
   const hoy = recepciones.filter(r => esHoy(r.fecha_fmt));
@@ -1779,6 +1967,290 @@ function actualizarResumenes() {
   }
   if (esAdmin()) renderReportes();
 }
+
+// ============================================================
+// AUDITORÍA (árbol + timeline)
+// ============================================================
+function renderAuditoria() {
+  renderAuditoriaResumen();
+  renderAuditoriaArbol();
+}
+function renderAuditoriaResumen() {
+  const totalSol = solicitudes.length;
+  const pend = solicitudes.filter(s => s.estado === 'PENDIENTE').length;
+  const aprob = solicitudes.filter(s => s.estado === 'APROBADA').length;
+  const recib = solicitudes.filter(s => s.estado === 'RECIBIDA').length;
+  const rech = solicitudes.filter(s => s.estado === 'RECHAZADA').length;
+  const canc = solicitudes.filter(s => s.estado === 'CANCELADA').length;
+  const totalRec = recepciones.length;
+  const montoRec = recepciones.reduce((s, r) => s + Number(r.monto_total_bruto||0), 0);
+  const totalSal = salidas.length;
+  const montoSal = salidas.reduce((s, x) => s + Number(x.monto_total_bruto||0), 0);
+  
+  const numSol = document.getElementById('aud-num-sol');
+  if (!numSol) return;
+  numSol.textContent = totalSol;
+  document.getElementById('aud-det-sol').innerHTML = `🟡 ${pend} · 🔵 ${aprob} · 🟢 ${recib}<br>🔴 ${rech} · ⚫ ${canc}`;
+  document.getElementById('aud-num-rec').textContent = totalRec;
+  document.getElementById('aud-det-rec').textContent = 'Monto: ' + formatearCLP(montoRec);
+  document.getElementById('aud-num-sal').textContent = totalSal;
+  document.getElementById('aud-det-sal').textContent = 'Monto: ' + formatearCLP(montoSal);
+  document.getElementById('aud-num-pend').textContent = pend;
+  document.getElementById('aud-det-pend').textContent = pend > 0 ? 'Requieren atención' : 'Sin pendientes';
+}
+function renderAuditoriaArbol() {
+  const cont = document.getElementById('aud-arbol');
+  if (!cont) return;
+  const filtroTexto = (document.getElementById('aud-filtro-texto')?.value || '').toLowerCase().trim();
+  const filtroEstado = document.getElementById('aud-filtro-estado')?.value || '';
+  const filtroFecha = document.getElementById('aud-filtro-fecha')?.value || '';
+  const filtroUrg = document.getElementById('aud-filtro-urgencia')?.value || '';
+  
+  const ahora = Date.now();
+  const dias = filtroFecha ? parseInt(filtroFecha) : 0;
+  
+  const filtradas = solicitudes.filter(s => {
+    if (filtroEstado && s.estado !== filtroEstado) return false;
+    if (filtroUrg && s.urgencia !== filtroUrg) return false;
+    if (dias > 0) {
+      const t = new Date(s.fecha_solicitud).getTime();
+      if (ahora - t > dias * 24 * 60 * 60 * 1000) return false;
+    }
+    if (filtroTexto) {
+      const its = solicitudItems.filter(i => i.solicitud_id === s.id);
+      const prods = its.map(it => productos.find(p => p.id === it.producto_id)?.nombre || '').join(' ');
+      const txt = `${s.codigo} ${s.departamento_padre} ${s.subdepartamento_padre} ${s.subdepartamento} ${s.solicitante_nombre} ${s.solicitante_email} ${prods}`.toLowerCase();
+      if (!txt.includes(filtroTexto)) return false;
+    }
+    return true;
+  });
+  
+  if (!filtradas.length) {
+    cont.innerHTML = '<div class="empty-state-grande"><span class="icono">📭</span>Sin solicitudes que coincidan</div>';
+    return;
+  }
+  
+  // Agrupar por dirección → depto → área
+  const arbol = {};
+  filtradas.forEach(s => {
+    const dir = s.departamento_padre || s.departamento || 'Sin dirección';
+    const dep = s.subdepartamento_padre || '—';
+    const area = s.subdepartamento || '—';
+    if (!arbol[dir]) arbol[dir] = { total: 0, monto: 0, deptos: {} };
+    arbol[dir].total++;
+    arbol[dir].monto += Number(s.monto_estimado_bruto || 0);
+    if (!arbol[dir].deptos[dep]) arbol[dir].deptos[dep] = { total: 0, monto: 0, areas: {} };
+    arbol[dir].deptos[dep].total++;
+    arbol[dir].deptos[dep].monto += Number(s.monto_estimado_bruto || 0);
+    if (!arbol[dir].deptos[dep].areas[area]) arbol[dir].deptos[dep].areas[area] = [];
+    arbol[dir].deptos[dep].areas[area].push(s);
+  });
+  
+  // Render
+  let html = '';
+  Object.keys(arbol).sort().forEach(dir => {
+    const infoDir = arbol[dir];
+    const expandidoDir = auditoriaExpandidos.dirs.has(dir);
+    html += `
+      <div class="aud-item">
+        <div class="aud-dir ${expandidoDir ? 'expandido' : ''}" onclick="toggleAudDir('${escaparHtml(dir)}')">
+          <div class="nombre">🏢 ${escaparHtml(dir)}</div>
+          <div class="stats">
+            <span class="chev">${expandidoDir ? '▼' : '▶'}</span>
+            ${infoDir.total} sol · ${formatearCLP(infoDir.monto)}
+          </div>
+        </div>
+        <div style="display:${expandidoDir ? 'block' : 'none'};">
+    `;
+    Object.keys(infoDir.deptos).sort().forEach(dep => {
+      const infoDep = infoDir.deptos[dep];
+      const keyDep = dir + '||' + dep;
+      const expandidoDep = auditoriaExpandidos.deptos.has(keyDep);
+      html += `
+        <div class="aud-depto ${expandidoDep ? 'expandido' : ''}" onclick="toggleAudDepto('${escaparHtml(dir)}', '${escaparHtml(dep)}')">
+          <div class="nombre">📁 ${escaparHtml(dep)}</div>
+          <div class="stats">
+            <span class="chev">${expandidoDep ? '▼' : '▶'}</span>
+            ${infoDep.total} sol · ${formatearCLP(infoDep.monto)}
+          </div>
+        </div>
+        <div style="display:${expandidoDep ? 'block' : 'none'};">
+      `;
+      Object.keys(infoDep.areas).sort().forEach(area => {
+        const sols = infoDep.areas[area];
+        const montoArea = sols.reduce((s, x) => s + Number(x.monto_estimado_bruto||0), 0);
+        const keyArea = keyDep + '||' + area;
+        const expandidoArea = auditoriaExpandidos.areas.has(keyArea);
+        html += `
+          <div class="aud-area" onclick="toggleAudArea('${escaparHtml(dir)}','${escaparHtml(dep)}','${escaparHtml(area)}')">
+            <span class="chev">${expandidoArea ? '▼' : '▶'}</span>
+            <span class="nombre">🏷️ ${escaparHtml(area)}</span>
+            <span class="stats">${sols.length} sol · ${formatearCLP(montoArea)}</span>
+          </div>
+          <div style="display:${expandidoArea ? 'block' : 'none'};">
+            <div class="aud-sol-lista">
+        `;
+        sols.forEach(s => {
+          html += `
+            <div class="aud-sol-item" onclick="verTrazabilidad('${s.id}')">
+              <div>
+                <div class="cod">${escaparHtml(s.codigo)}</div>
+                <div class="info">${escaparHtml(s.solicitante_nombre||s.solicitante_email)} · ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div>
+              </div>
+              <span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span>
+              <div class="monto">${formatearCLP(s.monto_estimado_bruto||0)}</div>
+            </div>
+          `;
+        });
+        html += `</div></div>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div></div>`;
+  });
+  cont.innerHTML = html;
+}
+function toggleAudDir(dir) {
+  if (auditoriaExpandidos.dirs.has(dir)) auditoriaExpandidos.dirs.delete(dir);
+  else auditoriaExpandidos.dirs.add(dir);
+  renderAuditoriaArbol();
+}
+function toggleAudDepto(dir, dep) {
+  const k = dir + '||' + dep;
+  if (auditoriaExpandidos.deptos.has(k)) auditoriaExpandidos.deptos.delete(k);
+  else auditoriaExpandidos.deptos.add(k);
+  renderAuditoriaArbol();
+}
+function toggleAudArea(dir, dep, area) {
+  const k = dir + '||' + dep + '||' + area;
+  if (auditoriaExpandidos.areas.has(k)) auditoriaExpandidos.areas.delete(k);
+  else auditoriaExpandidos.areas.add(k);
+  renderAuditoriaArbol();
+}
+
+// ============================================================
+// TRAZABILIDAD (modal)
+// ============================================================
+function verTrazabilidad(solId) {
+  const s = solicitudes.find(x => x.id === solId);
+  if (!s) return;
+  const items = solicitudItems.filter(i => i.solicitud_id === solId);
+  const recAsociada = recepciones.find(r => r.id === s.recepcion_id);
+  const recPorSolicitud = recepciones.filter(r => r.solicitud_id === solId);
+  const recFinal = recAsociada || recPorSolicitud[0];
+  const salAsociada = recFinal ? salidas.find(x => x.id === recFinal.salida_id) : null;
+  
+  // Bloque L1 y L2
+  const l1 = items.filter(i => i.linea === 1);
+  const l2 = items.filter(i => i.linea === 2);
+  const subL1 = l1.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  const subL2 = l2.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  
+  const renderItems = (arr) => arr.map(it => {
+    const p = productos.find(x => x.id === it.producto_id);
+    const pb = it.precio_estimado_bruto || precioBruto(it.precio_estimado);
+    return `<div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:6px 12px;font-size:11.5px;border-bottom:1px solid #f1f5f9;align-items:center;">
+      <span>${escaparHtml(p?.nombre || 'N/E')}</span>
+      <span style="font-weight:700;color:var(--azul);text-align:center;">×${it.cantidad}</span>
+      <span style="font-weight:700;text-align:right;">${formatearCLP(pb * it.cantidad)}</span>
+    </div>`;
+  }).join('');
+  
+  const labelSub = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
+  
+  let html = `
+    <div style="background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid #bfdbfe;border-radius:14px;padding:14px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#1e40af;font-weight:700;">Solicitud</div>
+          <div style="font-size:18px;font-weight:800;color:#1e3a8a;font-family:'Courier New',monospace;">${escaparHtml(s.codigo)}</div>
+        </div>
+        <span class="badge-estado ${claseEstado(s.estado)}" style="font-size:11px;padding:5px 14px;">${iconoEstado(s.estado)} ${s.estado}</span>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:#1e40af;">
+        🏢 ${escaparHtml(s.departamento_padre||s.departamento)} · ${escaparHtml(labelSub)}<br>
+        👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)} · 📅 ${s.fecha_fmt} · Urgencia: ${s.urgencia}
+      </div>
+    </div>
+  `;
+  
+  if (l1.length) {
+    html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--azul);margin-top:12px;">📦 ARTÍCULOS L1 · PVC (${l1.length})</div>
+      <div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">
+        ${renderItems(l1)}
+        <div style="padding:8px 12px;background:#eff6ff;font-weight:700;text-align:right;color:var(--azul);">Subtotal L1: ${formatearCLP(subL1)}</div>
+      </div>`;
+  }
+  if (l2.length) {
+    html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--morado);margin-top:12px;">📦 ARTÍCULOS L2 · Papelería (${l2.length})</div>
+      <div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">
+        ${renderItems(l2)}
+        <div style="padding:8px 12px;background:#f3e8ff;font-weight:700;text-align:right;color:var(--morado);">Subtotal L2: ${formatearCLP(subL2)}</div>
+      </div>`;
+  }
+  
+  html += `<div class="section-label" style="margin-top:20px;">📅 LÍNEA DE TIEMPO</div>
+    <div class="timeline-aud">`;
+  
+  // Evento 1: Solicitud
+  html += `<div class="timeline-aud-item solicitud">
+    <div class="tl-titulo">📝 Solicitud creada <span class="tl-monto">${formatearCLP(s.monto_estimado_bruto||0)}</span></div>
+    <div class="tl-fecha">📅 ${s.fecha_fmt} · 👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</div>
+    <div class="tl-detalle">${items.length} productos · Urgencia: ${s.urgencia}</div>
+  </div>`;
+  
+  // Evento 2: Aprobación (si aplica)
+  if (s.estado === 'APROBADA' || s.estado === 'RECIBIDA') {
+    html += `<div class="timeline-aud-item aprobacion">
+      <div class="tl-titulo">✅ Aprobada</div>
+      <div class="tl-fecha">📅 ${formatearFecha(s.fecha_aprobacion) || '—'}</div>
+      <div class="tl-detalle">👤 ${escaparHtml(s.aprobado_por || '—')} · ${escaparHtml(s.aprobado_por_cargo || '')}</div>
+    </div>`;
+  }
+  if (s.estado === 'RECHAZADA') {
+    html += `<div class="timeline-aud-item" style="border-left:4px solid var(--rojo);">
+      <div class="tl-titulo" style="color:var(--rojo);">❌ Rechazada</div>
+      <div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Sin motivo')}</div>
+    </div>`;
+  }
+  if (s.estado === 'CANCELADA') {
+    html += `<div class="timeline-aud-item">
+      <div class="tl-titulo" style="color:var(--texto-gris);">⚫ Cancelada</div>
+      <div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Cancelada')}</div>
+    </div>`;
+  }
+  
+  // Evento 3: Recepción
+  if (recFinal) {
+    html += `<div class="timeline-aud-item recepcion">
+      <div class="tl-titulo">📥 Recepción <span class="tl-monto">${formatearCLP(recFinal.monto_total_bruto||0)}</span></div>
+      <div class="tl-fecha">📅 ${recFinal.fecha_fmt} · Código: <strong>${escaparHtml(recFinal.codigo)}</strong></div>
+      <div class="tl-detalle">🏭 ${escaparHtml(recFinal.proveedor||'N/E')}<br>👤 ${escaparHtml(recFinal.responsable||'N/E')}${recFinal.numero_guia ? `<br>📄 Guía: ${escaparHtml(recFinal.numero_guia)}` : ''}</div>
+    </div>`;
+  }
+  
+  // Evento 4: Salida
+  if (salAsociada) {
+    html += `<div class="timeline-aud-item salida">
+      <div class="tl-titulo">📤 Salida <span class="tl-monto">${formatearCLP(salAsociada.monto_total_bruto||0)}</span></div>
+      <div class="tl-fecha">📅 ${salAsociada.fecha_fmt} · Código: <strong>${escaparHtml(salAsociada.codigo)}</strong></div>
+      <div class="tl-detalle">👤 Receptor: ${escaparHtml(salAsociada.receptor_nombre||'N/E')}<br>🆔 RUT: ${escaparHtml(salAsociada.receptor_rut||'N/E')}</div>
+    </div>`;
+  }
+  
+  html += `</div>`;
+  
+  if (s.estado === 'RECIBIDA' && !salAsociada) {
+    html += `<div class="aviso-info" style="margin-top:14px;">ℹ️ Esta solicitud fue <strong>recibida</strong> pero aún <strong>no ha sido despachada</strong> al cliente final.</div>`;
+  } else if (s.estado === 'PENDIENTE') {
+    html += `<div class="aviso-info" style="margin-top:14px;">⏳ Esta solicitud está <strong>pendiente de aprobación</strong>.</div>`;
+  }
+  
+  document.getElementById('modal-traz-titulo').textContent = `🔍 ${s.codigo}`;
+  document.getElementById('modal-traz-contenido').innerHTML = html;
+  document.getElementById('modal-trazabilidad').classList.add('visible');
+}
+function cerrarModalTraz() { document.getElementById('modal-trazabilidad').classList.remove('visible'); }
 
 // ============================================================
 // PDF
@@ -1919,7 +2391,6 @@ function descargarPDFRecepcion() {
       ['Dirección', c.direccion || '—'],
       ['Departamento', c.departamento_padre || '—'],
       ['Área', c.subdepartamento || '—'],
-      ['Línea', 'L' + (c.linea || '—')],
       ['N° Guía', r.guia||'N/E'],
       ['N° Factura', r.factura||'N/E']
     ],
@@ -1954,27 +2425,160 @@ function descargarPDFSolicitud(id) {
   const s = solicitudes.find(x => x.id === id);
   if (!s) return;
   const items = solicitudItems.filter(i => i.solicitud_id === id);
-  const doc = generarPDFBase({
-    titulo: 'SOLICITUD', numero: s.codigo,
-    filas: [
-      ['Fecha', s.fecha_fmt],
-      ['Dirección', s.departamento_padre || s.departamento || '—'],
-      ['Departamento', s.subdepartamento_padre || '—'],
-      ['Área', s.subdepartamento || '—'],
-      ['Solicitante', s.solicitante_nombre||s.solicitante_email],
-      ['Urgencia', s.urgencia],
-      ['Estado', s.estado]
-    ],
-    productos: items.map(it => { const p = productos.find(x => x.id === it.producto_id); return { nombre: p?.nombre||'N/E', precio_neto: it.precio_estimado, cantidad: it.cantidad }; }),
-    tituloProd: 'PRODUCTOS SOLICITADOS', mostrarProveedor: true, desglose: true,
-    firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
+  const l1 = items.filter(i => i.linea === 1);
+  const l2 = items.filter(i => i.linea === 2);
+  
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pw = doc.internal.pageSize.getWidth();
+  const ph = doc.internal.pageSize.getHeight();
+  const m = 16;
+  const azul = [22,100,192], azulOsc = [15,74,138];
+  const gris = [74,90,110], grisC = [245,247,252], borde = [226,232,240];
+  doc.setFillColor(...azul); doc.rect(0,0,pw,32,'F');
+  doc.setFillColor(...azulOsc); doc.rect(0,30.5,pw,1.5,'F');
+  if (logoImageData) { try { doc.addImage(logoImageData, 'PNG', m, 6, 20, 20); } catch(e){} }
+  const xT = logoImageData ? m+26 : m;
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(13);
+  doc.text('MUNICIPALIDAD DE LAS CONDES', xT, 14);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  doc.text('Licitación 2345-99-LP26 · Materiales Gráficos', xT, 20);
+  doc.setFillColor(255,255,255); doc.roundedRect(pw-m-58, 8, 58, 16, 2, 2, 'F');
+  doc.setTextColor(...azul); doc.setFont('helvetica','bold'); doc.setFontSize(8);
+  doc.text('SOLICITUD', pw-m-29, 14, { align:'center' });
+  doc.setFontSize(13);
+  doc.text('N° ' + s.codigo, pw-m-29, 21, { align:'center' });
+  let y = 42;
+  doc.setFillColor(255,250,235); doc.setDrawColor(224,142,11);
+  doc.roundedRect(m, y, pw-m*2, 24, 2, 2, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(146,64,14);
+  doc.text('PROVEEDOR:', m+5, y+6);
+  doc.setFont('helvetica','normal'); doc.setTextColor(20,30,45);
+  doc.text(PROVEEDOR_OFICIAL.razon_social + ' · RUT ' + PROVEEDOR_OFICIAL.rut, m+30, y+6);
+  doc.text('Rep. Legal: ' + PROVEEDOR_OFICIAL.representante_legal, m+5, y+12);
+  doc.text(PROVEEDOR_OFICIAL.direccion + ' · ' + PROVEEDOR_OFICIAL.telefono, m+5, y+18);
+  y += 30;
+  
+  const filaH = 7;
+  const filasInfo = [
+    ['Fecha', s.fecha_fmt],
+    ['Dirección', s.departamento_padre || s.departamento || '—'],
+    ['Departamento', s.subdepartamento_padre || '—'],
+    ['Área', s.subdepartamento || '—'],
+    ['Solicitante', s.solicitante_nombre||s.solicitante_email],
+    ['Urgencia', s.urgencia],
+    ['Estado', s.estado]
+  ];
+  const boxH = 6 + filasInfo.length * filaH;
+  doc.setFillColor(...grisC); doc.setDrawColor(...borde);
+  doc.roundedRect(m, y, pw-m*2, boxH, 2, 2, 'FD');
+  let yd = y+8;
+  filasInfo.forEach(([lb, v]) => {
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...gris);
+    doc.text(lb+':', m+5, yd);
+    doc.setFont('helvetica','normal'); doc.setTextColor(20,30,45);
+    const t = doc.splitTextToSize(String(v||''), pw-m*2-55);
+    doc.text(t[0], m+45, yd); yd += filaH;
   });
+  y += boxH + 10;
+  
+  const cCant = 20, cUnit = 30, cSub = 35;
+  const cProd = pw-m*2 - cCant - cUnit - cSub;
+  const dibujarEncabezado = (yPos, color) => {
+    doc.setFillColor(...color); doc.rect(m, yPos, pw-m*2, 8, 'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
+    doc.text('Producto', m+4, yPos+5.5);
+    doc.text('Cant.', m+cProd+cCant/2+2, yPos+5.5, { align:'center' });
+    doc.text('P. Unit', m+cProd+cCant+cUnit/2+2, yPos+5.5, { align:'center' });
+    doc.text('Subtotal', pw-m-cSub/2, yPos+5.5, { align:'center' });
+    return yPos+8;
+  };
+  const dibujarBloque = (titulo, colorTitulo, items) => {
+    if (!items.length) return;
+    doc.setDrawColor(...colorTitulo); doc.setLineWidth(1);
+    doc.line(m, y+1, m+3, y+1);
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...colorTitulo);
+    doc.text(titulo, m+6, y+2);
+    y += 6;
+    y = dibujarEncabezado(y, colorTitulo);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    let par = false, sub = 0;
+    items.forEach(it => {
+      if (y > ph-55) { doc.addPage(); y = 16; y = dibujarEncabezado(y, colorTitulo); doc.setFont('helvetica','normal'); doc.setFontSize(9); }
+      const p = productos.find(x => x.id === it.producto_id);
+      const pNeto = Number(it.precio_estimado||0);
+      const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
+      const subB = pBruto * Number(it.cantidad);
+      sub += subB;
+      if (par) { doc.setFillColor(...grisC); doc.rect(m, y, pw-m*2, 8, 'F'); }
+      doc.setDrawColor(...borde); doc.rect(m, y, pw-m*2, 8);
+      doc.setTextColor(20,30,45);
+      doc.text(String(p?.nombre||'N/E').substring(0,50), m+4, y+5.5);
+      doc.text(String(it.cantidad), m+cProd+cCant/2+2, y+5.5, { align:'center' });
+      doc.text(formatearCLP(pBruto), m+cProd+cCant+cUnit/2+2, y+5.5, { align:'center' });
+      doc.setFont('helvetica','bold');
+      doc.text(formatearCLP(subB), pw-m-cSub/2, y+5.5, { align:'center' });
+      doc.setFont('helvetica','normal');
+      y += 8; par = !par;
+    });
+    doc.setFillColor(colorTitulo[0]+30, colorTitulo[1]+30, colorTitulo[2]+30);
+    doc.setFillColor(240, 248, 255);
+    doc.rect(m, y, pw-m*2, 8, 'F');
+    doc.setDrawColor(...borde); doc.rect(m, y, pw-m*2, 8);
+    doc.setFont('helvetica','bold'); doc.setTextColor(...colorTitulo);
+    doc.text('Subtotal ' + titulo.match(/L\d/)?.[0] + ':', m+4, y+5.5);
+    doc.text(formatearCLP(sub), pw-m-4, y+5.5, { align:'right' });
+    doc.setTextColor(20,30,45);
+    y += 12;
+  };
+  
+  dibujarBloque('ARTÍCULOS L1 · PVC', [30,64,175], l1);
+  dibujarBloque('ARTÍCULOS L2 · Papelería', [124,58,237], l2);
+  
+  const totalBruto = items.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
+  const totalNeto = totalBruto / (1 + IVA);
+  const iva = totalBruto - totalNeto;
+  
+  if (y > ph-55) { doc.addPage(); y = 16; }
+  doc.setFillColor(230,240,255); doc.rect(m, y, pw-m*2, 27, 'F');
+  doc.setDrawColor(...azul); doc.setLineWidth(0.5);
+  doc.rect(m, y, pw-m*2, 27);
+  doc.setFont('helvetica','bold'); doc.setTextColor(...azulOsc);
+  doc.setFontSize(10);
+  doc.text('Subtotal Neto:', m+4, y+6); doc.text(formatearCLP(totalNeto), pw-m-4, y+6, { align:'right' });
+  doc.text('IVA (19%):', m+4, y+13); doc.text(formatearCLP(iva), pw-m-4, y+13, { align:'right' });
+  doc.setFontSize(12);
+  doc.text('TOTAL (IVA inc.):', m+4, y+22); doc.text(formatearCLP(totalBruto), pw-m-4, y+22, { align:'right' });
+  y += 35;
+  
+  const yF = ph - 45;
+  if (y + 14 > yF) doc.addPage();
+  y = yF;
+  doc.setDrawColor(150,160,175); doc.setLineWidth(0.4);
+  const wF = 80;
+  const x1 = (pw - wF) / 2;
+  doc.line(x1, y, x1 + wF, y);
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(20,30,45);
+  doc.text('Supervisor del Contrato', pw/2, y + 5, { align:'center' });
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...gris);
+  doc.text('Municipalidad de Las Condes', pw/2, y + 10, { align:'center' });
+  
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setDrawColor(...borde); doc.setLineWidth(0.3);
+    doc.line(m, ph-16, pw-m, ph-16);
+    doc.setFont('helvetica','italic'); doc.setFontSize(7); doc.setTextColor(140,150,165);
+    doc.text('Licitación 2345-99-LP26 · Municipalidad de Las Condes', pw/2, ph-7, { align:'center' });
+    doc.text(`Página ${i} de ${totalPages}`, pw-m, ph-7, { align:'right' });
+  }
+  
   doc.save(`Solicitud_${s.codigo}.pdf`);
   mostrarToast('✅ PDF descargado');
 }
 
 // ============================================================
-// EXCEL
+// EXCEL — con formato de moneda chileno correcto
 // ============================================================
 function hojaExcel(data, cols) {
   const AZ = '1664C0', GR = 'F5F7FC', BO = 'E2E8F0', BL = 'FFFFFF';
@@ -1990,7 +2594,8 @@ function hojaExcel(data, cols) {
       return {
         v: val == null ? '' : val,
         t: typeof val === 'number' ? 'n' : 's',
-        z: money ? '"$"#.##0' : undefined,
+        // Formato de moneda con separador de miles por punto y sin decimales
+        z: money ? '"$"#,##0' : undefined,
         s: {
           font: { sz:10, name:'Century Gothic', color:{rgb:'141E2D'} },
           fill: { patternType:'solid', fgColor:{rgb: par?GR:BL} },
@@ -2006,21 +2611,12 @@ function hojaExcel(data, cols) {
   if (data.length) { const l = String.fromCharCode(65 + cols.length - 1); ws['!autofilter'] = { ref: `A1:${l}${data.length+1}` }; }
   return ws;
 }
-
 function exportarExcelStock() {
   if (!productos.length) { mostrarToast('❌ Sin productos'); return; }
   const data = productos.map(p => {
     const pB = precioBruto(p.precio_neto);
     const st = Number(p.stock);
-    return {
-      producto: p.nombre,
-      linea: 'L' + p.linea,
-      neto: Number(p.precio_neto),
-      iva: pB - Number(p.precio_neto),
-      bruto: pB,
-      stock: st,
-      valor: st * pB
-    };
+    return { producto: p.nombre, linea: 'L' + p.linea, neto: Number(p.precio_neto), iva: pB - Number(p.precio_neto), bruto: pB, stock: st, valor: st * pB };
   });
   const wb = XLSX.utils.book_new();
   const ws = hojaExcel(data, [
@@ -2036,7 +2632,6 @@ function exportarExcelStock() {
   XLSX.writeFile(wb, `Stock_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
 }
-
 function exportarExcelRecepciones() {
   if (!recepciones.length) { mostrarToast('❌ Sin recepciones'); return; }
   const data = [];
@@ -2054,16 +2649,12 @@ function exportarExcelRecepciones() {
     }
     items.forEach(it => {
       const p = productos.find(x => x.id === it.producto_id);
-      const linea = p?.linea || 1;
       data.push({
         codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '',
         proveedor: r.proveedor || '', guia: r.numero_guia || '', factura: r.numero_factura || '',
-        linea: 'L' + linea,
-        producto: p?.nombre || 'N/E',
+        linea: 'L' + (p?.linea || 1), producto: p?.nombre || 'N/E',
         cantidad: Number(it.cantidad || 0),
-        neto: Number(it.subtotal || 0),
-        iva: Number(it.iva || 0),
-        bruto: Number(it.subtotal_bruto || 0),
+        neto: Number(it.subtotal || 0), iva: Number(it.iva || 0), bruto: Number(it.subtotal_bruto || 0),
         responsable: r.responsable || ''
       });
     });
@@ -2088,7 +2679,6 @@ function exportarExcelRecepciones() {
   XLSX.writeFile(wb, `Recepciones_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
 }
-
 function exportarExcelSalidas() {
   if (!salidas.length) { mostrarToast('❌ Sin salidas'); return; }
   const data = [];
@@ -2096,8 +2686,7 @@ function exportarExcelSalidas() {
     const items = salidaItems.filter(i => i.salida_id === s.id);
     if (!items.length) {
       data.push({
-        codigo: s.codigo, fecha: s.fecha_fmt,
-        direccion: s.departamento_padre || s.departamento || '',
+        codigo: s.codigo, fecha: s.fecha_fmt, direccion: s.departamento_padre || s.departamento || '',
         depto: s.subdepartamento_padre || '', area: s.subdepartamento || '',
         receptor: s.receptor_nombre || '', rut: s.receptor_rut || '', email: s.receptor_email || '',
         linea: '—', producto: '(sin items)', cantidad: 0,
@@ -2108,21 +2697,14 @@ function exportarExcelSalidas() {
     }
     items.forEach(it => {
       const p = productos.find(x => x.id === it.producto_id);
-      const linea = p?.linea || 1;
       data.push({
         codigo: s.codigo, fecha: s.fecha_fmt,
         direccion: s.departamento_padre || s.departamento || '',
-        depto: s.subdepartamento_padre || '',
-        area: s.subdepartamento || '',
-        receptor: s.receptor_nombre || '',
-        rut: s.receptor_rut || '',
-        email: s.receptor_email || '',
-        linea: 'L' + linea,
-        producto: p?.nombre || 'N/E',
+        depto: s.subdepartamento_padre || '', area: s.subdepartamento || '',
+        receptor: s.receptor_nombre || '', rut: s.receptor_rut || '', email: s.receptor_email || '',
+        linea: 'L' + (p?.linea || 1), producto: p?.nombre || 'N/E',
         cantidad: Number(it.cantidad || 0),
-        neto: Number(it.subtotal || 0),
-        iva: Number(it.iva || 0),
-        bruto: Number(it.subtotal_bruto || 0),
+        neto: Number(it.subtotal || 0), iva: Number(it.iva || 0), bruto: Number(it.subtotal_bruto || 0),
         responsable: s.responsable || ''
       });
     });
@@ -2149,21 +2731,15 @@ function exportarExcelSalidas() {
   XLSX.writeFile(wb, `Salidas_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
 }
-
 function exportarExcelCuentas() {
   if (!cuentas.length) { mostrarToast('❌ Sin cuentas'); return; }
   const data = cuentas.map(c => {
     const cons = calcularConsumidoCuenta(c.id);
     const res = calcularReservadoCuenta(c.id);
     return {
-      direccion: c.direccion,
-      depto: c.departamento_padre || '—',
-      area: c.subdepartamento,
-      linea: 'L' + c.linea,
-      cuenta: c.codigo,
-      asignado: Number(c.monto_asignado),
-      reservado: res,
-      consumido: cons,
+      direccion: c.direccion, depto: c.departamento_padre || '—', area: c.subdepartamento,
+      linea: 'L' + c.linea, cuenta: c.codigo,
+      asignado: Number(c.monto_asignado), reservado: res, consumido: cons,
       disponible: Number(c.monto_asignado) - cons - res
     };
   });
@@ -2183,7 +2759,6 @@ function exportarExcelCuentas() {
   XLSX.writeFile(wb, `Cuentas_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
 }
-
 function exportarExcelSolicitudes() {
   if (!solicitudes.length) { mostrarToast('❌ Sin solicitudes'); return; }
   const data = [];
@@ -2193,8 +2768,7 @@ function exportarExcelSolicitudes() {
       data.push({
         codigo: s.codigo, fecha: s.fecha_fmt,
         direccion: s.departamento_padre || s.departamento || '',
-        depto: s.subdepartamento_padre || '',
-        area: s.subdepartamento || '',
+        depto: s.subdepartamento_padre || '', area: s.subdepartamento || '',
         solicitante: s.solicitante_nombre || s.solicitante_email || '',
         estado: s.estado, urgencia: s.urgencia || '',
         linea: '—', producto: '(sin items)', cantidad: 0,
@@ -2204,22 +2778,17 @@ function exportarExcelSolicitudes() {
     }
     items.forEach(it => {
       const p = productos.find(x => x.id === it.producto_id);
-      const linea = it.linea || p?.linea || 1;
       const pNeto = Number(it.precio_estimado || 0);
       const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
+      const cant = Number(it.cantidad || 0);
       data.push({
         codigo: s.codigo, fecha: s.fecha_fmt,
         direccion: s.departamento_padre || s.departamento || '',
-        depto: s.subdepartamento_padre || '',
-        area: s.subdepartamento || '',
+        depto: s.subdepartamento_padre || '', area: s.subdepartamento || '',
         solicitante: s.solicitante_nombre || s.solicitante_email || '',
         estado: s.estado, urgencia: s.urgencia || '',
-        linea: 'L' + linea,
-        producto: p?.nombre || 'N/E',
-        cantidad: Number(it.cantidad || 0),
-        neto: pNeto * Number(it.cantidad || 0),
-        iva: (pBruto - pNeto) * Number(it.cantidad || 0),
-        bruto: Number(it.subtotal_bruto || pBruto * Number(it.cantidad || 0))
+        linea: 'L' + (it.linea || p?.linea || 1), producto: p?.nombre || 'N/E',
+        cantidad: cant, neto: pNeto * cant, iva: (pBruto - pNeto) * cant, bruto: Number(it.subtotal_bruto || pBruto * cant)
       });
     });
   });
@@ -2256,6 +2825,7 @@ function cambiarTab(tabId) {
   const tab = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
   if (tab) tab.classList.add('active');
   if (tabId === 'tab-mi-solicitud') { renderMisSolicitudes(); actualizarBadgePendientes(); }
+  if (tabId === 'tab-solicitudes' && esAdmin()) renderSolicitudesAdmin();
   if (tabId === 'tab-recepcion') { poblarVinculoSolicitud(); actualizarResumenes(); }
   if (tabId === 'tab-salida') { 
     document.getElementById('sal-depto-padre').value = '';
@@ -2264,10 +2834,9 @@ function cambiarTab(tabId) {
     actualizarResumenes(); 
   }
   if (tabId === 'tab-stock') renderStock();
-  if (tabId === 'tab-solicitudes' && esAdmin()) renderSolicitudesAdmin();
   if (tabId === 'tab-cuentas' && esAdmin()) renderCuentas();
-  if (tabId === 'tab-auditoria' && esAdmin()) renderAuditoria();
   if (tabId === 'tab-reportes' && esAdmin()) renderReportes();
+  if (tabId === 'tab-auditoria' && esAdmin()) renderAuditoria();
 }
 
 // ============================================================
@@ -2315,6 +2884,13 @@ window.exportarExcelRecepciones = exportarExcelRecepciones;
 window.exportarExcelSalidas = exportarExcelSalidas;
 window.exportarExcelCuentas = exportarExcelCuentas;
 window.exportarExcelSolicitudes = exportarExcelSolicitudes;
+window.verReporte = verReporte;
+window.filtrarReporte = filtrarReporte;
+window.toggleAudDir = toggleAudDir;
+window.toggleAudDepto = toggleAudDepto;
+window.toggleAudArea = toggleAudArea;
+window.verTrazabilidad = verTrazabilidad;
+window.cerrarModalTraz = cerrarModalTraz;
 </script>
 </body>
 </html>

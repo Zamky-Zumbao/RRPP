@@ -1072,17 +1072,45 @@ async function enviarSolicitud() {
   btn.disabled = false; btn.textContent = '📨 ENVIAR SOLICITUD';
 }
 function nuevaSolicitudForm() {
-  carritoSolicitud = []; adjuntosTemporales = []; urgenciaSolicitud = 'NORMAL';
-  renderCarritoMiSolicitud(); renderAdjuntosSolicitud(); elegirUrgencia('NORMAL');
+  carritoSolicitud = [];
+  adjuntosTemporales = [];
+  urgenciaSolicitud = 'NORMAL';
+  
+  // Resetear carritos
+  renderCarritoMiSolicitud();
+  renderAdjuntosSolicitud();
+  elegirUrgencia('NORMAL');
+  
+  // Limpiar campos
   document.getElementById('sol-obs').value = '';
   document.getElementById('sol-depto-padre').value = '';
-  document.getElementById('sol-depto').innerHTML = '<option value="">— Primero elige dirección —</option>';
+  document.getElementById('sol-depto').value = '';
   document.getElementById('sol-depto').disabled = false;
+  document.getElementById('sol-depto').innerHTML = '<option value="">— Primero elige dirección —</option>';
+  document.getElementById('sol-subdepto').value = '';
   document.getElementById('sol-subdepto').innerHTML = '<option value="">— Primero elige departamento —</option>';
+  document.getElementById('sol-prod-trigger').value = '';
+  document.getElementById('sol-cantidad').value = '';
+  document.getElementById('sol-prod-sel').style.display = 'none';
+  document.getElementById('sol-prod-nombre').textContent = 'Producto';
+  document.getElementById('sol-prod-info').textContent = '—';
+  document.getElementById('sol-adjuntos-grid').innerHTML = '';
+  document.getElementById('sol-file-input').value = '';
+  
+  // Resetear paneles
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
   const buscador = document.getElementById('sol-busqueda-wrap');
   if (buscador) buscador.style.display = 'none';
+  
+  // Resetear estado de líneas
+  lineaSeleccionadaSol = null;
+  subdeptoActualSol = { l1: null, l2: null };
+  productoSeleccionadoSol = null;
+  
+  // Ocultar mensaje de éxito
+  const msg = document.getElementById('sol-mensaje');
+  if (msg) msg.style.display = 'none';
 }
 
 function renderMisSolicitudes() {

@@ -438,8 +438,8 @@
     <div class="field"><label>Correo (opcional)</label><input type="email" id="sal-receptor-email" placeholder="Ej: juan@lascondes.cl"></div>
     <div class="field"><label>Observación (opcional)</label><textarea id="sal-obs" rows="2"></textarea></div>
     <button class="btn-primario" onclick="registrarSalida()">✅ Registrar Salida</button>
-    <div id="sal-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
   </div>
+  <div id="sal-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
 </div>
 
 <div class="section solo-operador solo-admin" id="tab-stock">
@@ -1533,7 +1533,9 @@ function salCambiarDireccion() {
   const wrapRecep = document.getElementById('sal-wrap-recepciones');
   const selRecep = document.getElementById('sal-recepcion-sel');
   const detalle = document.getElementById('sal-detalle');
-  detalle.style.display = 'none';
+  const mensaje = document.getElementById('sal-mensaje');
+  if (detalle) detalle.style.display = 'none';
+  if (mensaje) mensaje.style.display = 'none';
   recepcionSeleccionadaSalida = null;
   fotosSalidaTemp = {};
   if (!direccion) { wrapRecep.style.display = 'none'; selRecep.innerHTML = '<option value="">— Selecciona una recepción —</option>'; return; }
@@ -1555,6 +1557,8 @@ function salCargarRecepcion() {
   const listaL2 = document.getElementById('sal-lista-l2');
   const totalL1 = document.getElementById('sal-total-l1');
   const totalL2 = document.getElementById('sal-total-l2');
+  const mensaje = document.getElementById('sal-mensaje');
+  if (mensaje) mensaje.style.display = 'none';
   if (!id) { detalle.style.display = 'none'; recepcionSeleccionadaSalida = null; fotosSalidaTemp = {}; return; }
   const r = recepciones.find(x => x.id === id);
   if (!r) return;
@@ -1688,17 +1692,20 @@ async function registrarSalida() {
     msg.style.display = 'block';
     msg.innerHTML = `✅ Salida <strong>${sal.codigo}</strong> desde recepción <strong>${r.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFSalida()" style="margin-left:10px;">📄 PDF con fotos</button>`;
     msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Limpiar campos
     document.getElementById('sal-receptor').value = '';
     document.getElementById('sal-receptor-rut').value = '';
     document.getElementById('sal-receptor-email').value = '';
     document.getElementById('sal-obs').value = '';
+    // Ocultar detalle del formulario (pero NO el mensaje, que ya está afuera)
     document.getElementById('sal-detalle').style.display = 'none';
-    document.getElementById('sal-recepcion-sel').value = '';
+    document.getElementById('sal-recepcion-sel').innerHTML = '<option value="">— Selecciona una recepción —</option>';
     fotosSalidaTemp = {};
+    recepcionSeleccionadaSalida = null;
+    // Refrescar data
     await cargarTodo();
     renderStock();
     actualizarResumenes();
-    salCambiarDireccion();
   } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
   btn.disabled = false; btn.textContent = '✅ Registrar Salida';
 }
@@ -2666,7 +2673,13 @@ function cambiarTab(tabId) {
   if (tabId === 'tab-mi-solicitud') { renderMisSolicitudes(); actualizarBadgePendientes(); }
   if (tabId === 'tab-solicitudes' && esAdmin()) renderSolicitudesAdmin();
   if (tabId === 'tab-recepcion') { poblarVinculoSolicitud(); actualizarResumenes(); }
-  if (tabId === 'tab-salida') { document.getElementById('sal-depto-padre').value = ''; document.getElementById('sal-wrap-recepciones').style.display = 'none'; document.getElementById('sal-detalle').style.display = 'none'; actualizarResumenes(); }
+  if (tabId === 'tab-salida') { 
+    document.getElementById('sal-depto-padre').value = ''; 
+    document.getElementById('sal-wrap-recepciones').style.display = 'none'; 
+    document.getElementById('sal-detalle').style.display = 'none'; 
+    document.getElementById('sal-mensaje').style.display = 'none';
+    actualizarResumenes(); 
+  }
   if (tabId === 'tab-stock') renderStock();
   if (tabId === 'tab-cuentas' && esAdmin()) renderCuentas();
   if (tabId === 'tab-finanzas' && esAdmin()) renderFinanzas();

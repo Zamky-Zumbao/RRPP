@@ -152,7 +152,6 @@
   .articulo-fila .nombre { font-weight:600; font-size:12.5px; }
   .articulo-fila .cant { font-weight:700; font-size:13px; color:var(--azul); text-align:center; white-space:nowrap; }
   .articulo-fila .monto { font-weight:700; font-size:12.5px; color:var(--texto-oscuro); text-align:right; white-space:nowrap; }
-  /* Auditoría: árbol y timeline */
   .aud-filtros { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:8px; margin-bottom:14px; }
   .aud-filtros input, .aud-filtros select { padding:8px 10px; font-size:12px; border-radius:10px; }
   .aud-resumen { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px; margin-bottom:16px; }
@@ -198,6 +197,7 @@
   .timeline-aud-item .tl-fecha { font-size:10.5px; color:var(--texto-gris); margin-bottom:6px; }
   .timeline-aud-item .tl-detalle { font-size:11.5px; color:var(--texto-oscuro); }
   .timeline-aud-item .tl-monto { font-weight:700; color:var(--azul); font-size:12px; }
+  .foto-salida-thumb { height:50px; border-radius:6px; border:2px solid var(--verde); box-shadow:0 2px 4px rgba(0,0,0,0.1); }
   .solo-admin.nav-tab, .solo-operador.nav-tab, .solo-solicitante.nav-tab, .solo-admin.section, .solo-operador.section, .solo-solicitante.section { display:none !important; }
   body.rol-admin .nav-tab.solo-admin { display:block !important; }
   body.rol-admin .section.solo-admin.active { display:block !important; }
@@ -247,7 +247,6 @@
   </div>
 </div>
 
-<!-- ORDEN NUEVO DE PESTAÑAS -->
 <div class="nav-tabs">
   <div class="nav-tab solo-solicitante solo-admin" data-tab="tab-mi-solicitud" onclick="cambiarTab('tab-mi-solicitud')"><span class="icono">📝</span><span class="label">SOLICITUD</span></div>
   <div class="nav-tab solo-admin" data-tab="tab-solicitudes" onclick="cambiarTab('tab-solicitudes')"><span class="icono">📋</span><span class="label">SOLICITUDES<span class="tab-badge" id="badge-sol-pend" style="display:none;">0</span></span></div>
@@ -255,11 +254,11 @@
   <div class="nav-tab solo-operador solo-admin" data-tab="tab-salida" onclick="cambiarTab('tab-salida')"><span class="icono">📤</span><span class="label">SALIDA</span></div>
   <div class="nav-tab solo-operador solo-admin" data-tab="tab-stock" onclick="cambiarTab('tab-stock')"><span class="icono">📊</span><span class="label">STOCK</span></div>
   <div class="nav-tab solo-admin" data-tab="tab-cuentas" onclick="cambiarTab('tab-cuentas')"><span class="icono">💰</span><span class="label">CUENTAS</span></div>
+  <div class="nav-tab solo-admin" data-tab="tab-finanzas" onclick="cambiarTab('tab-finanzas')"><span class="icono">💼</span><span class="label">FINANZAS</span></div>
   <div class="nav-tab solo-admin" data-tab="tab-reportes" onclick="cambiarTab('tab-reportes')"><span class="icono">📈</span><span class="label">REPORTES</span></div>
   <div class="nav-tab solo-admin" data-tab="tab-auditoria" onclick="cambiarTab('tab-auditoria')"><span class="icono">🔍</span><span class="label">AUDITORÍA</span></div>
 </div>
 
-<!-- SOLICITUD -->
 <div class="section solo-solicitante solo-admin" id="tab-mi-solicitud">
   <div class="section-label">📝 NUEVA SOLICITUD DE ARTÍCULOS</div>
   <div class="aviso-info">ℹ️ <strong>Paso 1:</strong> Selecciona Dirección → Departamento → Área. El sistema mostrará las líneas disponibles y validará el tope del presupuesto.</div>
@@ -322,7 +321,6 @@
   </div>
 </div>
 
-<!-- SOLICITUDES (ADMIN) -->
 <div class="section solo-admin" id="tab-solicitudes">
   <div class="section-label">📋 GESTIÓN DE SOLICITUDES</div>
   <div class="filtros">
@@ -340,7 +338,6 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="soladmin-total"></div>
 </div>
 
-<!-- RECEPCIÓN -->
 <div class="section solo-operador solo-admin" id="tab-recepcion">
   <div class="section-label">📥 RECEPCIÓN DE PRODUCTOS</div>
   <div class="resumen-grid">
@@ -403,7 +400,6 @@
   <div id="rec-mensaje" class="aviso-info" style="display:none; margin-top:12px;"></div>
 </div>
 
-<!-- SALIDA -->
 <div class="section solo-operador solo-admin" id="tab-salida">
   <div class="section-label">📤 SALIDA DE PRODUCTOS</div>
   <div class="resumen-grid">
@@ -424,6 +420,9 @@
   </div>
   <div id="sal-detalle" style="display:none;">
     <div id="sal-info-recepcion" class="cuenta-info-box" style="margin-bottom:12px;"></div>
+    <div class="aviso-info" style="background:#fef3c7;border-left-color:#e08e0b;">
+      📷 <strong>Fotos obligatorias:</strong> debes subir 1 foto JPG (máx 3 MB) por cada artículo antes de registrar la salida.
+    </div>
     <div id="sal-bloque-l1" style="display:none; margin-bottom:16px;">
       <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--texto-gris); border-left:3px solid var(--azul); padding-left:8px; margin-bottom:8px;">📦 ARTÍCULOS L1 · PVC</div>
       <div id="sal-lista-l1"></div>
@@ -443,7 +442,6 @@
   </div>
 </div>
 
-<!-- STOCK -->
 <div class="section solo-operador solo-admin" id="tab-stock">
   <div class="section-label">📊 INVENTARIO</div>
   <div class="filtros">
@@ -455,7 +453,6 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="stock-total"></div>
 </div>
 
-<!-- CUENTAS -->
 <div class="section solo-admin" id="tab-cuentas">
   <div class="section-label">💰 CUENTAS Y PRESUPUESTO</div>
   <div class="filtros"><input type="text" id="cuentas-filtro" placeholder="🔍 Buscar..." oninput="renderCuentas()"></div>
@@ -463,7 +460,51 @@
   <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="cuentas-total"></div>
 </div>
 
-<!-- REPORTES -->
+<div class="section solo-admin" id="tab-finanzas">
+  <div class="section-label">💼 ESTADO FINANCIERO DE LA LICITACIÓN</div>
+  <div class="aviso-info">ℹ️ Resumen financiero completo: qué se ha <strong>recepcionado</strong>, qué se ha <strong>entregado</strong>, qué está <strong>pendiente</strong> y qué queda <strong>en bodega</strong>.</div>
+  <div class="filtros" style="margin-bottom:14px;">
+    <input type="date" id="fin-fecha-desde" onchange="renderFinanzas()" title="Desde">
+    <input type="date" id="fin-fecha-hasta" onchange="renderFinanzas()" title="Hasta">
+    <select id="fin-filtro-direccion" onchange="renderFinanzas()"><option value="">Todas las direcciones</option></select>
+    <select id="fin-filtro-linea" onchange="renderFinanzas()"><option value="">Todas las líneas</option><option value="1">L1 · PVC</option><option value="2">L2 · Papelería</option></select>
+    <button class="btn-pequeno gris" onclick="limpiarFiltrosFinanzas()" style="padding:8px 14px;">🔄 Limpiar</button>
+    <button class="btn-pequeno" onclick="exportarExcelFinanzas()" style="padding:8px 14px;background:#7c3aed;color:white;">💼 Excel</button>
+  </div>
+  <div class="resumen-grid" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+    <div class="resumen-card" style="background:white;border-left:4px solid var(--verde);">
+      <div class="num" id="fin-num-rec" style="color:var(--verde);">$0</div>
+      <div class="lbl">📥 Recepcionado</div>
+      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-rec">0 uds</div>
+    </div>
+    <div class="resumen-card" style="background:white;border-left:4px solid var(--rojo);">
+      <div class="num" id="fin-num-ent" style="color:var(--rojo);">$0</div>
+      <div class="lbl">📤 Entregado</div>
+      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-ent">0 uds</div>
+    </div>
+    <div class="resumen-card" style="background:white;border-left:4px solid var(--naranja);">
+      <div class="num" id="fin-num-pend" style="color:var(--naranja);">$0</div>
+      <div class="lbl">⏳ Pendiente entrega</div>
+      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-pend">0 uds</div>
+    </div>
+    <div class="resumen-card" style="background:white;border-left:4px solid var(--azul);">
+      <div class="num" id="fin-num-bod" style="color:var(--azul);">$0</div>
+      <div class="lbl">📦 En bodega</div>
+      <div style="font-size:10px;color:var(--texto-gris);margin-top:4px;" id="fin-uds-bod">0 uds</div>
+    </div>
+  </div>
+  <div class="section-label" style="margin-top:20px;">📊 Resumen financiero</div>
+  <div class="tabla-container" style="background:white;">
+    <table><thead><tr><th>Concepto</th><th style="text-align:right;">Unidades</th><th style="text-align:right;">Neto</th><th style="text-align:right;">IVA</th><th style="text-align:right;">Bruto</th></tr></thead><tbody id="fin-resumen-tbody"></tbody></table>
+  </div>
+  <div class="section-label" style="margin-top:20px;">📦 Detalle por producto</div>
+  <div class="filtros"><input type="text" id="fin-prod-filtro" placeholder="🔍 Buscar producto..." oninput="renderDetalleProductosFin()"></div>
+  <div class="tabla-container" style="background:white;">
+    <table><thead><tr><th>Producto</th><th>L</th><th style="text-align:right;">Recibido</th><th style="text-align:right;">Entregado</th><th style="text-align:right;">Pendiente</th><th style="text-align:right;">En bodega</th><th style="text-align:right;">Monto recibido</th><th style="text-align:right;">Monto entregado</th><th style="text-align:right;">Monto pendiente</th></tr></thead><tbody id="fin-prod-tbody"></tbody></table>
+  </div>
+  <div style="font-size:10px;color:var(--texto-gris);margin-top:6px;text-align:right;" id="fin-prod-total"></div>
+</div>
+
 <div class="section solo-admin" id="tab-reportes">
   <div class="section-label">📈 REPORTES</div>
   <div class="field">
@@ -494,74 +535,29 @@
   </div>
   <div id="rep-detalle" style="display:none; margin-top:20px;">
     <div class="section-label" id="rep-detalle-titulo">Detalle</div>
-    <div class="filtros">
-      <input type="text" id="rep-detalle-filtro" placeholder="🔍 Buscar..." oninput="filtrarReporte()">
-    </div>
-    <div class="tabla-container">
-      <table>
-        <thead id="rep-detalle-thead"></thead>
-        <tbody id="rep-detalle-tbody"></tbody>
-      </table>
-    </div>
+    <div class="filtros"><input type="text" id="rep-detalle-filtro" placeholder="🔍 Buscar..." oninput="filtrarReporte()"></div>
+    <div class="tabla-container"><table><thead id="rep-detalle-thead"></thead><tbody id="rep-detalle-tbody"></tbody></table></div>
     <div style="font-size:10px; color:var(--texto-gris); margin-top:6px; text-align:right;" id="rep-detalle-total"></div>
   </div>
 </div>
 
-<!-- AUDITORÍA (NUEVA) -->
 <div class="section solo-admin" id="tab-auditoria">
   <div class="section-label">🔍 AUDITORÍA Y TRAZABILIDAD</div>
-
   <div class="aud-resumen" id="aud-resumen">
-    <div class="aud-resumen-card">
-      <div class="titulo">📝 Solicitudes</div>
-      <div class="num" id="aud-num-sol">0</div>
-      <div class="detalle" id="aud-det-sol">—</div>
-    </div>
-    <div class="aud-resumen-card">
-      <div class="titulo">📥 Recepciones</div>
-      <div class="num" id="aud-num-rec" style="color:var(--verde);">0</div>
-      <div class="detalle" id="aud-det-rec">—</div>
-    </div>
-    <div class="aud-resumen-card">
-      <div class="titulo">📤 Salidas</div>
-      <div class="num" id="aud-num-sal" style="color:var(--rojo);">0</div>
-      <div class="detalle" id="aud-det-sal">—</div>
-    </div>
-    <div class="aud-resumen-card">
-      <div class="titulo">⏳ Pendientes</div>
-      <div class="num" id="aud-num-pend" style="color:var(--naranja);">0</div>
-      <div class="detalle" id="aud-det-pend">—</div>
-    </div>
+    <div class="aud-resumen-card"><div class="titulo">📝 Solicitudes</div><div class="num" id="aud-num-sol">0</div><div class="detalle" id="aud-det-sol">—</div></div>
+    <div class="aud-resumen-card"><div class="titulo">📥 Recepciones</div><div class="num" id="aud-num-rec" style="color:var(--verde);">0</div><div class="detalle" id="aud-det-rec">—</div></div>
+    <div class="aud-resumen-card"><div class="titulo">📤 Salidas</div><div class="num" id="aud-num-sal" style="color:var(--rojo);">0</div><div class="detalle" id="aud-det-sal">—</div></div>
+    <div class="aud-resumen-card"><div class="titulo">⏳ Pendientes</div><div class="num" id="aud-num-pend" style="color:var(--naranja);">0</div><div class="detalle" id="aud-det-pend">—</div></div>
   </div>
-
   <div class="aud-filtros">
     <input type="text" id="aud-filtro-texto" placeholder="🔍 Buscar código, solicitante, producto..." oninput="renderAuditoriaArbol()">
-    <select id="aud-filtro-estado" onchange="renderAuditoriaArbol()">
-      <option value="">Todos los estados</option>
-      <option value="PENDIENTE">Pendiente</option>
-      <option value="APROBADA">Aprobada</option>
-      <option value="RECIBIDA">Recibida</option>
-      <option value="RECHAZADA">Rechazada</option>
-      <option value="CANCELADA">Cancelada</option>
-    </select>
-    <select id="aud-filtro-fecha" onchange="renderAuditoriaArbol()">
-      <option value="">Todo el histórico</option>
-      <option value="7">Últimos 7 días</option>
-      <option value="30">Últimos 30 días</option>
-      <option value="90">Últimos 90 días</option>
-    </select>
-    <select id="aud-filtro-urgencia" onchange="renderAuditoriaArbol()">
-      <option value="">Todas las urgencias</option>
-      <option value="NORMAL">Normal</option>
-      <option value="ALTA">Alta</option>
-      <option value="URGENTE">Urgente</option>
-    </select>
+    <select id="aud-filtro-estado" onchange="renderAuditoriaArbol()"><option value="">Todos los estados</option><option value="PENDIENTE">Pendiente</option><option value="APROBADA">Aprobada</option><option value="RECIBIDA">Recibida</option><option value="RECHAZADA">Rechazada</option><option value="CANCELADA">Cancelada</option></select>
+    <select id="aud-filtro-fecha" onchange="renderAuditoriaArbol()"><option value="">Todo el histórico</option><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option><option value="90">Últimos 90 días</option></select>
+    <select id="aud-filtro-urgencia" onchange="renderAuditoriaArbol()"><option value="">Todas las urgencias</option><option value="NORMAL">Normal</option><option value="ALTA">Alta</option><option value="URGENTE">Urgente</option></select>
   </div>
-
   <div class="aud-arbol" id="aud-arbol"></div>
 </div>
 
-<!-- MODALES -->
 <div class="modal-overlay" id="modal-detalle-solicitud">
   <div class="modal modal-ancho">
     <div class="modal-header"><h2 id="modal-sol-titulo">📋 Solicitud</h2><button class="btn-cerrar-modal" onclick="cerrarModalSolicitud()">✕</button></div>
@@ -641,6 +637,7 @@ let recepcionSeleccionadaSalida = null;
 let reporteActual = null;
 let reporteDatos = [];
 let auditoriaExpandidos = { dirs: new Set(), deptos: new Set(), areas: new Set() };
+let fotosSalidaTemp = {};
 
 // ============================================================
 // HELPERS
@@ -758,9 +755,6 @@ async function cargarTodo() {
   } catch(e) { console.error(e); return false; }
 }
 
-// ============================================================
-// SELECTORES DE DIRECCIÓN
-// ============================================================
 function obtenerDirecciones() {
   return [...new Set(cuentas.map(c => c.direccion).filter(Boolean))].sort();
 }
@@ -1124,10 +1118,6 @@ async function cancelarSolicitud(id) {
   mostrarToast('✅ Cancelada');
   await cargarTodo(); renderMisSolicitudes(); actualizarBadgePendientes();
 }
-
-// ============================================================
-// VER DETALLE SOLICITUD (modal)
-// ============================================================
 function verDetalleSolicitud(id) {
   const s = solicitudes.find(x => x.id === id);
   if (!s) return;
@@ -1353,7 +1343,6 @@ async function registrarRecepcion() {
   let cuentaL1, cuentaL2, deptoPadre;
   let subdeptoPadre = null;
   let subdeptoArea = null;
-  
   if (solVinculo) {
     const s = solicitudes.find(x => x.id === solVinculo);
     if (!s) { mostrarToast('❌ Solicitud no encontrada'); return; }
@@ -1369,36 +1358,25 @@ async function registrarRecepcion() {
     cuentaL1 = subdeptoActualRec.l1 || null;
     cuentaL2 = subdeptoActualRec.l2 || null;
   }
-  
   if (!deptoPadre) { mostrarToast('❌ Sin dirección'); return; }
   if (!subdeptoArea) { mostrarToast('❌ Sin área'); return; }
   if (!carritoRecepcion.length) { mostrarToast('❌ Sin productos'); return; }
-  
   const itemsL1 = carritoRecepcion.filter(p => p.linea === 1);
   const itemsL2 = carritoRecepcion.filter(p => p.linea === 2);
   const totalL1 = itemsL1.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
   const totalL2 = itemsL2.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
   const totalBruto = totalL1 + totalL2;
   const totalNeto = carritoRecepcion.reduce((s, p) => s + p.precio_neto * p.cantidad, 0);
-  
   if (itemsL1.length > 0) {
     if (!cuentaL1) { mostrarToast('❌ No hay cuenta asignada para L1'); return; }
     const dispL1 = calcularDisponibleCuenta(cuentaL1.id);
-    if (totalL1 > dispL1) {
-      mostrarToast(`⛔ Excede disponible L1 · PVC. Cuenta ${cuentaL1.codigo} · Disponible: ${formatearCLP(dispL1)} · Intentado: ${formatearCLP(totalL1)}`, 8000);
-      return;
-    }
+    if (totalL1 > dispL1) { mostrarToast(`⛔ Excede disponible L1 · PVC. Cuenta ${cuentaL1.codigo} · Disponible: ${formatearCLP(dispL1)} · Intentado: ${formatearCLP(totalL1)}`, 8000); return; }
   }
-  
   if (itemsL2.length > 0) {
     if (!cuentaL2) { mostrarToast('❌ No hay cuenta asignada para L2'); return; }
     const dispL2 = calcularDisponibleCuenta(cuentaL2.id);
-    if (totalL2 > dispL2) {
-      mostrarToast(`⛔ Excede disponible L2 · Papelería. Cuenta ${cuentaL2.codigo} · Disponible: ${formatearCLP(dispL2)} · Intentado: ${formatearCLP(totalL2)}`, 8000);
-      return;
-    }
+    if (totalL2 > dispL2) { mostrarToast(`⛔ Excede disponible L2 · Papelería. Cuenta ${cuentaL2.codigo} · Disponible: ${formatearCLP(dispL2)} · Intentado: ${formatearCLP(totalL2)}`, 8000); return; }
   }
-  
   const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
   try {
     const guia = document.getElementById('rec-guia').value.trim();
@@ -1406,7 +1384,6 @@ async function registrarRecepcion() {
     const obs = document.getElementById('rec-obs').value.trim();
     const firma = obtenerFirma(nombreUsuario);
     const cuentaPrincipal = cuentaL1 || cuentaL2;
-    
     const { data: rec, error: e1 } = await sb.from('lc_recepciones').insert({
       proveedor: PROVEEDOR_OFICIAL.razon_social,
       proveedor_rut: PROVEEDOR_OFICIAL.rut,
@@ -1425,7 +1402,6 @@ async function registrarRecepcion() {
       despachada: false
     }).select().single();
     if (e1) throw e1;
-    
     const items = carritoRecepcion.map(p => {
       const cuentaItem = p.linea === 1 ? cuentaL1 : cuentaL2;
       return {
@@ -1442,7 +1418,6 @@ async function registrarRecepcion() {
     });
     const { error: e2 } = await sb.from('lc_recepcion_items').insert(items);
     if (e2) throw e2;
-    
     for (const p of carritoRecepcion) {
       const prod = productos.find(x => x.id === p.producto_id);
       if (prod) {
@@ -1451,15 +1426,9 @@ async function registrarRecepcion() {
         prod.stock = ns;
       }
     }
-    
     if (solVinculo) {
-      await sb.from('lc_solicitudes').update({
-        estado: 'RECIBIDA',
-        fecha_recepcion: new Date().toISOString(),
-        recepcion_id: rec.id
-      }).eq('id', solVinculo);
+      await sb.from('lc_solicitudes').update({ estado: 'RECIBIDA', fecha_recepcion: new Date().toISOString(), recepcion_id: rec.id }).eq('id', solVinculo);
     }
-    
     ultimaRecepcion = {
       id: rec.id, codigo: rec.codigo,
       productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
@@ -1470,18 +1439,10 @@ async function registrarRecepcion() {
       monto_l1: totalL1, monto_l2: totalL2,
       responsable: nombreUsuario, firma, fecha: formatearFecha(rec.fecha)
     };
-    
     mostrarToast(`✅ Recepción ${rec.codigo} registrada`);
     const msg = document.getElementById('rec-mensaje');
     msg.style.display = 'block';
-    msg.innerHTML = `
-      ✅ Recepción <strong>${rec.codigo}</strong> registrada
-      ${totalL1 > 0 ? `<br>📦 L1 · PVC: <strong>${formatearCLP(totalL1)}</strong>` : ''}
-      ${totalL2 > 0 ? `<br>📦 L2 · Papelería: <strong>${formatearCLP(totalL2)}</strong>` : ''}
-      <br>💰 Total: <strong>${formatearCLP(totalBruto)}</strong>
-      <button class="btn-pequeno azul" onclick="descargarPDFRecepcion()" style="margin-left:10px;">📄 PDF</button>
-    `;
-    
+    msg.innerHTML = `✅ Recepción <strong>${rec.codigo}</strong> registrada${totalL1 > 0 ? `<br>📦 L1 · PVC: <strong>${formatearCLP(totalL1)}</strong>` : ''}${totalL2 > 0 ? `<br>📦 L2 · Papelería: <strong>${formatearCLP(totalL2)}</strong>` : ''}<br>💰 Total: <strong>${formatearCLP(totalBruto)}</strong> <button class="btn-pequeno azul" onclick="descargarPDFRecepcion()" style="margin-left:10px;">📄 PDF</button>`;
     carritoRecepcion = [];
     renderCarritoRecepcion();
     document.getElementById('rec-guia').value = '';
@@ -1492,17 +1453,13 @@ async function registrarRecepcion() {
     await cargarTodo();
     renderStock();
     actualizarResumenes();
-    
-  } catch(e) {
-    console.error(e);
-    mostrarToast('❌ ' + (e.message||'Error'));
-  }
+  } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
   btn.disabled = false;
   btn.textContent = '✅ Registrar Recepción';
 }
 
 // ============================================================
-// SALIDA
+// SALIDA CON FOTOS
 // ============================================================
 function salCambiarDireccion() {
   const direccion = document.getElementById('sal-depto-padre').value;
@@ -1511,25 +1468,11 @@ function salCambiarDireccion() {
   const detalle = document.getElementById('sal-detalle');
   detalle.style.display = 'none';
   recepcionSeleccionadaSalida = null;
-  
-  if (!direccion) {
-    wrapRecep.style.display = 'none';
-    selRecep.innerHTML = '<option value="">— Selecciona una recepción —</option>';
-    return;
-  }
-  
-  const pendientes = recepciones.filter(r => 
-    !r.despachada && 
-    (r.departamento === direccion || r.departamento_padre === direccion)
-  );
-  
+  fotosSalidaTemp = {};
+  if (!direccion) { wrapRecep.style.display = 'none'; selRecep.innerHTML = '<option value="">— Selecciona una recepción —</option>'; return; }
+  const pendientes = recepciones.filter(r => !r.despachada && (r.departamento === direccion || r.departamento_padre === direccion));
   wrapRecep.style.display = 'block';
-  
-  if (!pendientes.length) {
-    selRecep.innerHTML = '<option value="">— No hay recepciones pendientes de despacho —</option>';
-    return;
-  }
-  
+  if (!pendientes.length) { selRecep.innerHTML = '<option value="">— No hay recepciones pendientes de despacho —</option>'; return; }
   selRecep.innerHTML = '<option value="">— Selecciona una recepción —</option>' + pendientes.map(r => {
     const totalItems = recepcionItems.filter(i => i.recepcion_id === r.id).reduce((s, i) => s + Number(i.cantidad||0), 0);
     return `<option value="${r.id}">${escaparHtml(r.codigo)} · ${r.fecha_fmt} · ${totalItems} uds · ${formatearCLP(r.monto_total_bruto||0)}</option>`;
@@ -1545,63 +1488,62 @@ function salCargarRecepcion() {
   const listaL2 = document.getElementById('sal-lista-l2');
   const totalL1 = document.getElementById('sal-total-l1');
   const totalL2 = document.getElementById('sal-total-l2');
-  
-  if (!id) { detalle.style.display = 'none'; recepcionSeleccionadaSalida = null; return; }
+  if (!id) { detalle.style.display = 'none'; recepcionSeleccionadaSalida = null; fotosSalidaTemp = {}; return; }
   const r = recepciones.find(x => x.id === id);
   if (!r) return;
   recepcionSeleccionadaSalida = r;
-  
+  fotosSalidaTemp = {};
   const items = recepcionItems.filter(i => i.recepcion_id === id);
   const cuentasRecepcion = [...new Set(items.map(i => i.cuenta_id).filter(Boolean))].map(cid => cuentas.find(c => c.id === cid)).filter(Boolean);
-  const cuentasInfo = cuentasRecepcion.map(c => 
-    `💰 <strong>${escaparHtml(c.direccion)} · ${escaparHtml(c.subdepartamento)} · L${c.linea}</strong> (${escaparHtml(c.codigo)})`
-  ).join('<br>');
-  
-  infoRecep.innerHTML = `
-    <div style="font-weight:700; color:var(--azul); font-size:13px; margin-bottom:4px;">📥 Recepción ${escaparHtml(r.codigo)}</div>
-    <div>📅 Fecha: <strong>${r.fecha_fmt}</strong></div>
-    <div>🏭 Proveedor: <strong>${escaparHtml(r.proveedor||'N/E')}</strong></div>
-    ${r.numero_guia ? `<div>📄 Guía: <strong>${escaparHtml(r.numero_guia)}</strong></div>` : ''}
-    ${cuentasInfo}
-    <div>💵 Monto bruto: <strong>${formatearCLP(r.monto_total_bruto||0)}</strong></div>
-  `;
-  
+  const cuentasInfo = cuentasRecepcion.map(c => `💰 <strong>${escaparHtml(c.direccion)} · ${escaparHtml(c.subdepartamento)} · L${c.linea}</strong> (${escaparHtml(c.codigo)})`).join('<br>');
+  infoRecep.innerHTML = `<div style="font-weight:700; color:var(--azul); font-size:13px; margin-bottom:4px;">📥 Recepción ${escaparHtml(r.codigo)}</div><div>📅 Fecha: <strong>${r.fecha_fmt}</strong></div><div>🏭 Proveedor: <strong>${escaparHtml(r.proveedor||'N/E')}</strong></div>${r.numero_guia ? `<div>📄 Guía: <strong>${escaparHtml(r.numero_guia)}</strong></div>` : ''}${cuentasInfo}<div>💵 Monto bruto: <strong>${formatearCLP(r.monto_total_bruto||0)}</strong></div>`;
   const itemsL1 = [];
   const itemsL2 = [];
   items.forEach(it => {
     const p = productos.find(x => x.id === it.producto_id);
     if (!p) return;
-    const row = {
-      producto_id: it.producto_id,
-      nombre: p.nombre,
-      cantidad: Number(it.cantidad),
-      precio_neto: Number(it.precio_neto || p.precio_neto),
-      subtotal_bruto: Number(it.subtotal_bruto || (Number(it.precio_neto || p.precio_neto) * 1.19 * Number(it.cantidad)))
-    };
+    const row = { item_id: it.id, producto_id: it.producto_id, nombre: p.nombre, cantidad: Number(it.cantidad), precio_neto: Number(it.precio_neto || p.precio_neto), subtotal_bruto: Number(it.subtotal_bruto || (Number(it.precio_neto || p.precio_neto) * 1.19 * Number(it.cantidad))) };
     if (p.linea === 1) itemsL1.push(row); else itemsL2.push(row);
   });
-  
   const renderFila = (x) => `
-    <div class="articulo-fila">
+    <div class="articulo-fila" style="grid-template-columns:1fr auto auto auto;gap:10px;">
       <div class="nombre">${escaparHtml(x.nombre)}</div>
       <div class="cant">${x.cantidad} ud${x.cantidad === 1 ? '' : 's'}</div>
       <div class="monto">${formatearCLP(x.subtotal_bruto)}</div>
+      <div style="text-align:right;">
+        <input type="file" id="foto-${x.item_id}" accept="image/jpeg" style="display:none;" onchange="subirFotoSalida('${x.item_id}', event)">
+        <div id="foto-info-${x.item_id}">
+          <button class="btn-pequeno morado" onclick="document.getElementById('foto-${x.item_id}').click()">📷 Subir foto</button>
+        </div>
+      </div>
     </div>
   `;
-  
-  if (itemsL1.length) {
-    bloqueL1.style.display = 'block';
-    listaL1.innerHTML = itemsL1.map(renderFila).join('');
-    totalL1.textContent = 'Subtotal L1: ' + formatearCLP(itemsL1.reduce((s, x) => s + x.subtotal_bruto, 0));
-  } else bloqueL1.style.display = 'none';
-  
-  if (itemsL2.length) {
-    bloqueL2.style.display = 'block';
-    listaL2.innerHTML = itemsL2.map(renderFila).join('');
-    totalL2.textContent = 'Subtotal L2: ' + formatearCLP(itemsL2.reduce((s, x) => s + x.subtotal_bruto, 0));
-  } else bloqueL2.style.display = 'none';
-  
+  if (itemsL1.length) { bloqueL1.style.display = 'block'; listaL1.innerHTML = itemsL1.map(renderFila).join(''); totalL1.textContent = 'Subtotal L1: ' + formatearCLP(itemsL1.reduce((s, x) => s + x.subtotal_bruto, 0)); } else bloqueL1.style.display = 'none';
+  if (itemsL2.length) { bloqueL2.style.display = 'block'; listaL2.innerHTML = itemsL2.map(renderFila).join(''); totalL2.textContent = 'Subtotal L2: ' + formatearCLP(itemsL2.reduce((s, x) => s + x.subtotal_bruto, 0)); } else bloqueL2.style.display = 'none';
   detalle.style.display = 'block';
+}
+async function subirFotoSalida(itemId, event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { mostrarToast('❌ La foto excede los 3 MB'); event.target.value = ''; return; }
+  if (!file.type.startsWith('image/')) { mostrarToast('❌ Solo se aceptan imágenes JPG'); event.target.value = ''; return; }
+  const infoDiv = document.getElementById(`foto-info-${itemId}`);
+  if (infoDiv) infoDiv.innerHTML = '<span style="font-size:11px;color:var(--texto-gris);">⏳ Subiendo...</span>';
+  try {
+    const nombreArchivo = `${Date.now()}_${itemId.substring(0,8)}.jpg`;
+    const path = `salidas/${nombreArchivo}`;
+    const { error } = await sb.storage.from('lc-salidas-fotos').upload(path, file, { contentType: 'image/jpeg', upsert: false });
+    if (error) throw error;
+    const { data: urlData } = sb.storage.from('lc-salidas-fotos').getPublicUrl(path);
+    fotosSalidaTemp[itemId] = urlData.publicUrl;
+    if (infoDiv) infoDiv.innerHTML = `<div style="display:flex;gap:6px;align-items:center;justify-content:flex-end;"><img src="${urlData.publicUrl}" class="foto-salida-thumb"><button class="btn-pequeno rojo" onclick="quitarFotoSalida('${itemId}')" title="Quitar">✕</button></div>`;
+    mostrarToast('✅ Foto subida');
+  } catch(e) { console.error(e); mostrarToast('❌ Error al subir: ' + (e.message || 'Error')); if (infoDiv) infoDiv.innerHTML = `<button class="btn-pequeno morado" onclick="document.getElementById('foto-${itemId}').click()">📷 Subir foto</button>`; }
+}
+function quitarFotoSalida(itemId) {
+  delete fotosSalidaTemp[itemId];
+  const infoDiv = document.getElementById(`foto-info-${itemId}`);
+  if (infoDiv) infoDiv.innerHTML = `<button class="btn-pequeno morado" onclick="document.getElementById('foto-${itemId}').click()">📷 Subir foto</button>`;
 }
 async function registrarSalida() {
   if (!recepcionSeleccionadaSalida) { mostrarToast('❌ Selecciona una recepción'); return; }
@@ -1611,49 +1553,46 @@ async function registrarSalida() {
   const obs = document.getElementById('sal-obs').value.trim();
   if (!receptor) { mostrarToast('❌ Ingresa el nombre del receptor'); return; }
   if (!receptorRut) { mostrarToast('❌ Ingresa el RUT del receptor'); return; }
-  
   const r = recepcionSeleccionadaSalida;
   const items = recepcionItems.filter(i => i.recepcion_id === r.id);
   for (const it of items) {
     const prod = productos.find(x => x.id === it.producto_id);
-    if (!prod || Number(prod.stock||0) < Number(it.cantidad)) {
-      mostrarToast(`❌ Stock insuficiente: ${prod?.nombre||'producto'}`); return;
-    }
+    if (!prod || Number(prod.stock||0) < Number(it.cantidad)) { mostrarToast(`❌ Stock insuficiente: ${prod?.nombre||'producto'}`); return; }
   }
-  
+  const itemsSinFoto = items.filter(it => !fotosSalidaTemp[it.id]);
+  if (itemsSinFoto.length > 0) {
+    const nombres = itemsSinFoto.map(it => { const p = productos.find(x => x.id === it.producto_id); return p?.nombre || 'N/E'; });
+    mostrarToast(`❌ Faltan fotos de ${itemsSinFoto.length} producto(s): ${nombres.join(', ')}`, 8000);
+    const primerId = itemsSinFoto[0].id;
+    const elem = document.getElementById(`foto-info-${primerId}`);
+    if (elem) elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
   const btn = event.target; btn.disabled = true; btn.textContent = '⏳';
   try {
     const totalNeto = Number(r.monto_total || 0);
     const totalBruto = Number(r.monto_total_bruto || 0);
     const firma = obtenerFirma(nombreUsuario);
-    
     const { data: sal, error: e1 } = await sb.from('lc_salidas').insert({
       departamento: r.departamento,
       departamento_padre: r.departamento_padre || r.departamento,
       subdepartamento_padre: r.subdepartamento_padre || null,
       subdepartamento: r.subdepartamento || null,
-      receptor_nombre: receptor,
-      receptor_rut: receptorRut,
-      receptor_email: receptorEmail || null,
-      observacion: obs || null,
-      responsable: nombreUsuario,
-      monto_total: totalNeto,
-      monto_total_bruto: totalBruto,
-      iva_total: totalBruto - totalNeto,
-      entregado_por_nombre: firma.nombre,
-      entregado_por_cargo: firma.cargo,
+      receptor_nombre: receptor, receptor_rut: receptorRut, receptor_email: receptorEmail || null,
+      observacion: obs || null, responsable: nombreUsuario,
+      monto_total: totalNeto, monto_total_bruto: totalBruto, iva_total: totalBruto - totalNeto,
+      entregado_por_nombre: firma.nombre, entregado_por_cargo: firma.cargo,
       recepcion_origen_id: r.id
     }).select().single();
     if (e1) throw e1;
-    
     const itemsInsert = items.map(it => ({
       salida_id: sal.id, producto_id: it.producto_id, cantidad: it.cantidad,
       precio_neto: it.precio_neto, precio_bruto: it.precio_bruto,
-      subtotal: it.subtotal, subtotal_bruto: it.subtotal_bruto, iva: it.iva
+      subtotal: it.subtotal, subtotal_bruto: it.subtotal_bruto, iva: it.iva,
+      foto_url: fotosSalidaTemp[it.id] || null
     }));
     const { error: e2 } = await sb.from('lc_salida_items').insert(itemsInsert);
     if (e2) throw e2;
-    
     for (const it of items) {
       const prod = productos.find(x => x.id === it.producto_id);
       if (prod) {
@@ -1662,48 +1601,36 @@ async function registrarSalida() {
         prod.stock = ns;
       }
     }
-    
-    const { error: e3 } = await sb.from('lc_recepciones').update({
-      despachada: true,
-      fecha_despacho: new Date().toISOString(),
-      salida_id: sal.id
-    }).eq('id', r.id);
+    const { error: e3 } = await sb.from('lc_recepciones').update({ despachada: true, fecha_despacho: new Date().toISOString(), salida_id: sal.id }).eq('id', r.id);
     if (e3) throw e3;
-    
     ultimaSalida = {
       id: sal.id, codigo: sal.codigo,
       productos: items.map(it => {
         const p = productos.find(x => x.id === it.producto_id);
-        return { producto_id: it.producto_id, nombre: p?.nombre || 'N/E', linea: p?.linea || 1, cantidad: Number(it.cantidad), precio_neto: Number(it.precio_neto), precio_bruto: Number(it.precio_bruto), subtotal_bruto: Number(it.subtotal_bruto) };
+        return { producto_id: it.producto_id, nombre: p?.nombre || 'N/E', linea: p?.linea || 1, cantidad: Number(it.cantidad), precio_neto: Number(it.precio_neto), precio_bruto: Number(it.precio_bruto), subtotal_bruto: Number(it.subtotal_bruto), foto_url: fotosSalidaTemp[it.id] || null };
       }),
-      departamento: r.departamento,
-      departamento_padre: r.departamento_padre || r.departamento,
-      subdepartamento_padre: r.subdepartamento_padre,
-      subdepartamento: r.subdepartamento,
+      departamento: r.departamento, departamento_padre: r.departamento_padre || r.departamento,
+      subdepartamento_padre: r.subdepartamento_padre, subdepartamento: r.subdepartamento,
       receptor, receptor_email: receptorEmail, receptor_rut: receptorRut, obs,
       responsable: nombreUsuario, firma,
       monto_total: totalNeto, monto_total_bruto: totalBruto,
-      fecha: formatearFecha(sal.fecha),
-      recepcion_origen: r.codigo
+      fecha: formatearFecha(sal.fecha), recepcion_origen: r.codigo
     };
-    
     mostrarToast(`✅ Salida ${sal.codigo} registrada`);
     const msg = document.getElementById('sal-mensaje');
     msg.style.display = 'block';
-    msg.innerHTML = `✅ Salida <strong>${sal.codigo}</strong> desde recepción <strong>${r.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFSalida()" style="margin-left:10px;">📄 PDF</button>`;
-    
+    msg.innerHTML = `✅ Salida <strong>${sal.codigo}</strong> desde recepción <strong>${r.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFSalida()" style="margin-left:10px;">📄 PDF con fotos</button>`;
     document.getElementById('sal-receptor').value = '';
     document.getElementById('sal-receptor-rut').value = '';
     document.getElementById('sal-receptor-email').value = '';
     document.getElementById('sal-obs').value = '';
     document.getElementById('sal-detalle').style.display = 'none';
     document.getElementById('sal-recepcion-sel').value = '';
-    
+    fotosSalidaTemp = {};
     await cargarTodo();
     renderStock();
     actualizarResumenes();
     salCambiarDireccion();
-    
   } catch(e) { console.error(e); mostrarToast('❌ ' + (e.message||'Error')); }
   btn.disabled = false; btn.textContent = '✅ Registrar Salida';
 }
@@ -1776,205 +1703,147 @@ function renderCuentas() {
 }
 
 // ============================================================
-// REPORTES (con vista previa en pantalla)
+// FINANZAS
 // ============================================================
-function renderReportes() {
-  const t = document.getElementById('rep-total-productos');
-  if (!t) return;
-  t.textContent = productos.length;
-  const tu = productos.reduce((s, p) => s + Number(p.stock||0), 0);
-  const tv = productos.reduce((s, p) => s + Number(p.stock||0) * precioBruto(p.precio_neto), 0);
-  document.getElementById('rep-total-unidades').textContent = tu;
-  document.getElementById('rep-valor-stock').textContent = formatearCLP(tv);
-  document.getElementById('rep-total-cuentas').textContent = cuentas.length;
+function poblarFiltrosFinanzas() {
+  const sel = document.getElementById('fin-filtro-direccion');
+  if (!sel) return;
+  const dirs = [...new Set(cuentas.map(c => c.direccion).filter(Boolean))].sort();
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Todas las direcciones</option>' + dirs.map(d => `<option value="${escaparHtml(d)}">${escaparHtml(d)}</option>`).join('');
+  sel.value = cur;
 }
-function verReporte(tipo) {
-  reporteActual = tipo;
-  const cont = document.getElementById('rep-detalle');
-  const titulo = document.getElementById('rep-detalle-titulo');
-  const thead = document.getElementById('rep-detalle-thead');
-  const tbody = document.getElementById('rep-detalle-tbody');
-  const filtro = document.getElementById('rep-detalle-filtro');
-  filtro.value = '';
-  cont.style.display = 'block';
-
-  if (tipo === 'stock') {
-    titulo.textContent = '📊 STOCK ACTUAL';
-    thead.innerHTML = '<tr><th>Producto</th><th>L</th><th style="text-align:right;">Neto</th><th style="text-align:right;">IVA</th><th style="text-align:right;">Bruto</th><th style="text-align:right;">Stock</th><th style="text-align:right;">Valor Total</th></tr>';
-    reporteDatos = productos.map(p => {
-      const pb = precioBruto(p.precio_neto);
-      const st = Number(p.stock);
-      return { tipo:'stock', nombre: p.nombre, linea: 'L' + p.linea, neto: Number(p.precio_neto), iva: pb - Number(p.precio_neto), bruto: pb, stock: st, valor: st * pb, txt: `${p.nombre} L${p.linea}` };
-    });
-  } else if (tipo === 'recepciones') {
-    titulo.textContent = '📥 RECEPCIONES';
-    thead.innerHTML = '<tr><th>Recepción</th><th>Fecha</th><th>Dirección</th><th>Proveedor</th><th>L</th><th>Producto</th><th style="text-align:right;">Cant.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
-    reporteDatos = [];
-    recepciones.forEach(r => {
-      const its = recepcionItems.filter(i => i.recepcion_id === r.id);
-      its.forEach(it => {
-        const p = productos.find(x => x.id === it.producto_id);
-        reporteDatos.push({
-          tipo:'recepciones',
-          codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '', proveedor: r.proveedor || '',
-          linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E',
-          cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0),
-          responsable: r.responsable || '',
-          txt: `${r.codigo} ${r.departamento} ${r.proveedor} ${p?.nombre||''}`
-        });
-      });
-    });
-  } else if (tipo === 'salidas') {
-    titulo.textContent = '📤 SALIDAS';
-    thead.innerHTML = '<tr><th>Salida</th><th>Fecha</th><th>Dirección</th><th>Receptor</th><th>L</th><th>Producto</th><th style="text-align:right;">Cant.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
-    reporteDatos = [];
-    salidas.forEach(s => {
-      const its = salidaItems.filter(i => i.salida_id === s.id);
-      its.forEach(it => {
-        const p = productos.find(x => x.id === it.producto_id);
-        reporteDatos.push({
-          tipo:'salidas',
-          codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento || '', receptor: s.receptor_nombre || '',
-          linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E',
-          cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0),
-          txt: `${s.codigo} ${s.departamento} ${s.receptor_nombre} ${p?.nombre||''}`
-        });
-      });
-    });
-  } else if (tipo === 'cuentas') {
-    titulo.textContent = '💰 CUENTAS Y PRESUPUESTO';
-    thead.innerHTML = '<tr><th>Dirección</th><th>Depto</th><th>Área</th><th>L</th><th>Cuenta</th><th style="text-align:right;">Asignado</th><th style="text-align:right;">Reservado</th><th style="text-align:right;">Consumido</th><th style="text-align:right;">Disponible</th></tr>';
-    reporteDatos = cuentas.map(c => {
-      const cons = calcularConsumidoCuenta(c.id);
-      const res = calcularReservadoCuenta(c.id);
-      const disp = Number(c.monto_asignado) - cons - res;
-      return {
-        tipo: 'cuentas',
-        direccion: c.direccion, depto: c.departamento_padre || '—', area: c.subdepartamento,
-        linea: 'L' + c.linea, cuenta: c.codigo,
-        asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: disp,
-        txt: `${c.direccion} ${c.subdepartamento} L${c.linea}`
-      };
-    });
-  } else if (tipo === 'solicitudes') {
-    titulo.textContent = '📋 SOLICITUDES';
-    thead.innerHTML = '<tr><th>Solicitud</th><th>Fecha</th><th>Dirección</th><th>Solicitante</th><th>Estado</th><th>L</th><th>Producto</th><th style="text-align:right;">Cant.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
-    reporteDatos = [];
-    solicitudes.forEach(s => {
-      const its = solicitudItems.filter(i => i.solicitud_id === s.id);
-      its.forEach(it => {
-        const p = productos.find(x => x.id === it.producto_id);
-        const pNeto = Number(it.precio_estimado||0);
-        const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
-        reporteDatos.push({
-          tipo:'solicitudes',
-          codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento_padre || '', solicitante: s.solicitante_nombre||s.solicitante_email, estado: s.estado,
-          linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E',
-          cantidad: Number(it.cantidad||0), neto: pNeto * Number(it.cantidad||0), bruto: pBruto * Number(it.cantidad||0),
-          txt: `${s.codigo} ${s.departamento_padre} ${s.solicitante_nombre} ${s.estado} ${p?.nombre||''}`
-        });
-      });
-    });
-  }
-  filtrarReporte();
+function limpiarFiltrosFinanzas() {
+  document.getElementById('fin-fecha-desde').value = '';
+  document.getElementById('fin-fecha-hasta').value = '';
+  document.getElementById('fin-filtro-direccion').value = '';
+  document.getElementById('fin-filtro-linea').value = '';
+  renderFinanzas();
 }
-function filtrarReporte() {
-  if (!reporteActual) return;
-  const filtro = document.getElementById('rep-detalle-filtro').value.toLowerCase().trim();
-  const tbody = document.getElementById('rep-detalle-tbody');
-  let lista = reporteDatos.filter(d => !filtro || (d.txt||'').toLowerCase().includes(filtro));
-  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin datos</td></tr>'; document.getElementById('rep-detalle-total').textContent = '0'; return; }
-  if (reporteActual === 'stock') {
-    let tu = 0, tv = 0;
-    tbody.innerHTML = lista.map(d => {
-      tu += d.stock; tv += d.valor;
-      const color = d.stock === 0 ? 'var(--rojo)' : d.stock <= 3 ? 'var(--naranja)' : 'var(--texto-oscuro)';
-      return `<tr><td><strong>${escaparHtml(d.nombre)}</strong></td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td>
-        <td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;">${formatearCLP(d.iva)}</td><td style="text-align:right;">${formatearCLP(d.bruto)}</td>
-        <td style="text-align:right;font-weight:700;color:${color};">${d.stock}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.valor)}</td></tr>`;
-    }).join('');
-    document.getElementById('rep-detalle-total').textContent = `${lista.length} productos · ${tu} unid · ${formatearCLP(tv)}`;
-  } else if (reporteActual === 'recepciones' || reporteActual === 'salidas') {
-    let tc = 0, tn = 0, tb = 0;
-    tbody.innerHTML = lista.map(d => {
-      tc += d.cantidad; tn += d.neto; tb += d.bruto;
-      const col = reporteActual === 'recepciones' ? 'recepcion' : 'salida';
-      const receptorOProv = d.receptor || d.proveedor || '';
-      return `<tr>
-        <td><strong>${escaparHtml(d.codigo)}</strong></td>
-        <td style="font-size:11px;">${d.fecha}</td>
-        <td style="font-size:11px;">${escaparHtml(d.depto)}</td>
-        <td style="font-size:11px;">${escaparHtml(receptorOProv)}</td>
-        <td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td>
-        <td style="font-size:11px;">${escaparHtml(d.producto)}</td>
-        <td style="text-align:right;">${d.cantidad}</td>
-        <td style="text-align:right;">${formatearCLP(d.neto)}</td>
-        <td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td>
-      </tr>`;
-    }).join('');
-    document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} uds · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
-  } else if (reporteActual === 'cuentas') {
-    let ta = 0, tr = 0, tc = 0;
-    tbody.innerHTML = lista.map(d => {
-      ta += d.asignado; tr += d.reservado; tc += d.consumido;
-      return `<tr>
-        <td style="font-size:11px;">${escaparHtml(d.direccion)}</td>
-        <td style="font-size:11px;">${escaparHtml(d.depto)}</td>
-        <td style="font-size:11px;">${escaparHtml(d.area)}</td>
-        <td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td>
-        <td style="font-size:11px;">${escaparHtml(d.cuenta)}</td>
-        <td style="text-align:right;">${formatearCLP(d.asignado)}</td>
-        <td style="text-align:right;color:var(--naranja);">${formatearCLP(d.reservado)}</td>
-        <td style="text-align:right;color:var(--azul);">${formatearCLP(d.consumido)}</td>
-        <td style="text-align:right;font-weight:700;color:${d.disponible>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(d.disponible)}</td>
-      </tr>`;
-    }).join('');
-    document.getElementById('rep-detalle-total').textContent = `${lista.length} cuentas · Asignado: ${formatearCLP(ta)} · Reservado: ${formatearCLP(tr)} · Consumido: ${formatearCLP(tc)}`;
-  } else if (reporteActual === 'solicitudes') {
-    let tc = 0, tn = 0, tb = 0;
-    tbody.innerHTML = lista.map(d => {
-      tc += d.cantidad; tn += d.neto; tb += d.bruto;
-      return `<tr>
-        <td><strong>${escaparHtml(d.codigo)}</strong></td>
-        <td style="font-size:11px;">${d.fecha}</td>
-        <td style="font-size:11px;">${escaparHtml(d.depto)}</td>
-        <td style="font-size:11px;">${escaparHtml(d.solicitante)}</td>
-        <td style="text-align:center;"><span class="badge-estado ${claseEstado(d.estado)}">${iconoEstado(d.estado)} ${d.estado}</span></td>
-        <td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td>
-        <td style="font-size:11px;">${escaparHtml(d.producto)}</td>
-        <td style="text-align:right;">${d.cantidad}</td>
-        <td style="text-align:right;">${formatearCLP(d.neto)}</td>
-        <td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td>
-      </tr>`;
-    }).join('');
-    document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} uds · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
-  }
+function finPasaFiltro(fecha, direccion, linea) {
+  const desde = document.getElementById('fin-fecha-desde').value;
+  const hasta = document.getElementById('fin-fecha-hasta').value;
+  const dir = document.getElementById('fin-filtro-direccion').value;
+  const lin = document.getElementById('fin-filtro-linea').value;
+  if (desde && fecha) { const f = new Date(fecha).toISOString().substring(0, 10); if (f < desde) return false; }
+  if (hasta && fecha) { const f = new Date(fecha).toISOString().substring(0, 10); if (f > hasta) return false; }
+  if (dir && direccion !== dir) return false;
+  if (lin && String(linea) !== lin) return false;
+  return true;
 }
-function actualizarResumenes() {
-  const hoy = recepciones.filter(r => esHoy(r.fecha_fmt));
-  const rrh = document.getElementById('res-rec-hoy');
-  if (rrh) {
-    rrh.textContent = hoy.length;
-    document.getElementById('res-rec-unidades').textContent = hoy.reduce((s, r) => s + recepcionItems.filter(ri => ri.recepcion_id === r.id).reduce((a, x) => a + Number(x.cantidad||0), 0), 0);
-    document.getElementById('res-rec-monto').textContent = formatearCLP(hoy.reduce((s, r) => s + Number(r.monto_total_bruto||0), 0));
-    const cr = productos.filter(p => Number(p.stock||0) <= 3 && Number(p.stock||0) > 0).length;
-    document.getElementById('res-stock-critico').textContent = cr;
-    document.getElementById('res-stock-critico2').textContent = cr;
-    const hSal = salidas.filter(s => esHoy(s.fecha_fmt));
-    document.getElementById('res-sal-hoy').textContent = hSal.length;
-    document.getElementById('res-sal-unidades').textContent = hSal.reduce((s, x) => s + salidaItems.filter(si => si.salida_id === x.id).reduce((a, y) => a + Number(y.cantidad||0), 0), 0);
-    document.getElementById('res-sal-prods').textContent = productos.filter(p => Number(p.stock||0) > 0).length;
-  }
-  if (esAdmin()) renderReportes();
+function calcularFinanzas() {
+  let recUds = 0, recNeto = 0, recIva = 0, recBruto = 0;
+  recepciones.forEach(r => {
+    recepcionItems.filter(i => i.recepcion_id === r.id).forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      const linea = p?.linea || 1;
+      if (!finPasaFiltro(r.fecha, r.departamento, linea)) return;
+      recUds += Number(it.cantidad || 0); recNeto += Number(it.subtotal || 0); recIva += Number(it.iva || 0); recBruto += Number(it.subtotal_bruto || 0);
+    });
+  });
+  let entUds = 0, entNeto = 0, entIva = 0, entBruto = 0;
+  salidas.forEach(s => {
+    salidaItems.filter(i => i.salida_id === s.id).forEach(it => {
+      const p = productos.find(x => x.id === it.producto_id);
+      const linea = p?.linea || 1;
+      if (!finPasaFiltro(s.fecha, s.departamento, linea)) return;
+      entUds += Number(it.cantidad || 0); entNeto += Number(it.subtotal || 0); entIva += Number(it.iva || 0); entBruto += Number(it.subtotal_bruto || 0);
+    });
+  });
+  const porProducto = {};
+  recepcionItems.forEach(it => {
+    const r = recepciones.find(x => x.id === it.recepcion_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!r || !p) return;
+    if (!finPasaFiltro(r.fecha, r.departamento, p.linea)) return;
+    if (!porProducto[it.producto_id]) porProducto[it.producto_id] = { rec: 0, ent: 0, precioNeto: Number(it.precio_neto||0) };
+    porProducto[it.producto_id].rec += Number(it.cantidad || 0);
+  });
+  salidaItems.forEach(it => {
+    const s = salidas.find(x => x.id === it.salida_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!s || !p) return;
+    if (!finPasaFiltro(s.fecha, s.departamento, p.linea)) return;
+    if (!porProducto[it.producto_id]) porProducto[it.producto_id] = { rec: 0, ent: 0, precioNeto: Number(it.precio_neto||0) };
+    porProducto[it.producto_id].ent += Number(it.cantidad || 0);
+  });
+  let pendUds = 0, pendNeto = 0, pendIva = 0, pendBruto = 0;
+  Object.values(porProducto).forEach(x => {
+    const pend = x.rec - x.ent;
+    if (pend > 0) { const n = x.precioNeto * pend; pendUds += pend; pendNeto += n; pendIva += n * IVA; pendBruto += n * (1 + IVA); }
+  });
+  return {
+    rec: { uds: recUds, neto: recNeto, iva: recIva, bruto: recBruto },
+    ent: { uds: entUds, neto: entNeto, iva: entIva, bruto: entBruto },
+    pend: { uds: pendUds, neto: Math.round(pendNeto), iva: Math.round(pendIva), bruto: Math.round(pendBruto) }
+  };
+}
+function renderFinanzas() {
+  poblarFiltrosFinanzas();
+  const ef = calcularFinanzas();
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('fin-num-rec', formatearCLP(ef.rec.bruto)); set('fin-uds-rec', ef.rec.uds + ' uds');
+  set('fin-num-ent', formatearCLP(ef.ent.bruto)); set('fin-uds-ent', ef.ent.uds + ' uds');
+  set('fin-num-pend', formatearCLP(ef.pend.bruto)); set('fin-uds-pend', ef.pend.uds + ' uds');
+  set('fin-num-bod', formatearCLP(ef.pend.bruto)); set('fin-uds-bod', ef.pend.uds + ' uds');
+  const tbody = document.getElementById('fin-resumen-tbody');
+  if (!tbody) return;
+  const fila = (icono, label, x, color) => `<tr><td><span style="font-weight:700;color:${color};">${icono} ${label}</span></td><td style="text-align:right;font-weight:700;">${x.uds}</td><td style="text-align:right;">${formatearCLP(x.neto)}</td><td style="text-align:right;">${formatearCLP(x.iva)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(x.bruto)}</td></tr>`;
+  tbody.innerHTML = fila('📥', 'Recepcionado', ef.rec, 'var(--verde)') + fila('📤', 'Entregado', ef.ent, 'var(--rojo)') + fila('⏳', 'Pendiente de entrega', ef.pend, 'var(--naranja)') + fila('📦', 'En bodega', ef.pend, 'var(--azul)');
+  renderDetalleProductosFin();
+}
+function renderDetalleProductosFin() {
+  const tbody = document.getElementById('fin-prod-tbody');
+  if (!tbody) return;
+  const filtro = (document.getElementById('fin-prod-filtro')?.value || '').toLowerCase().trim();
+  const porProducto = {};
+  productos.forEach(p => { porProducto[p.id] = { nombre: p.nombre, linea: p.linea, rec: 0, ent: 0, precioNeto: Number(p.precio_neto||0) }; });
+  recepcionItems.forEach(it => {
+    const r = recepciones.find(x => x.id === it.recepcion_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!r || !p) return;
+    if (!finPasaFiltro(r.fecha, r.departamento, p.linea)) return;
+    if (porProducto[it.producto_id]) porProducto[it.producto_id].rec += Number(it.cantidad || 0);
+  });
+  salidaItems.forEach(it => {
+    const s = salidas.find(x => x.id === it.salida_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!s || !p) return;
+    if (!finPasaFiltro(s.fecha, s.departamento, p.linea)) return;
+    if (porProducto[it.producto_id]) porProducto[it.producto_id].ent += Number(it.cantidad || 0);
+  });
+  let lista = Object.values(porProducto).filter(x => x.rec > 0 || x.ent > 0);
+  if (filtro) lista = lista.filter(x => x.nombre.toLowerCase().includes(filtro));
+  lista.sort((a, b) => a.nombre.localeCompare(b.nombre));
+  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin movimientos</td></tr>'; document.getElementById('fin-prod-total').textContent = '0 productos'; return; }
+  let totalBruto = 0, totalRec = 0, totalEnt = 0, totalPend = 0, totalBod = 0;
+  tbody.innerHTML = lista.map(x => {
+    const pend = x.rec - x.ent;
+    const bod = pend > 0 ? pend : 0;
+    const bruto = x.precioNeto * (1 + IVA);
+    const montoBruto = x.rec * bruto;
+    totalBruto += montoBruto; totalRec += x.rec; totalEnt += x.ent;
+    totalPend += pend > 0 ? pend : 0; totalBod += bod;
+    const colorPend = pend > 0 ? 'var(--naranja)' : 'var(--texto-gris)';
+    return `<tr>
+      <td><strong>${escaparHtml(x.nombre)}</strong></td>
+      <td><span class="badge-linea l${x.linea}">L${x.linea}</span></td>
+      <td style="text-align:right;">${x.rec}</td>
+      <td style="text-align:right;">${x.ent}</td>
+      <td style="text-align:right;color:${colorPend};font-weight:700;">${pend > 0 ? pend : 0}</td>
+      <td style="text-align:right;">${bod}</td>
+      <td style="text-align:right;font-weight:700;">${formatearCLP(montoBruto)}</td>
+      <td style="text-align:right;font-weight:700;">${formatearCLP(x.ent * bruto)}</td>
+      <td style="text-align:right;font-weight:700;color:${colorPend};">${formatearCLP(bod * bruto)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('fin-prod-total').textContent = `${lista.length} productos · Recib: ${totalRec} · Entreg: ${totalEnt} · Pend: ${totalPend} · Bodega: ${totalBod} · Total: ${formatearCLP(totalBruto)}`;
 }
 
 // ============================================================
-// AUDITORÍA (árbol + timeline)
+// AUDITORÍA
 // ============================================================
-function renderAuditoria() {
-  renderAuditoriaResumen();
-  renderAuditoriaArbol();
-}
+function renderAuditoria() { renderAuditoriaResumen(); renderAuditoriaArbol(); }
 function renderAuditoriaResumen() {
   const totalSol = solicitudes.length;
   const pend = solicitudes.filter(s => s.estado === 'PENDIENTE').length;
@@ -1986,7 +1855,6 @@ function renderAuditoriaResumen() {
   const montoRec = recepciones.reduce((s, r) => s + Number(r.monto_total_bruto||0), 0);
   const totalSal = salidas.length;
   const montoSal = salidas.reduce((s, x) => s + Number(x.monto_total_bruto||0), 0);
-  
   const numSol = document.getElementById('aud-num-sol');
   if (!numSol) return;
   numSol.textContent = totalSol;
@@ -2005,102 +1873,46 @@ function renderAuditoriaArbol() {
   const filtroEstado = document.getElementById('aud-filtro-estado')?.value || '';
   const filtroFecha = document.getElementById('aud-filtro-fecha')?.value || '';
   const filtroUrg = document.getElementById('aud-filtro-urgencia')?.value || '';
-  
   const ahora = Date.now();
   const dias = filtroFecha ? parseInt(filtroFecha) : 0;
-  
   const filtradas = solicitudes.filter(s => {
     if (filtroEstado && s.estado !== filtroEstado) return false;
     if (filtroUrg && s.urgencia !== filtroUrg) return false;
-    if (dias > 0) {
-      const t = new Date(s.fecha_solicitud).getTime();
-      if (ahora - t > dias * 24 * 60 * 60 * 1000) return false;
-    }
-    if (filtroTexto) {
-      const its = solicitudItems.filter(i => i.solicitud_id === s.id);
-      const prods = its.map(it => productos.find(p => p.id === it.producto_id)?.nombre || '').join(' ');
-      const txt = `${s.codigo} ${s.departamento_padre} ${s.subdepartamento_padre} ${s.subdepartamento} ${s.solicitante_nombre} ${s.solicitante_email} ${prods}`.toLowerCase();
-      if (!txt.includes(filtroTexto)) return false;
-    }
+    if (dias > 0) { const t = new Date(s.fecha_solicitud).getTime(); if (ahora - t > dias * 24 * 60 * 60 * 1000) return false; }
+    if (filtroTexto) { const its = solicitudItems.filter(i => i.solicitud_id === s.id); const prods = its.map(it => productos.find(p => p.id === it.producto_id)?.nombre || '').join(' '); const txt = `${s.codigo} ${s.departamento_padre} ${s.subdepartamento_padre} ${s.subdepartamento} ${s.solicitante_nombre} ${s.solicitante_email} ${prods}`.toLowerCase(); if (!txt.includes(filtroTexto)) return false; }
     return true;
   });
-  
-  if (!filtradas.length) {
-    cont.innerHTML = '<div class="empty-state-grande"><span class="icono">📭</span>Sin solicitudes que coincidan</div>';
-    return;
-  }
-  
-  // Agrupar por dirección → depto → área
+  if (!filtradas.length) { cont.innerHTML = '<div class="empty-state-grande"><span class="icono">📭</span>Sin solicitudes que coincidan</div>'; return; }
   const arbol = {};
   filtradas.forEach(s => {
     const dir = s.departamento_padre || s.departamento || 'Sin dirección';
     const dep = s.subdepartamento_padre || '—';
     const area = s.subdepartamento || '—';
     if (!arbol[dir]) arbol[dir] = { total: 0, monto: 0, deptos: {} };
-    arbol[dir].total++;
-    arbol[dir].monto += Number(s.monto_estimado_bruto || 0);
+    arbol[dir].total++; arbol[dir].monto += Number(s.monto_estimado_bruto || 0);
     if (!arbol[dir].deptos[dep]) arbol[dir].deptos[dep] = { total: 0, monto: 0, areas: {} };
-    arbol[dir].deptos[dep].total++;
-    arbol[dir].deptos[dep].monto += Number(s.monto_estimado_bruto || 0);
+    arbol[dir].deptos[dep].total++; arbol[dir].deptos[dep].monto += Number(s.monto_estimado_bruto || 0);
     if (!arbol[dir].deptos[dep].areas[area]) arbol[dir].deptos[dep].areas[area] = [];
     arbol[dir].deptos[dep].areas[area].push(s);
   });
-  
-  // Render
   let html = '';
   Object.keys(arbol).sort().forEach(dir => {
     const infoDir = arbol[dir];
-    const expandidoDir = auditoriaExpandidos.dirs.has(dir);
-    html += `
-      <div class="aud-item">
-        <div class="aud-dir ${expandidoDir ? 'expandido' : ''}" onclick="toggleAudDir('${escaparHtml(dir)}')">
-          <div class="nombre">🏢 ${escaparHtml(dir)}</div>
-          <div class="stats">
-            <span class="chev">${expandidoDir ? '▼' : '▶'}</span>
-            ${infoDir.total} sol · ${formatearCLP(infoDir.monto)}
-          </div>
-        </div>
-        <div style="display:${expandidoDir ? 'block' : 'none'};">
-    `;
+    const expDir = auditoriaExpandidos.dirs.has(dir);
+    html += `<div class="aud-item"><div class="aud-dir ${expDir ? 'expandido' : ''}" onclick="toggleAudDir('${escaparHtml(dir)}')"><div class="nombre">🏢 ${escaparHtml(dir)}</div><div class="stats"><span class="chev">${expDir ? '▼' : '▶'}</span> ${infoDir.total} sol · ${formatearCLP(infoDir.monto)}</div></div><div style="display:${expDir ? 'block' : 'none'};">`;
     Object.keys(infoDir.deptos).sort().forEach(dep => {
       const infoDep = infoDir.deptos[dep];
       const keyDep = dir + '||' + dep;
-      const expandidoDep = auditoriaExpandidos.deptos.has(keyDep);
-      html += `
-        <div class="aud-depto ${expandidoDep ? 'expandido' : ''}" onclick="toggleAudDepto('${escaparHtml(dir)}', '${escaparHtml(dep)}')">
-          <div class="nombre">📁 ${escaparHtml(dep)}</div>
-          <div class="stats">
-            <span class="chev">${expandidoDep ? '▼' : '▶'}</span>
-            ${infoDep.total} sol · ${formatearCLP(infoDep.monto)}
-          </div>
-        </div>
-        <div style="display:${expandidoDep ? 'block' : 'none'};">
-      `;
+      const expDep = auditoriaExpandidos.deptos.has(keyDep);
+      html += `<div class="aud-depto ${expDep ? 'expandido' : ''}" onclick="toggleAudDepto('${escaparHtml(dir)}', '${escaparHtml(dep)}')"><div class="nombre">📁 ${escaparHtml(dep)}</div><div class="stats"><span class="chev">${expDep ? '▼' : '▶'}</span> ${infoDep.total} sol · ${formatearCLP(infoDep.monto)}</div></div><div style="display:${expDep ? 'block' : 'none'};">`;
       Object.keys(infoDep.areas).sort().forEach(area => {
         const sols = infoDep.areas[area];
         const montoArea = sols.reduce((s, x) => s + Number(x.monto_estimado_bruto||0), 0);
         const keyArea = keyDep + '||' + area;
-        const expandidoArea = auditoriaExpandidos.areas.has(keyArea);
-        html += `
-          <div class="aud-area" onclick="toggleAudArea('${escaparHtml(dir)}','${escaparHtml(dep)}','${escaparHtml(area)}')">
-            <span class="chev">${expandidoArea ? '▼' : '▶'}</span>
-            <span class="nombre">🏷️ ${escaparHtml(area)}</span>
-            <span class="stats">${sols.length} sol · ${formatearCLP(montoArea)}</span>
-          </div>
-          <div style="display:${expandidoArea ? 'block' : 'none'};">
-            <div class="aud-sol-lista">
-        `;
+        const expArea = auditoriaExpandidos.areas.has(keyArea);
+        html += `<div class="aud-area" onclick="toggleAudArea('${escaparHtml(dir)}','${escaparHtml(dep)}','${escaparHtml(area)}')"><span class="chev">${expArea ? '▼' : '▶'}</span><span class="nombre">🏷️ ${escaparHtml(area)}</span><span class="stats">${sols.length} sol · ${formatearCLP(montoArea)}</span></div><div style="display:${expArea ? 'block' : 'none'};"><div class="aud-sol-lista">`;
         sols.forEach(s => {
-          html += `
-            <div class="aud-sol-item" onclick="verTrazabilidad('${s.id}')">
-              <div>
-                <div class="cod">${escaparHtml(s.codigo)}</div>
-                <div class="info">${escaparHtml(s.solicitante_nombre||s.solicitante_email)} · ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div>
-              </div>
-              <span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span>
-              <div class="monto">${formatearCLP(s.monto_estimado_bruto||0)}</div>
-            </div>
-          `;
+          html += `<div class="aud-sol-item" onclick="verTrazabilidad('${s.id}')"><div><div class="cod">${escaparHtml(s.codigo)}</div><div class="info">${escaparHtml(s.solicitante_nombre||s.solicitante_email)} · ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div></div><span class="badge-estado ${claseEstado(s.estado)}">${iconoEstado(s.estado)} ${s.estado}</span><div class="monto">${formatearCLP(s.monto_estimado_bruto||0)}</div></div>`;
         });
         html += `</div></div>`;
       });
@@ -2110,26 +1922,12 @@ function renderAuditoriaArbol() {
   });
   cont.innerHTML = html;
 }
-function toggleAudDir(dir) {
-  if (auditoriaExpandidos.dirs.has(dir)) auditoriaExpandidos.dirs.delete(dir);
-  else auditoriaExpandidos.dirs.add(dir);
-  renderAuditoriaArbol();
-}
-function toggleAudDepto(dir, dep) {
-  const k = dir + '||' + dep;
-  if (auditoriaExpandidos.deptos.has(k)) auditoriaExpandidos.deptos.delete(k);
-  else auditoriaExpandidos.deptos.add(k);
-  renderAuditoriaArbol();
-}
-function toggleAudArea(dir, dep, area) {
-  const k = dir + '||' + dep + '||' + area;
-  if (auditoriaExpandidos.areas.has(k)) auditoriaExpandidos.areas.delete(k);
-  else auditoriaExpandidos.areas.add(k);
-  renderAuditoriaArbol();
-}
+function toggleAudDir(dir) { if (auditoriaExpandidos.dirs.has(dir)) auditoriaExpandidos.dirs.delete(dir); else auditoriaExpandidos.dirs.add(dir); renderAuditoriaArbol(); }
+function toggleAudDepto(dir, dep) { const k = dir + '||' + dep; if (auditoriaExpandidos.deptos.has(k)) auditoriaExpandidos.deptos.delete(k); else auditoriaExpandidos.deptos.add(k); renderAuditoriaArbol(); }
+function toggleAudArea(dir, dep, area) { const k = dir + '||' + dep + '||' + area; if (auditoriaExpandidos.areas.has(k)) auditoriaExpandidos.areas.delete(k); else auditoriaExpandidos.areas.add(k); renderAuditoriaArbol(); }
 
 // ============================================================
-// TRAZABILIDAD (modal)
+// TRAZABILIDAD
 // ============================================================
 function verTrazabilidad(solId) {
   const s = solicitudes.find(x => x.id === solId);
@@ -2139,113 +1937,29 @@ function verTrazabilidad(solId) {
   const recPorSolicitud = recepciones.filter(r => r.solicitud_id === solId);
   const recFinal = recAsociada || recPorSolicitud[0];
   const salAsociada = recFinal ? salidas.find(x => x.id === recFinal.salida_id) : null;
-  
-  // Bloque L1 y L2
   const l1 = items.filter(i => i.linea === 1);
   const l2 = items.filter(i => i.linea === 2);
   const subL1 = l1.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
   const subL2 = l2.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
-  
   const renderItems = (arr) => arr.map(it => {
     const p = productos.find(x => x.id === it.producto_id);
     const pb = it.precio_estimado_bruto || precioBruto(it.precio_estimado);
-    return `<div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:6px 12px;font-size:11.5px;border-bottom:1px solid #f1f5f9;align-items:center;">
-      <span>${escaparHtml(p?.nombre || 'N/E')}</span>
-      <span style="font-weight:700;color:var(--azul);text-align:center;">×${it.cantidad}</span>
-      <span style="font-weight:700;text-align:right;">${formatearCLP(pb * it.cantidad)}</span>
-    </div>`;
+    return `<div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:6px 12px;font-size:11.5px;border-bottom:1px solid #f1f5f9;align-items:center;"><span>${escaparHtml(p?.nombre || 'N/E')}</span><span style="font-weight:700;color:var(--azul);text-align:center;">×${it.cantidad}</span><span style="font-weight:700;text-align:right;">${formatearCLP(pb * it.cantidad)}</span></div>`;
   }).join('');
-  
   const labelSub = s.subdepartamento_padre ? `${s.subdepartamento_padre} / ${s.subdepartamento}` : (s.subdepartamento||'—');
-  
-  let html = `
-    <div style="background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid #bfdbfe;border-radius:14px;padding:14px;margin-bottom:14px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-        <div>
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#1e40af;font-weight:700;">Solicitud</div>
-          <div style="font-size:18px;font-weight:800;color:#1e3a8a;font-family:'Courier New',monospace;">${escaparHtml(s.codigo)}</div>
-        </div>
-        <span class="badge-estado ${claseEstado(s.estado)}" style="font-size:11px;padding:5px 14px;">${iconoEstado(s.estado)} ${s.estado}</span>
-      </div>
-      <div style="margin-top:10px;font-size:12px;color:#1e40af;">
-        🏢 ${escaparHtml(s.departamento_padre||s.departamento)} · ${escaparHtml(labelSub)}<br>
-        👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)} · 📅 ${s.fecha_fmt} · Urgencia: ${s.urgencia}
-      </div>
-    </div>
-  `;
-  
-  if (l1.length) {
-    html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--azul);margin-top:12px;">📦 ARTÍCULOS L1 · PVC (${l1.length})</div>
-      <div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">
-        ${renderItems(l1)}
-        <div style="padding:8px 12px;background:#eff6ff;font-weight:700;text-align:right;color:var(--azul);">Subtotal L1: ${formatearCLP(subL1)}</div>
-      </div>`;
-  }
-  if (l2.length) {
-    html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--morado);margin-top:12px;">📦 ARTÍCULOS L2 · Papelería (${l2.length})</div>
-      <div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">
-        ${renderItems(l2)}
-        <div style="padding:8px 12px;background:#f3e8ff;font-weight:700;text-align:right;color:var(--morado);">Subtotal L2: ${formatearCLP(subL2)}</div>
-      </div>`;
-  }
-  
-  html += `<div class="section-label" style="margin-top:20px;">📅 LÍNEA DE TIEMPO</div>
-    <div class="timeline-aud">`;
-  
-  // Evento 1: Solicitud
-  html += `<div class="timeline-aud-item solicitud">
-    <div class="tl-titulo">📝 Solicitud creada <span class="tl-monto">${formatearCLP(s.monto_estimado_bruto||0)}</span></div>
-    <div class="tl-fecha">📅 ${s.fecha_fmt} · 👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</div>
-    <div class="tl-detalle">${items.length} productos · Urgencia: ${s.urgencia}</div>
-  </div>`;
-  
-  // Evento 2: Aprobación (si aplica)
-  if (s.estado === 'APROBADA' || s.estado === 'RECIBIDA') {
-    html += `<div class="timeline-aud-item aprobacion">
-      <div class="tl-titulo">✅ Aprobada</div>
-      <div class="tl-fecha">📅 ${formatearFecha(s.fecha_aprobacion) || '—'}</div>
-      <div class="tl-detalle">👤 ${escaparHtml(s.aprobado_por || '—')} · ${escaparHtml(s.aprobado_por_cargo || '')}</div>
-    </div>`;
-  }
-  if (s.estado === 'RECHAZADA') {
-    html += `<div class="timeline-aud-item" style="border-left:4px solid var(--rojo);">
-      <div class="tl-titulo" style="color:var(--rojo);">❌ Rechazada</div>
-      <div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Sin motivo')}</div>
-    </div>`;
-  }
-  if (s.estado === 'CANCELADA') {
-    html += `<div class="timeline-aud-item">
-      <div class="tl-titulo" style="color:var(--texto-gris);">⚫ Cancelada</div>
-      <div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Cancelada')}</div>
-    </div>`;
-  }
-  
-  // Evento 3: Recepción
-  if (recFinal) {
-    html += `<div class="timeline-aud-item recepcion">
-      <div class="tl-titulo">📥 Recepción <span class="tl-monto">${formatearCLP(recFinal.monto_total_bruto||0)}</span></div>
-      <div class="tl-fecha">📅 ${recFinal.fecha_fmt} · Código: <strong>${escaparHtml(recFinal.codigo)}</strong></div>
-      <div class="tl-detalle">🏭 ${escaparHtml(recFinal.proveedor||'N/E')}<br>👤 ${escaparHtml(recFinal.responsable||'N/E')}${recFinal.numero_guia ? `<br>📄 Guía: ${escaparHtml(recFinal.numero_guia)}` : ''}</div>
-    </div>`;
-  }
-  
-  // Evento 4: Salida
-  if (salAsociada) {
-    html += `<div class="timeline-aud-item salida">
-      <div class="tl-titulo">📤 Salida <span class="tl-monto">${formatearCLP(salAsociada.monto_total_bruto||0)}</span></div>
-      <div class="tl-fecha">📅 ${salAsociada.fecha_fmt} · Código: <strong>${escaparHtml(salAsociada.codigo)}</strong></div>
-      <div class="tl-detalle">👤 Receptor: ${escaparHtml(salAsociada.receptor_nombre||'N/E')}<br>🆔 RUT: ${escaparHtml(salAsociada.receptor_rut||'N/E')}</div>
-    </div>`;
-  }
-  
+  let html = `<div style="background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid #bfdbfe;border-radius:14px;padding:14px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#1e40af;font-weight:700;">Solicitud</div><div style="font-size:18px;font-weight:800;color:#1e3a8a;font-family:'Courier New',monospace;">${escaparHtml(s.codigo)}</div></div><span class="badge-estado ${claseEstado(s.estado)}" style="font-size:11px;padding:5px 14px;">${iconoEstado(s.estado)} ${s.estado}</span></div><div style="margin-top:10px;font-size:12px;color:#1e40af;">🏢 ${escaparHtml(s.departamento_padre||s.departamento)} · ${escaparHtml(labelSub)}<br>👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)} · 📅 ${s.fecha_fmt} · Urgencia: ${s.urgencia}</div></div>`;
+  if (l1.length) html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--azul);margin-top:12px;">📦 ARTÍCULOS L1 · PVC (${l1.length})</div><div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">${renderItems(l1)}<div style="padding:8px 12px;background:#eff6ff;font-weight:700;text-align:right;color:var(--azul);">Subtotal L1: ${formatearCLP(subL1)}</div></div>`;
+  if (l2.length) html += `<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--morado);margin-top:12px;">📦 ARTÍCULOS L2 · Papelería (${l2.length})</div><div style="background:white;border:1px solid var(--borde);border-radius:10px;overflow:hidden;margin-top:6px;">${renderItems(l2)}<div style="padding:8px 12px;background:#f3e8ff;font-weight:700;text-align:right;color:var(--morado);">Subtotal L2: ${formatearCLP(subL2)}</div></div>`;
+  html += `<div class="section-label" style="margin-top:20px;">📅 LÍNEA DE TIEMPO</div><div class="timeline-aud">`;
+  html += `<div class="timeline-aud-item solicitud"><div class="tl-titulo">📝 Solicitud creada <span class="tl-monto">${formatearCLP(s.monto_estimado_bruto||0)}</span></div><div class="tl-fecha">📅 ${s.fecha_fmt} · 👤 ${escaparHtml(s.solicitante_nombre||s.solicitante_email)}</div><div class="tl-detalle">${items.length} productos · Urgencia: ${s.urgencia}</div></div>`;
+  if (s.estado === 'APROBADA' || s.estado === 'RECIBIDA') html += `<div class="timeline-aud-item aprobacion"><div class="tl-titulo">✅ Aprobada</div><div class="tl-fecha">📅 ${formatearFecha(s.fecha_aprobacion) || '—'}</div><div class="tl-detalle">👤 ${escaparHtml(s.aprobado_por || '—')} · ${escaparHtml(s.aprobado_por_cargo || '')}</div></div>`;
+  if (s.estado === 'RECHAZADA') html += `<div class="timeline-aud-item" style="border-left:4px solid var(--rojo);"><div class="tl-titulo" style="color:var(--rojo);">❌ Rechazada</div><div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Sin motivo')}</div></div>`;
+  if (s.estado === 'CANCELADA') html += `<div class="timeline-aud-item"><div class="tl-titulo" style="color:var(--texto-gris);">⚫ Cancelada</div><div class="tl-detalle">${escaparHtml(s.motivo_rechazo || 'Cancelada')}</div></div>`;
+  if (recFinal) html += `<div class="timeline-aud-item recepcion"><div class="tl-titulo">📥 Recepción <span class="tl-monto">${formatearCLP(recFinal.monto_total_bruto||0)}</span></div><div class="tl-fecha">📅 ${recFinal.fecha_fmt} · Código: <strong>${escaparHtml(recFinal.codigo)}</strong></div><div class="tl-detalle">🏭 ${escaparHtml(recFinal.proveedor||'N/E')}<br>👤 ${escaparHtml(recFinal.responsable||'N/E')}${recFinal.numero_guia ? `<br>📄 Guía: ${escaparHtml(recFinal.numero_guia)}` : ''}</div></div>`;
+  if (salAsociada) html += `<div class="timeline-aud-item salida"><div class="tl-titulo">📤 Salida <span class="tl-monto">${formatearCLP(salAsociada.monto_total_bruto||0)}</span></div><div class="tl-fecha">📅 ${salAsociada.fecha_fmt} · Código: <strong>${escaparHtml(salAsociada.codigo)}</strong></div><div class="tl-detalle">👤 Receptor: ${escaparHtml(salAsociada.receptor_nombre||'N/E')}<br>🆔 RUT: ${escaparHtml(salAsociada.receptor_rut||'N/E')}</div></div>`;
   html += `</div>`;
-  
-  if (s.estado === 'RECIBIDA' && !salAsociada) {
-    html += `<div class="aviso-info" style="margin-top:14px;">ℹ️ Esta solicitud fue <strong>recibida</strong> pero aún <strong>no ha sido despachada</strong> al cliente final.</div>`;
-  } else if (s.estado === 'PENDIENTE') {
-    html += `<div class="aviso-info" style="margin-top:14px;">⏳ Esta solicitud está <strong>pendiente de aprobación</strong>.</div>`;
-  }
-  
+  if (s.estado === 'RECIBIDA' && !salAsociada) html += `<div class="aviso-info" style="margin-top:14px;">ℹ️ Esta solicitud fue <strong>recibida</strong> pero aún <strong>no ha sido despachada</strong> al cliente final.</div>`;
+  else if (s.estado === 'PENDIENTE') html += `<div class="aviso-info" style="margin-top:14px;">⏳ Esta solicitud está <strong>pendiente de aprobación</strong>.</div>`;
   document.getElementById('modal-traz-titulo').textContent = `🔍 ${s.codigo}`;
   document.getElementById('modal-traz-contenido').innerHTML = html;
   document.getElementById('modal-trazabilidad').classList.add('visible');
@@ -2386,40 +2100,62 @@ function descargarPDFRecepcion() {
   const c = r.cuenta || {};
   const doc = generarPDFBase({
     titulo: 'RECEPCIÓN', numero: r.codigo,
-    filas: [
-      ['Fecha', r.fecha],
-      ['Dirección', c.direccion || '—'],
-      ['Departamento', c.departamento_padre || '—'],
-      ['Área', c.subdepartamento || '—'],
-      ['N° Guía', r.guia||'N/E'],
-      ['N° Factura', r.factura||'N/E']
-    ],
+    filas: [['Fecha', r.fecha],['Dirección', c.direccion || '—'],['Departamento', c.departamento_padre || '—'],['Área', c.subdepartamento || '—'],['N° Guía', r.guia||'N/E'],['N° Factura', r.factura||'N/E']],
     productos: r.productos, tituloProd: 'PRODUCTOS RECEPCIONADOS', desglose: false,
     firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
   });
   doc.save(`Recepcion_${r.codigo}.pdf`);
   mostrarToast('✅ PDF descargado');
 }
-function descargarPDFSalida() {
+async function descargarPDFSalida() {
   if (!ultimaSalida) return;
   const s = ultimaSalida;
   const doc = generarPDFBase({
     titulo: 'SALIDA', numero: s.codigo,
-    filas: [
-      ['Fecha', s.fecha],
-      ['Dirección', s.departamento_padre || '—'],
-      ['Departamento', s.subdepartamento_padre || '—'],
-      ['Área', s.subdepartamento || '—'],
-      ['Recepción origen', s.recepcion_origen || '—'],
-      ['Receptor', s.receptor],
-      ['RUT', s.receptor_rut || 'N/E'],
-      ['Email', s.receptor_email||'N/E']
-    ],
+    filas: [['Fecha', s.fecha],['Dirección', s.departamento_padre || '—'],['Departamento', s.subdepartamento_padre || '—'],['Área', s.subdepartamento || '—'],['Recepción origen', s.recepcion_origen || '—'],['Receptor', s.receptor],['RUT', s.receptor_rut || 'N/E'],['Email', s.receptor_email||'N/E']],
     productos: s.productos, tituloProd: 'PRODUCTOS ENTREGADOS', desglose: true,
     firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
   });
+  const productosConFoto = s.productos.filter(p => p.foto_url);
+  if (productosConFoto.length > 0) {
+    doc.addPage();
+    const pw = doc.internal.pageSize.getWidth();
+    const ph = doc.internal.pageSize.getHeight();
+    const m = 16;
+    doc.setFillColor(22, 100, 192); doc.rect(0, 0, pw, 24, 'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.text('RESPALDO FOTOGRÁFICO', m, 12);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Salida N° ' + s.codigo + ' · ' + s.fecha, m, 19);
+    const imagenesData = await Promise.all(productosConFoto.map(async p => {
+      try {
+        const resp = await fetch(p.foto_url);
+        const blob = await resp.blob();
+        const dataUrl = await new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(blob); });
+        return { ...p, dataUrl };
+      } catch(e) { return { ...p, dataUrl: null }; }
+    }));
+    const cols = 2;
+    const fotoW = (pw - m * 3) / 2;
+    const fotoH = fotoW * 0.75;
+    const gapY = 14;
+    let x = m; let y = 34; let colIdx = 0;
+    for (const foto of imagenesData) {
+      if (colIdx === cols) { colIdx = 0; x = m; y += fotoH + gapY + 8; }
+      if (y + fotoH + 12 > ph - 20) { doc.addPage(); y = 16; x = m; colIdx = 0; }
+      doc.setDrawColor(226, 232, 240); doc.setFillColor(245, 247, 252);
+      doc.roundedRect(x, y, fotoW, fotoH + 12, 2, 2, 'FD');
+      if (foto.dataUrl) { try { doc.addImage(foto.dataUrl, 'JPEG', x + 2, y + 2, fotoW - 4, fotoH - 4); } catch(e) {} }
+      else { doc.setFontSize(9); doc.setTextColor(150); doc.text('(Imagen no disponible)', x + fotoW/2, y + fotoH/2, { align: 'center' }); }
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(26, 38, 52);
+      doc.text(foto.nombre.substring(0, 45), x + 3, y + fotoH + 4);
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(74, 90, 110);
+      doc.text(`${foto.cantidad} ud${foto.cantidad===1?'':'s'} · L${foto.linea}`, x + 3, y + fotoH + 9);
+      x += fotoW + m; colIdx++;
+    }
+  }
   doc.save(`Salida_${s.codigo}.pdf`);
-  mostrarToast('✅ PDF descargado');
+  mostrarToast('✅ PDF descargado con fotos');
 }
 function descargarPDFSolicitud(id) {
   const s = solicitudes.find(x => x.id === id);
@@ -2427,7 +2163,6 @@ function descargarPDFSolicitud(id) {
   const items = solicitudItems.filter(i => i.solicitud_id === id);
   const l1 = items.filter(i => i.linea === 1);
   const l2 = items.filter(i => i.linea === 2);
-  
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const pw = doc.internal.pageSize.getWidth();
@@ -2458,17 +2193,8 @@ function descargarPDFSolicitud(id) {
   doc.text('Rep. Legal: ' + PROVEEDOR_OFICIAL.representante_legal, m+5, y+12);
   doc.text(PROVEEDOR_OFICIAL.direccion + ' · ' + PROVEEDOR_OFICIAL.telefono, m+5, y+18);
   y += 30;
-  
   const filaH = 7;
-  const filasInfo = [
-    ['Fecha', s.fecha_fmt],
-    ['Dirección', s.departamento_padre || s.departamento || '—'],
-    ['Departamento', s.subdepartamento_padre || '—'],
-    ['Área', s.subdepartamento || '—'],
-    ['Solicitante', s.solicitante_nombre||s.solicitante_email],
-    ['Urgencia', s.urgencia],
-    ['Estado', s.estado]
-  ];
+  const filasInfo = [['Fecha', s.fecha_fmt],['Dirección', s.departamento_padre || s.departamento || '—'],['Departamento', s.subdepartamento_padre || '—'],['Área', s.subdepartamento || '—'],['Solicitante', s.solicitante_nombre||s.solicitante_email],['Urgencia', s.urgencia],['Estado', s.estado]];
   const boxH = 6 + filasInfo.length * filaH;
   doc.setFillColor(...grisC); doc.setDrawColor(...borde);
   doc.roundedRect(m, y, pw-m*2, boxH, 2, 2, 'FD');
@@ -2481,7 +2207,6 @@ function descargarPDFSolicitud(id) {
     doc.text(t[0], m+45, yd); yd += filaH;
   });
   y += boxH + 10;
-  
   const cCant = 20, cUnit = 30, cSub = 35;
   const cProd = pw-m*2 - cCant - cUnit - cSub;
   const dibujarEncabezado = (yPos, color) => {
@@ -2521,7 +2246,6 @@ function descargarPDFSolicitud(id) {
       doc.setFont('helvetica','normal');
       y += 8; par = !par;
     });
-    doc.setFillColor(colorTitulo[0]+30, colorTitulo[1]+30, colorTitulo[2]+30);
     doc.setFillColor(240, 248, 255);
     doc.rect(m, y, pw-m*2, 8, 'F');
     doc.setDrawColor(...borde); doc.rect(m, y, pw-m*2, 8);
@@ -2531,14 +2255,11 @@ function descargarPDFSolicitud(id) {
     doc.setTextColor(20,30,45);
     y += 12;
   };
-  
   dibujarBloque('ARTÍCULOS L1 · PVC', [30,64,175], l1);
   dibujarBloque('ARTÍCULOS L2 · Papelería', [124,58,237], l2);
-  
   const totalBruto = items.reduce((sum, it) => sum + (it.precio_estimado_bruto || precioBruto(it.precio_estimado)) * it.cantidad, 0);
   const totalNeto = totalBruto / (1 + IVA);
   const iva = totalBruto - totalNeto;
-  
   if (y > ph-55) { doc.addPage(); y = 16; }
   doc.setFillColor(230,240,255); doc.rect(m, y, pw-m*2, 27, 'F');
   doc.setDrawColor(...azul); doc.setLineWidth(0.5);
@@ -2550,7 +2271,6 @@ function descargarPDFSolicitud(id) {
   doc.setFontSize(12);
   doc.text('TOTAL (IVA inc.):', m+4, y+22); doc.text(formatearCLP(totalBruto), pw-m-4, y+22, { align:'right' });
   y += 35;
-  
   const yF = ph - 45;
   if (y + 14 > yF) doc.addPage();
   y = yF;
@@ -2562,7 +2282,6 @@ function descargarPDFSolicitud(id) {
   doc.text('Supervisor del Contrato', pw/2, y + 5, { align:'center' });
   doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...gris);
   doc.text('Municipalidad de Las Condes', pw/2, y + 10, { align:'center' });
-  
   const totalPages = doc.internal.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
@@ -2572,13 +2291,12 @@ function descargarPDFSolicitud(id) {
     doc.text('Licitación 2345-99-LP26 · Municipalidad de Las Condes', pw/2, ph-7, { align:'center' });
     doc.text(`Página ${i} de ${totalPages}`, pw-m, ph-7, { align:'right' });
   }
-  
   doc.save(`Solicitud_${s.codigo}.pdf`);
   mostrarToast('✅ PDF descargado');
 }
 
 // ============================================================
-// EXCEL — con formato de moneda chileno correcto
+// EXCEL
 // ============================================================
 function hojaExcel(data, cols) {
   const AZ = '1664C0', GR = 'F5F7FC', BO = 'E2E8F0', BL = 'FFFFFF';
@@ -2591,18 +2309,7 @@ function hojaExcel(data, cols) {
     filas.push(cols.map(c => {
       const val = row[c.key];
       const money = c.money === true && typeof val === 'number';
-      return {
-        v: val == null ? '' : val,
-        t: typeof val === 'number' ? 'n' : 's',
-        // Formato de moneda con separador de miles por punto y sin decimales
-        z: money ? '"$"#,##0' : undefined,
-        s: {
-          font: { sz:10, name:'Century Gothic', color:{rgb:'141E2D'} },
-          fill: { patternType:'solid', fgColor:{rgb: par?GR:BL} },
-          alignment: { vertical:'center', horizontal: c.align||'left', wrapText: false },
-          border: b
-        }
-      };
+      return { v: val == null ? '' : val, t: typeof val === 'number' ? 'n' : 's', z: money ? '"$"#,##0' : undefined, s: { font: { sz:10, name:'Century Gothic', color:{rgb:'141E2D'} }, fill: { patternType:'solid', fgColor:{rgb: par?GR:BL} }, alignment: { vertical:'center', horizontal: c.align||'left', wrapText: false }, border: b } };
     }));
   });
   const ws = XLSX.utils.aoa_to_sheet(filas);
@@ -2613,21 +2320,9 @@ function hojaExcel(data, cols) {
 }
 function exportarExcelStock() {
   if (!productos.length) { mostrarToast('❌ Sin productos'); return; }
-  const data = productos.map(p => {
-    const pB = precioBruto(p.precio_neto);
-    const st = Number(p.stock);
-    return { producto: p.nombre, linea: 'L' + p.linea, neto: Number(p.precio_neto), iva: pB - Number(p.precio_neto), bruto: pB, stock: st, valor: st * pB };
-  });
+  const data = productos.map(p => { const pB = precioBruto(p.precio_neto); const st = Number(p.stock); return { producto: p.nombre, linea: 'L' + p.linea, neto: Number(p.precio_neto), iva: pB - Number(p.precio_neto), bruto: pB, stock: st, valor: st * pB }; });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'producto', label:'Producto', width:55 },
-    { key:'linea', label:'L', width:6, align:'center' },
-    { key:'neto', label:'Neto', width:16, align:'right', money:true },
-    { key:'iva', label:'IVA', width:14, align:'right', money:true },
-    { key:'bruto', label:'Bruto', width:16, align:'right', money:true },
-    { key:'stock', label:'Stock', width:10, align:'center' },
-    { key:'valor', label:'Valor Total', width:18, align:'right', money:true }
-  ]);
+  const ws = hojaExcel(data, [{ key:'producto', label:'Producto', width:55 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'neto', label:'Neto', width:16, align:'right', money:true }, { key:'iva', label:'IVA', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:16, align:'right', money:true }, { key:'stock', label:'Stock', width:10, align:'center' }, { key:'valor', label:'Valor Total', width:18, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Stock');
   XLSX.writeFile(wb, `Stock_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
@@ -2637,44 +2332,13 @@ function exportarExcelRecepciones() {
   const data = [];
   recepciones.forEach(r => {
     const items = recepcionItems.filter(i => i.recepcion_id === r.id);
-    if (!items.length) {
-      data.push({
-        codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '',
-        proveedor: r.proveedor || '', guia: r.numero_guia || '', factura: r.numero_factura || '',
-        linea: '—', producto: '(sin items)', cantidad: 0,
-        neto: Number(r.monto_total || 0), iva: Number(r.iva_total || 0), bruto: Number(r.monto_total_bruto || 0),
-        responsable: r.responsable || ''
-      });
-      return;
-    }
     items.forEach(it => {
       const p = productos.find(x => x.id === it.producto_id);
-      data.push({
-        codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '',
-        proveedor: r.proveedor || '', guia: r.numero_guia || '', factura: r.numero_factura || '',
-        linea: 'L' + (p?.linea || 1), producto: p?.nombre || 'N/E',
-        cantidad: Number(it.cantidad || 0),
-        neto: Number(it.subtotal || 0), iva: Number(it.iva || 0), bruto: Number(it.subtotal_bruto || 0),
-        responsable: r.responsable || ''
-      });
+      data.push({ codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '', proveedor: r.proveedor || '', guia: r.numero_guia || '', factura: r.numero_factura || '', linea: 'L' + (p?.linea || 1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad || 0), neto: Number(it.subtotal || 0), iva: Number(it.iva || 0), bruto: Number(it.subtotal_bruto || 0), responsable: r.responsable || '' });
     });
   });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'codigo', label:'Recepción', width:14, align:'center' },
-    { key:'fecha', label:'Fecha', width:18, align:'center' },
-    { key:'depto', label:'Dirección', width:30 },
-    { key:'proveedor', label:'Proveedor', width:30 },
-    { key:'guia', label:'Guía', width:12, align:'center' },
-    { key:'factura', label:'Factura', width:12, align:'center' },
-    { key:'linea', label:'L', width:6, align:'center' },
-    { key:'producto', label:'Producto', width:50 },
-    { key:'cantidad', label:'Cantidad', width:10, align:'center' },
-    { key:'neto', label:'Neto', width:14, align:'right', money:true },
-    { key:'iva', label:'IVA', width:12, align:'right', money:true },
-    { key:'bruto', label:'Bruto', width:14, align:'right', money:true },
-    { key:'responsable', label:'Responsable', width:28 }
-  ]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Recepción', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18, align:'center' }, { key:'depto', label:'Dirección', width:30 }, { key:'proveedor', label:'Proveedor', width:30 }, { key:'guia', label:'Guía', width:12, align:'center' }, { key:'factura', label:'Factura', width:12, align:'center' }, { key:'linea', label:'L', width:6, align:'center' }, { key:'producto', label:'Producto', width:50 }, { key:'cantidad', label:'Cantidad', width:10, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'responsable', label:'Responsable', width:28 }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Recepciones');
   XLSX.writeFile(wb, `Recepciones_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
@@ -2684,77 +2348,22 @@ function exportarExcelSalidas() {
   const data = [];
   salidas.forEach(s => {
     const items = salidaItems.filter(i => i.salida_id === s.id);
-    if (!items.length) {
-      data.push({
-        codigo: s.codigo, fecha: s.fecha_fmt, direccion: s.departamento_padre || s.departamento || '',
-        depto: s.subdepartamento_padre || '', area: s.subdepartamento || '',
-        receptor: s.receptor_nombre || '', rut: s.receptor_rut || '', email: s.receptor_email || '',
-        linea: '—', producto: '(sin items)', cantidad: 0,
-        neto: Number(s.monto_total || 0), iva: Number(s.iva_total || 0), bruto: Number(s.monto_total_bruto || 0),
-        responsable: s.responsable || ''
-      });
-      return;
-    }
     items.forEach(it => {
       const p = productos.find(x => x.id === it.producto_id);
-      data.push({
-        codigo: s.codigo, fecha: s.fecha_fmt,
-        direccion: s.departamento_padre || s.departamento || '',
-        depto: s.subdepartamento_padre || '', area: s.subdepartamento || '',
-        receptor: s.receptor_nombre || '', rut: s.receptor_rut || '', email: s.receptor_email || '',
-        linea: 'L' + (p?.linea || 1), producto: p?.nombre || 'N/E',
-        cantidad: Number(it.cantidad || 0),
-        neto: Number(it.subtotal || 0), iva: Number(it.iva || 0), bruto: Number(it.subtotal_bruto || 0),
-        responsable: s.responsable || ''
-      });
+      data.push({ codigo: s.codigo, fecha: s.fecha_fmt, direccion: s.departamento_padre || s.departamento || '', depto: s.subdepartamento_padre || '', area: s.subdepartamento || '', receptor: s.receptor_nombre || '', rut: s.receptor_rut || '', email: s.receptor_email || '', linea: 'L' + (p?.linea || 1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad || 0), neto: Number(it.subtotal || 0), iva: Number(it.iva || 0), bruto: Number(it.subtotal_bruto || 0), responsable: s.responsable || '' });
     });
   });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'codigo', label:'Salida', width:14, align:'center' },
-    { key:'fecha', label:'Fecha', width:18, align:'center' },
-    { key:'direccion', label:'Dirección', width:28 },
-    { key:'depto', label:'Departamento', width:28 },
-    { key:'area', label:'Área', width:28 },
-    { key:'receptor', label:'Receptor', width:25 },
-    { key:'rut', label:'RUT', width:14 },
-    { key:'email', label:'Email', width:25 },
-    { key:'linea', label:'L', width:6, align:'center' },
-    { key:'producto', label:'Producto', width:50 },
-    { key:'cantidad', label:'Cantidad', width:10, align:'center' },
-    { key:'neto', label:'Neto', width:14, align:'right', money:true },
-    { key:'iva', label:'IVA', width:12, align:'right', money:true },
-    { key:'bruto', label:'Bruto', width:14, align:'right', money:true },
-    { key:'responsable', label:'Responsable', width:25 }
-  ]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Salida', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18, align:'center' }, { key:'direccion', label:'Dirección', width:28 }, { key:'depto', label:'Departamento', width:28 }, { key:'area', label:'Área', width:28 }, { key:'receptor', label:'Receptor', width:25 }, { key:'rut', label:'RUT', width:14 }, { key:'email', label:'Email', width:25 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'producto', label:'Producto', width:50 }, { key:'cantidad', label:'Cantidad', width:10, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }, { key:'responsable', label:'Responsable', width:25 }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Salidas');
   XLSX.writeFile(wb, `Salidas_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
 }
 function exportarExcelCuentas() {
   if (!cuentas.length) { mostrarToast('❌ Sin cuentas'); return; }
-  const data = cuentas.map(c => {
-    const cons = calcularConsumidoCuenta(c.id);
-    const res = calcularReservadoCuenta(c.id);
-    return {
-      direccion: c.direccion, depto: c.departamento_padre || '—', area: c.subdepartamento,
-      linea: 'L' + c.linea, cuenta: c.codigo,
-      asignado: Number(c.monto_asignado), reservado: res, consumido: cons,
-      disponible: Number(c.monto_asignado) - cons - res
-    };
-  });
+  const data = cuentas.map(c => { const cons = calcularConsumidoCuenta(c.id); const res = calcularReservadoCuenta(c.id); return { direccion: c.direccion, depto: c.departamento_padre || '—', area: c.subdepartamento, linea: 'L' + c.linea, cuenta: c.codigo, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: Number(c.monto_asignado) - cons - res }; });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'direccion', label:'Dirección', width:32 },
-    { key:'depto', label:'Departamento', width:38 },
-    { key:'area', label:'Área', width:38 },
-    { key:'linea', label:'L', width:6, align:'center' },
-    { key:'cuenta', label:'Cuenta', width:14, align:'center' },
-    { key:'asignado', label:'Asignado', width:18, align:'right', money:true },
-    { key:'reservado', label:'Reservado', width:18, align:'right', money:true },
-    { key:'consumido', label:'Consumido', width:18, align:'right', money:true },
-    { key:'disponible', label:'Disponible', width:18, align:'right', money:true }
-  ]);
+  const ws = hojaExcel(data, [{ key:'direccion', label:'Dirección', width:32 }, { key:'depto', label:'Departamento', width:38 }, { key:'area', label:'Área', width:38 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'cuenta', label:'Cuenta', width:14, align:'center' }, { key:'asignado', label:'Asignado', width:18, align:'right', money:true }, { key:'reservado', label:'Reservado', width:18, align:'right', money:true }, { key:'consumido', label:'Consumido', width:18, align:'right', money:true }, { key:'disponible', label:'Disponible', width:18, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Cuentas');
   XLSX.writeFile(wb, `Cuentas_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
@@ -2764,54 +2373,178 @@ function exportarExcelSolicitudes() {
   const data = [];
   solicitudes.forEach(s => {
     const items = solicitudItems.filter(i => i.solicitud_id === s.id);
-    if (!items.length) {
-      data.push({
-        codigo: s.codigo, fecha: s.fecha_fmt,
-        direccion: s.departamento_padre || s.departamento || '',
-        depto: s.subdepartamento_padre || '', area: s.subdepartamento || '',
-        solicitante: s.solicitante_nombre || s.solicitante_email || '',
-        estado: s.estado, urgencia: s.urgencia || '',
-        linea: '—', producto: '(sin items)', cantidad: 0,
-        neto: Number(s.monto_estimado || 0), iva: 0, bruto: Number(s.monto_estimado_bruto || 0)
-      });
-      return;
-    }
     items.forEach(it => {
       const p = productos.find(x => x.id === it.producto_id);
       const pNeto = Number(it.precio_estimado || 0);
       const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
       const cant = Number(it.cantidad || 0);
-      data.push({
-        codigo: s.codigo, fecha: s.fecha_fmt,
-        direccion: s.departamento_padre || s.departamento || '',
-        depto: s.subdepartamento_padre || '', area: s.subdepartamento || '',
-        solicitante: s.solicitante_nombre || s.solicitante_email || '',
-        estado: s.estado, urgencia: s.urgencia || '',
-        linea: 'L' + (it.linea || p?.linea || 1), producto: p?.nombre || 'N/E',
-        cantidad: cant, neto: pNeto * cant, iva: (pBruto - pNeto) * cant, bruto: Number(it.subtotal_bruto || pBruto * cant)
-      });
+      data.push({ codigo: s.codigo, fecha: s.fecha_fmt, direccion: s.departamento_padre || s.departamento || '', depto: s.subdepartamento_padre || '', area: s.subdepartamento || '', solicitante: s.solicitante_nombre || s.solicitante_email || '', estado: s.estado, urgencia: s.urgencia || '', linea: 'L' + (it.linea || p?.linea || 1), producto: p?.nombre || 'N/E', cantidad: cant, neto: pNeto * cant, iva: (pBruto - pNeto) * cant, bruto: Number(it.subtotal_bruto || pBruto * cant) });
     });
   });
   const wb = XLSX.utils.book_new();
-  const ws = hojaExcel(data, [
-    { key:'codigo', label:'Solicitud', width:14, align:'center' },
-    { key:'fecha', label:'Fecha', width:18, align:'center' },
-    { key:'direccion', label:'Dirección', width:28 },
-    { key:'depto', label:'Departamento', width:28 },
-    { key:'area', label:'Área', width:28 },
-    { key:'solicitante', label:'Solicitante', width:28 },
-    { key:'estado', label:'Estado', width:14, align:'center' },
-    { key:'urgencia', label:'Urgencia', width:12, align:'center' },
-    { key:'linea', label:'L', width:6, align:'center' },
-    { key:'producto', label:'Producto', width:50 },
-    { key:'cantidad', label:'Cantidad', width:10, align:'center' },
-    { key:'neto', label:'Neto', width:14, align:'right', money:true },
-    { key:'iva', label:'IVA', width:12, align:'right', money:true },
-    { key:'bruto', label:'Bruto', width:14, align:'right', money:true }
-  ]);
+  const ws = hojaExcel(data, [{ key:'codigo', label:'Solicitud', width:14, align:'center' }, { key:'fecha', label:'Fecha', width:18, align:'center' }, { key:'direccion', label:'Dirección', width:28 }, { key:'depto', label:'Departamento', width:28 }, { key:'area', label:'Área', width:28 }, { key:'solicitante', label:'Solicitante', width:28 }, { key:'estado', label:'Estado', width:14, align:'center' }, { key:'urgencia', label:'Urgencia', width:12, align:'center' }, { key:'linea', label:'L', width:6, align:'center' }, { key:'producto', label:'Producto', width:50 }, { key:'cantidad', label:'Cantidad', width:10, align:'center' }, { key:'neto', label:'Neto', width:14, align:'right', money:true }, { key:'iva', label:'IVA', width:12, align:'right', money:true }, { key:'bruto', label:'Bruto', width:14, align:'right', money:true }]);
   XLSX.utils.book_append_sheet(wb, ws, 'Solicitudes');
   XLSX.writeFile(wb, `Solicitudes_${fechaActual()}.xlsx`);
   mostrarToast('✅ Excel exportado');
+}
+function exportarExcelFinanzas() {
+  const ef = calcularFinanzas();
+  const filtros = [];
+  const fd = document.getElementById('fin-fecha-desde').value;
+  const fh = document.getElementById('fin-fecha-hasta').value;
+  const dir = document.getElementById('fin-filtro-direccion').value;
+  const lin = document.getElementById('fin-filtro-linea').value;
+  if (fd) filtros.push('Desde: ' + fd);
+  if (fh) filtros.push('Hasta: ' + fh);
+  if (dir) filtros.push('Dirección: ' + dir);
+  if (lin) filtros.push('Línea: L' + lin);
+  const txtFiltros = filtros.length ? filtros.join(' · ') : 'Sin filtros (todo el histórico)';
+  const resumen = [
+    { concepto: '📥 Recepcionado', uds: ef.rec.uds, neto: ef.rec.neto, iva: ef.rec.iva, bruto: ef.rec.bruto },
+    { concepto: '📤 Entregado', uds: ef.ent.uds, neto: ef.ent.neto, iva: ef.ent.iva, bruto: ef.ent.bruto },
+    { concepto: '⏳ Pendiente de entrega', uds: ef.pend.uds, neto: ef.pend.neto, iva: ef.pend.iva, bruto: ef.pend.bruto },
+    { concepto: '📦 En bodega', uds: ef.pend.uds, neto: ef.pend.neto, iva: ef.pend.iva, bruto: ef.pend.bruto }
+  ];
+  const wb = XLSX.utils.book_new();
+  const wsResumen = hojaExcel(resumen, [{ key:'concepto', label:'Concepto', width:32 }, { key:'uds', label:'Unidades', width:14, align:'right' }, { key:'neto', label:'Neto', width:16, align:'right', money:true }, { key:'iva', label:'IVA', width:14, align:'right', money:true }, { key:'bruto', label:'Bruto', width:16, align:'right', money:true }]);
+  XLSX.utils.sheet_add_aoa(wsResumen, [[{ v: 'Filtros aplicados:', t: 's', s: { font: { bold: true, sz: 10, name: 'Century Gothic' } } }, { v: txtFiltros, t: 's', s: { sz: 10, name: 'Century Gothic' } }]], { origin: 'A6' });
+  XLSX.utils.book_append_sheet(wb, wsResumen, 'Estado Financiero');
+  const porProducto = {};
+  productos.forEach(p => { porProducto[p.id] = { nombre: p.nombre, linea: p.linea, rec: 0, ent: 0, precioNeto: Number(p.precio_neto||0) }; });
+  recepcionItems.forEach(it => {
+    const r = recepciones.find(x => x.id === it.recepcion_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!r || !p) return;
+    if (!finPasaFiltro(r.fecha, r.departamento, p.linea)) return;
+    if (porProducto[it.producto_id]) porProducto[it.producto_id].rec += Number(it.cantidad || 0);
+  });
+  salidaItems.forEach(it => {
+    const s = salidas.find(x => x.id === it.salida_id);
+    const p = productos.find(x => x.id === it.producto_id);
+    if (!s || !p) return;
+    if (!finPasaFiltro(s.fecha, s.departamento, p.linea)) return;
+    if (porProducto[it.producto_id]) porProducto[it.producto_id].ent += Number(it.cantidad || 0);
+  });
+  const detalle = Object.values(porProducto).filter(x => x.rec > 0 || x.ent > 0).sort((a,b) => a.nombre.localeCompare(b.nombre)).map(x => {
+    const pend = x.rec - x.ent;
+    const bod = pend > 0 ? pend : 0;
+    const bruto = x.precioNeto * (1 + IVA);
+    return { producto: x.nombre, linea: 'L' + x.linea, rec: x.rec, ent: x.ent, pend: pend > 0 ? pend : 0, bod: bod, recBruto: x.rec * bruto, entBruto: x.ent * bruto, pendBruto: (pend > 0 ? pend : 0) * bruto, bodBruto: bod * bruto };
+  });
+  const wsDetalle = hojaExcel(detalle, [{ key:'producto', label:'Producto', width:50 }, { key:'linea', label:'L', width:6, align:'center' }, { key:'rec', label:'Recepcionado', width:14, align:'right' }, { key:'ent', label:'Entregado', width:14, align:'right' }, { key:'pend', label:'Pendiente', width:14, align:'right' }, { key:'bod', label:'En bodega', width:14, align:'right' }, { key:'recBruto', label:'Recibido ($)', width:16, align:'right', money:true }, { key:'entBruto', label:'Entregado ($)', width:16, align:'right', money:true }, { key:'pendBruto', label:'Pendiente ($)', width:16, align:'right', money:true }]);
+  XLSX.utils.book_append_sheet(wb, wsDetalle, 'Detalle por producto');
+  XLSX.writeFile(wb, `EstadoFinanciero_${fechaActual()}.xlsx`);
+  mostrarToast('✅ Excel exportado');
+}
+
+// ============================================================
+// REPORTES VISTA PREVIA
+// ============================================================
+function renderReportes() {
+  const t = document.getElementById('rep-total-productos');
+  if (!t) return;
+  t.textContent = productos.length;
+  const tu = productos.reduce((s, p) => s + Number(p.stock||0), 0);
+  const tv = productos.reduce((s, p) => s + Number(p.stock||0) * precioBruto(p.precio_neto), 0);
+  document.getElementById('rep-total-unidades').textContent = tu;
+  document.getElementById('rep-valor-stock').textContent = formatearCLP(tv);
+  document.getElementById('rep-total-cuentas').textContent = cuentas.length;
+}
+function verReporte(tipo) {
+  reporteActual = tipo;
+  const cont = document.getElementById('rep-detalle');
+  const titulo = document.getElementById('rep-detalle-titulo');
+  const thead = document.getElementById('rep-detalle-thead');
+  const tbody = document.getElementById('rep-detalle-tbody');
+  const filtro = document.getElementById('rep-detalle-filtro');
+  filtro.value = '';
+  cont.style.display = 'block';
+  if (tipo === 'stock') {
+    titulo.textContent = '📊 STOCK ACTUAL';
+    thead.innerHTML = '<tr><th>Producto</th><th>L</th><th style="text-align:right;">Neto</th><th style="text-align:right;">IVA</th><th style="text-align:right;">Bruto</th><th style="text-align:right;">Stock</th><th style="text-align:right;">Valor Total</th></tr>';
+    reporteDatos = productos.map(p => { const pb = precioBruto(p.precio_neto); const st = Number(p.stock); return { tipo:'stock', nombre: p.nombre, linea: 'L' + p.linea, neto: Number(p.precio_neto), iva: pb - Number(p.precio_neto), bruto: pb, stock: st, valor: st * pb, txt: `${p.nombre} L${p.linea}` }; });
+  } else if (tipo === 'recepciones') {
+    titulo.textContent = '📥 RECEPCIONES';
+    thead.innerHTML = '<tr><th>Recepción</th><th>Fecha</th><th>Dirección</th><th>Proveedor</th><th>L</th><th>Producto</th><th style="text-align:right;">Cant.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
+    reporteDatos = [];
+    recepciones.forEach(r => {
+      const its = recepcionItems.filter(i => i.recepcion_id === r.id);
+      its.forEach(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        reporteDatos.push({ tipo:'recepciones', codigo: r.codigo, fecha: r.fecha_fmt, depto: r.departamento || '', proveedor: r.proveedor || '', linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0), txt: `${r.codigo} ${r.departamento} ${r.proveedor} ${p?.nombre||''}` });
+      });
+    });
+  } else if (tipo === 'salidas') {
+    titulo.textContent = '📤 SALIDAS';
+    thead.innerHTML = '<tr><th>Salida</th><th>Fecha</th><th>Dirección</th><th>Receptor</th><th>L</th><th>Producto</th><th style="text-align:right;">Cant.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
+    reporteDatos = [];
+    salidas.forEach(s => {
+      const its = salidaItems.filter(i => i.salida_id === s.id);
+      its.forEach(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        reporteDatos.push({ tipo:'salidas', codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento || '', receptor: s.receptor_nombre || '', linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad||0), neto: Number(it.subtotal||0), bruto: Number(it.subtotal_bruto||0), txt: `${s.codigo} ${s.departamento} ${s.receptor_nombre} ${p?.nombre||''}` });
+      });
+    });
+  } else if (tipo === 'cuentas') {
+    titulo.textContent = '💰 CUENTAS Y PRESUPUESTO';
+    thead.innerHTML = '<tr><th>Dirección</th><th>Depto</th><th>Área</th><th>L</th><th>Cuenta</th><th style="text-align:right;">Asignado</th><th style="text-align:right;">Reservado</th><th style="text-align:right;">Consumido</th><th style="text-align:right;">Disponible</th></tr>';
+    reporteDatos = cuentas.map(c => { const cons = calcularConsumidoCuenta(c.id); const res = calcularReservadoCuenta(c.id); const disp = Number(c.monto_asignado) - cons - res; return { tipo: 'cuentas', direccion: c.direccion, depto: c.departamento_padre || '—', area: c.subdepartamento, linea: 'L' + c.linea, cuenta: c.codigo, asignado: Number(c.monto_asignado), reservado: res, consumido: cons, disponible: disp, txt: `${c.direccion} ${c.subdepartamento} L${c.linea}` }; });
+  } else if (tipo === 'solicitudes') {
+    titulo.textContent = '📋 SOLICITUDES';
+    thead.innerHTML = '<tr><th>Solicitud</th><th>Fecha</th><th>Dirección</th><th>Solicitante</th><th>Estado</th><th>L</th><th>Producto</th><th style="text-align:right;">Cant.</th><th style="text-align:right;">Neto</th><th style="text-align:right;">Bruto</th></tr>';
+    reporteDatos = [];
+    solicitudes.forEach(s => {
+      const its = solicitudItems.filter(i => i.solicitud_id === s.id);
+      its.forEach(it => {
+        const p = productos.find(x => x.id === it.producto_id);
+        const pNeto = Number(it.precio_estimado||0);
+        const pBruto = Number(it.precio_estimado_bruto || precioBruto(pNeto));
+        reporteDatos.push({ tipo:'solicitudes', codigo: s.codigo, fecha: s.fecha_fmt, depto: s.departamento_padre || '', solicitante: s.solicitante_nombre||s.solicitante_email, estado: s.estado, linea: 'L' + (p?.linea||1), producto: p?.nombre || 'N/E', cantidad: Number(it.cantidad||0), neto: pNeto * Number(it.cantidad||0), bruto: pBruto * Number(it.cantidad||0), txt: `${s.codigo} ${s.departamento_padre} ${s.solicitante_nombre} ${s.estado} ${p?.nombre||''}` });
+      });
+    });
+  }
+  filtrarReporte();
+}
+function filtrarReporte() {
+  if (!reporteActual) return;
+  const filtro = document.getElementById('rep-detalle-filtro').value.toLowerCase().trim();
+  const tbody = document.getElementById('rep-detalle-tbody');
+  let lista = reporteDatos.filter(d => !filtro || (d.txt||'').toLowerCase().includes(filtro));
+  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:var(--texto-gris);">Sin datos</td></tr>'; document.getElementById('rep-detalle-total').textContent = '0'; return; }
+  if (reporteActual === 'stock') {
+    let tu = 0, tv = 0;
+    tbody.innerHTML = lista.map(d => { tu += d.stock; tv += d.valor; const color = d.stock === 0 ? 'var(--rojo)' : d.stock <= 3 ? 'var(--naranja)' : 'var(--texto-oscuro)'; return `<tr><td><strong>${escaparHtml(d.nombre)}</strong></td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;">${formatearCLP(d.iva)}</td><td style="text-align:right;">${formatearCLP(d.bruto)}</td><td style="text-align:right;font-weight:700;color:${color};">${d.stock}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.valor)}</td></tr>`; }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} productos · ${tu} unid · ${formatearCLP(tv)}`;
+  } else if (reporteActual === 'recepciones' || reporteActual === 'salidas') {
+    let tc = 0, tn = 0, tb = 0;
+    tbody.innerHTML = lista.map(d => { tc += d.cantidad; tn += d.neto; tb += d.bruto; const receptorOProv = d.receptor || d.proveedor || ''; return `<tr><td><strong>${escaparHtml(d.codigo)}</strong></td><td style="font-size:11px;">${d.fecha}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(receptorOProv)}</td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.producto)}</td><td style="text-align:right;">${d.cantidad}</td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td></tr>`; }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} uds · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
+  } else if (reporteActual === 'cuentas') {
+    let ta = 0, tr = 0, tc = 0;
+    tbody.innerHTML = lista.map(d => { ta += d.asignado; tr += d.reservado; tc += d.consumido; return `<tr><td style="font-size:11px;">${escaparHtml(d.direccion)}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(d.area)}</td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.cuenta)}</td><td style="text-align:right;">${formatearCLP(d.asignado)}</td><td style="text-align:right;color:var(--naranja);">${formatearCLP(d.reservado)}</td><td style="text-align:right;color:var(--azul);">${formatearCLP(d.consumido)}</td><td style="text-align:right;font-weight:700;color:${d.disponible>0?'var(--verde)':'var(--rojo)'};">${formatearCLP(d.disponible)}</td></tr>`; }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} cuentas · Asignado: ${formatearCLP(ta)} · Reservado: ${formatearCLP(tr)} · Consumido: ${formatearCLP(tc)}`;
+  } else if (reporteActual === 'solicitudes') {
+    let tc = 0, tn = 0, tb = 0;
+    tbody.innerHTML = lista.map(d => { tc += d.cantidad; tn += d.neto; tb += d.bruto; return `<tr><td><strong>${escaparHtml(d.codigo)}</strong></td><td style="font-size:11px;">${d.fecha}</td><td style="font-size:11px;">${escaparHtml(d.depto)}</td><td style="font-size:11px;">${escaparHtml(d.solicitante)}</td><td style="text-align:center;"><span class="badge-estado ${claseEstado(d.estado)}">${iconoEstado(d.estado)} ${d.estado}</span></td><td><span class="badge-linea l${d.linea.replace('L','')}">${d.linea}</span></td><td style="font-size:11px;">${escaparHtml(d.producto)}</td><td style="text-align:right;">${d.cantidad}</td><td style="text-align:right;">${formatearCLP(d.neto)}</td><td style="text-align:right;font-weight:700;">${formatearCLP(d.bruto)}</td></tr>`; }).join('');
+    document.getElementById('rep-detalle-total').textContent = `${lista.length} líneas · ${tc} uds · Neto: ${formatearCLP(tn)} · Bruto: ${formatearCLP(tb)}`;
+  }
+}
+function actualizarResumenes() {
+  const hoy = recepciones.filter(r => esHoy(r.fecha_fmt));
+  const rrh = document.getElementById('res-rec-hoy');
+  if (rrh) {
+    rrh.textContent = hoy.length;
+    document.getElementById('res-rec-unidades').textContent = hoy.reduce((s, r) => s + recepcionItems.filter(ri => ri.recepcion_id === r.id).reduce((a, x) => a + Number(x.cantidad||0), 0), 0);
+    document.getElementById('res-rec-monto').textContent = formatearCLP(hoy.reduce((s, r) => s + Number(r.monto_total_bruto||0), 0));
+    const cr = productos.filter(p => Number(p.stock||0) <= 3 && Number(p.stock||0) > 0).length;
+    document.getElementById('res-stock-critico').textContent = cr;
+    document.getElementById('res-stock-critico2').textContent = cr;
+    const hSal = salidas.filter(s => esHoy(s.fecha_fmt));
+    document.getElementById('res-sal-hoy').textContent = hSal.length;
+    document.getElementById('res-sal-unidades').textContent = hSal.reduce((s, x) => s + salidaItems.filter(si => si.salida_id === x.id).reduce((a, y) => a + Number(y.cantidad||0), 0), 0);
+    document.getElementById('res-sal-prods').textContent = productos.filter(p => Number(p.stock||0) > 0).length;
+  }
+  if (esAdmin()) renderReportes();
 }
 
 // ============================================================
@@ -2827,14 +2560,10 @@ function cambiarTab(tabId) {
   if (tabId === 'tab-mi-solicitud') { renderMisSolicitudes(); actualizarBadgePendientes(); }
   if (tabId === 'tab-solicitudes' && esAdmin()) renderSolicitudesAdmin();
   if (tabId === 'tab-recepcion') { poblarVinculoSolicitud(); actualizarResumenes(); }
-  if (tabId === 'tab-salida') { 
-    document.getElementById('sal-depto-padre').value = '';
-    document.getElementById('sal-wrap-recepciones').style.display = 'none';
-    document.getElementById('sal-detalle').style.display = 'none';
-    actualizarResumenes(); 
-  }
+  if (tabId === 'tab-salida') { document.getElementById('sal-depto-padre').value = ''; document.getElementById('sal-wrap-recepciones').style.display = 'none'; document.getElementById('sal-detalle').style.display = 'none'; actualizarResumenes(); }
   if (tabId === 'tab-stock') renderStock();
   if (tabId === 'tab-cuentas' && esAdmin()) renderCuentas();
+  if (tabId === 'tab-finanzas' && esAdmin()) renderFinanzas();
   if (tabId === 'tab-reportes' && esAdmin()) renderReportes();
   if (tabId === 'tab-auditoria' && esAdmin()) renderAuditoria();
 }
@@ -2874,10 +2603,16 @@ window.registrarRecepcion = registrarRecepcion;
 window.descargarPDFRecepcion = descargarPDFRecepcion;
 window.salCambiarDireccion = salCambiarDireccion;
 window.salCargarRecepcion = salCargarRecepcion;
+window.subirFotoSalida = subirFotoSalida;
+window.quitarFotoSalida = quitarFotoSalida;
 window.registrarSalida = registrarSalida;
 window.descargarPDFSalida = descargarPDFSalida;
 window.renderStock = renderStock;
 window.renderCuentas = renderCuentas;
+window.renderFinanzas = renderFinanzas;
+window.limpiarFiltrosFinanzas = limpiarFiltrosFinanzas;
+window.renderDetalleProductosFin = renderDetalleProductosFin;
+window.exportarExcelFinanzas = exportarExcelFinanzas;
 window.renderAuditoria = renderAuditoria;
 window.exportarExcelStock = exportarExcelStock;
 window.exportarExcelRecepciones = exportarExcelRecepciones;

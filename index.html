@@ -638,6 +638,7 @@ let reporteActual = null;
 let reporteDatos = [];
 let auditoriaExpandidos = { dirs: new Set(), deptos: new Set(), areas: new Set() };
 let fotosSalidaTemp = {};
+let fotosRecepcionTemp = {};
 
 // ============================================================
 // HELPERS
@@ -1075,13 +1076,9 @@ function nuevaSolicitudForm() {
   carritoSolicitud = [];
   adjuntosTemporales = [];
   urgenciaSolicitud = 'NORMAL';
-  
-  // Resetear carritos
   renderCarritoMiSolicitud();
   renderAdjuntosSolicitud();
   elegirUrgencia('NORMAL');
-  
-  // Limpiar campos
   document.getElementById('sol-obs').value = '';
   document.getElementById('sol-depto-padre').value = '';
   document.getElementById('sol-depto').value = '';
@@ -1096,19 +1093,13 @@ function nuevaSolicitudForm() {
   document.getElementById('sol-prod-info').textContent = '—';
   document.getElementById('sol-adjuntos-grid').innerHTML = '';
   document.getElementById('sol-file-input').value = '';
-  
-  // Resetear paneles
   document.getElementById('sol-info-panel').style.display = 'none';
   document.getElementById('sol-trabajo').style.display = 'none';
   const buscador = document.getElementById('sol-busqueda-wrap');
   if (buscador) buscador.style.display = 'none';
-  
-  // Resetear estado de líneas
   lineaSeleccionadaSol = null;
   subdeptoActualSol = { l1: null, l2: null };
   productoSeleccionadoSol = null;
-  
-  // Ocultar mensaje de éxito
   const msg = document.getElementById('sol-mensaje');
   if (msg) msg.style.display = 'none';
 }
@@ -1282,6 +1273,7 @@ function alVincularSolicitud() {
     panelLinea.style.display = 'none';
     wrapBusqueda.style.display = 'none';
     carritoRecepcion = [];
+    fotosRecepcionTemp = {};
     renderCarritoRecepcion();
     return;
   }
@@ -1299,6 +1291,7 @@ function alVincularSolicitud() {
     const p = productos.find(x => x.id === it.producto_id);
     return { producto_id: it.producto_id, nombre: p?.nombre||'N/E', linea: it.linea||p?.linea||1, precio_neto: Number(it.precio_estimado), cantidad: Number(it.cantidad), bloqueado: true };
   });
+  fotosRecepcionTemp = {};
   renderCarritoRecepcion();
 }
 function poblarVinculoSolicitud() {
@@ -1354,10 +1347,20 @@ function renderCarritoRecepcion() {
     const sub = precioBruto(p.precio_neto) * p.cantidad;
     if (p.linea === 1) totalL1 += sub; else totalL2 += sub;
     const bloq = p.bloqueado === true;
-    return `<div class="producto-agregado">
-      <div class="info"><div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div><div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = ${formatearCLP(sub)}</div></div>
-      <div class="cantidad">${p.cantidad}</div>
-      ${bloq ? '' : `<button class="btn-eliminar-prod" onclick="carritoRecepcion.splice(${i},1);renderCarritoRecepcion();">✕</button>`}
+    const fotoUrl = fotosRecepcionTemp[p.producto_id];
+    const fotoHTML = fotoUrl 
+      ? `<div style="display:flex;gap:6px;align-items:center;justify-content:flex-end;"><img src="${fotoUrl}" class="foto-salida-thumb"><button class="btn-pequeno rojo" onclick="quitarFotoRecepcion('${p.producto_id}')" title="Quitar">✕</button></div>`
+      : `<button class="btn-pequeno morado" onclick="document.getElementById('foto-rec-${i}').click()">📷 Subir foto</button>`;
+    return `<div class="producto-agregado" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div class="info"><div class="nombre">${escaparHtml(p.nombre)} <span class="badge-linea l${p.linea}">L${p.linea}</span></div><div class="detalle">${formatearCLP(precioBruto(p.precio_neto))} × ${p.cantidad} = ${formatearCLP(sub)}</div></div>
+        <div class="cantidad">${p.cantidad}</div>
+        ${bloq ? '' : `<button class="btn-eliminar-prod" onclick="carritoRecepcion.splice(${i},1);renderCarritoRecepcion();">✕</button>`}
+      </div>
+      <div style="margin-top:6px;text-align:right;">
+        <input type="file" id="foto-rec-${i}" accept="image/jpeg" style="display:none;" onchange="subirFotoRecepcion(${i}, '${p.producto_id}', event)">
+        <div id="foto-rec-info-${i}">${fotoHTML}</div>
+      </div>
     </div>`;
   }).join('');
   let html = '';
@@ -1365,6 +1368,28 @@ function renderCarritoRecepcion() {
   if (totalL2 > 0) html += `<div style="display:flex; justify-content:space-between; padding:4px 0;"><span>L2 · Papelería:</span><strong style="color:var(--morado);">${formatearCLP(totalL2)}</strong></div>`;
   html += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-top:1px solid var(--borde); margin-top:4px; font-size:14px;"><span><strong>TOTAL:</strong></span><strong style="color:var(--verde);">${formatearCLP(totalL1 + totalL2)}</strong></div>`;
   document.getElementById('rec-total-estimado').innerHTML = html;
+}
+async function subirFotoRecepcion(idx, productoId, event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { mostrarToast('❌ La foto excede los 3 MB'); event.target.value = ''; return; }
+  if (!file.type.startsWith('image/')) { mostrarToast('❌ Solo se aceptan imágenes JPG'); event.target.value = ''; return; }
+  const infoDiv = document.getElementById(`foto-rec-info-${idx}`);
+  if (infoDiv) infoDiv.innerHTML = '<span style="font-size:11px;color:var(--texto-gris);">⏳ Subiendo...</span>';
+  try {
+    const nombreArchivo = `${Date.now()}_${productoId.substring(0,8)}.jpg`;
+    const path = `recepciones/${nombreArchivo}`;
+    const { error } = await sb.storage.from('lc-salidas-fotos').upload(path, file, { contentType: 'image/jpeg', upsert: false });
+    if (error) throw error;
+    const { data: urlData } = sb.storage.from('lc-salidas-fotos').getPublicUrl(path);
+    fotosRecepcionTemp[productoId] = urlData.publicUrl;
+    renderCarritoRecepcion();
+    mostrarToast('✅ Foto subida');
+  } catch(e) { console.error(e); mostrarToast('❌ Error al subir: ' + (e.message || 'Error')); if (infoDiv) infoDiv.innerHTML = `<button class="btn-pequeno morado" onclick="document.getElementById('foto-rec-${idx}').click()">📷 Subir foto</button>`; }
+}
+function quitarFotoRecepcion(productoId) {
+  delete fotosRecepcionTemp[productoId];
+  renderCarritoRecepcion();
 }
 async function registrarRecepcion() {
   const solVinculo = document.getElementById('rec-solicitud-vinculo').value;
@@ -1389,6 +1414,17 @@ async function registrarRecepcion() {
   if (!deptoPadre) { mostrarToast('❌ Sin dirección'); return; }
   if (!subdeptoArea) { mostrarToast('❌ Sin área'); return; }
   if (!carritoRecepcion.length) { mostrarToast('❌ Sin productos'); return; }
+
+  const itemsSinFoto = carritoRecepcion.filter(p => !fotosRecepcionTemp[p.producto_id]);
+  if (itemsSinFoto.length > 0) {
+    const nombres = itemsSinFoto.map(p => p.nombre);
+    mostrarToast(`❌ Faltan fotos de ${itemsSinFoto.length} producto(s): ${nombres.join(', ')}`, 8000);
+    const idx = carritoRecepcion.findIndex(p => !fotosRecepcionTemp[p.producto_id]);
+    const elem = document.getElementById(`foto-rec-info-${idx}`);
+    if (elem) elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
   const itemsL1 = carritoRecepcion.filter(p => p.linea === 1);
   const itemsL2 = carritoRecepcion.filter(p => p.linea === 2);
   const totalL1 = itemsL1.reduce((s, p) => s + precioBruto(p.precio_neto) * p.cantidad, 0);
@@ -1441,7 +1477,8 @@ async function registrarRecepcion() {
         subtotal: p.precio_neto * p.cantidad,
         subtotal_bruto: precioBruto(p.precio_neto) * p.cantidad,
         iva: (precioBruto(p.precio_neto) - p.precio_neto) * p.cantidad,
-        cuenta_id: cuentaItem?.id || null
+        cuenta_id: cuentaItem?.id || null,
+        foto_url: fotosRecepcionTemp[p.producto_id] || null
       };
     });
     const { error: e2 } = await sb.from('lc_recepcion_items').insert(items);
@@ -1459,7 +1496,7 @@ async function registrarRecepcion() {
     }
     ultimaRecepcion = {
       id: rec.id, codigo: rec.codigo,
-      productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad})),
+      productos: carritoRecepcion.map(p => ({...p, subtotal_bruto: precioBruto(p.precio_neto)*p.cantidad, foto_url: fotosRecepcionTemp[p.producto_id] || null})),
       proveedor: PROVEEDOR_OFICIAL.razon_social, proveedor_rut: PROVEEDOR_OFICIAL.rut,
       guia, factura, obs, departamento: deptoPadre,
       cuenta: cuentaPrincipal,
@@ -1470,8 +1507,10 @@ async function registrarRecepcion() {
     mostrarToast(`✅ Recepción ${rec.codigo} registrada`);
     const msg = document.getElementById('rec-mensaje');
     msg.style.display = 'block';
-    msg.innerHTML = `✅ Recepción <strong>${rec.codigo}</strong> registrada${totalL1 > 0 ? `<br>📦 L1 · PVC: <strong>${formatearCLP(totalL1)}</strong>` : ''}${totalL2 > 0 ? `<br>📦 L2 · Papelería: <strong>${formatearCLP(totalL2)}</strong>` : ''}<br>💰 Total: <strong>${formatearCLP(totalBruto)}</strong> <button class="btn-pequeno azul" onclick="descargarPDFRecepcion()" style="margin-left:10px;">📄 PDF</button>`;
+    msg.innerHTML = `✅ Recepción <strong>${rec.codigo}</strong> registrada${totalL1 > 0 ? `<br>📦 L1 · PVC: <strong>${formatearCLP(totalL1)}</strong>` : ''}${totalL2 > 0 ? `<br>📦 L2 · Papelería: <strong>${formatearCLP(totalL2)}</strong>` : ''}<br>💰 Total: <strong>${formatearCLP(totalBruto)}</strong> <button class="btn-pequeno azul" onclick="descargarPDFRecepcion()" style="margin-left:10px;">📄 PDF con fotos</button>`;
+    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
     carritoRecepcion = [];
+    fotosRecepcionTemp = {};
     renderCarritoRecepcion();
     document.getElementById('rec-guia').value = '';
     document.getElementById('rec-factura').value = '';
@@ -1648,6 +1687,7 @@ async function registrarSalida() {
     const msg = document.getElementById('sal-mensaje');
     msg.style.display = 'block';
     msg.innerHTML = `✅ Salida <strong>${sal.codigo}</strong> desde recepción <strong>${r.codigo}</strong> · ${formatearCLP(totalBruto)} <button class="btn-pequeno azul" onclick="descargarPDFSalida()" style="margin-left:10px;">📄 PDF con fotos</button>`;
+    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
     document.getElementById('sal-receptor').value = '';
     document.getElementById('sal-receptor-rut').value = '';
     document.getElementById('sal-receptor-email').value = '';
@@ -2122,7 +2162,7 @@ function generarPDFBase(config) {
   }
   return doc;
 }
-function descargarPDFRecepcion() {
+async function descargarPDFRecepcion() {
   if (!ultimaRecepcion) return;
   const r = ultimaRecepcion;
   const c = r.cuenta || {};
@@ -2132,8 +2172,46 @@ function descargarPDFRecepcion() {
     productos: r.productos, tituloProd: 'PRODUCTOS RECEPCIONADOS', desglose: false,
     firmaUnica: { cargo: 'Supervisor del Contrato', institucion: 'Municipalidad de Las Condes' }
   });
+  const productosConFoto = r.productos.filter(p => p.foto_url);
+  if (productosConFoto.length > 0) {
+    doc.addPage();
+    const pw = doc.internal.pageSize.getWidth();
+    const ph = doc.internal.pageSize.getHeight();
+    const m = 16;
+    doc.setFillColor(22, 100, 192); doc.rect(0, 0, pw, 24, 'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.text('RESPALDO FOTOGRÁFICO', m, 12);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Recepción N° ' + r.codigo + ' · ' + r.fecha, m, 19);
+    const imagenesData = await Promise.all(productosConFoto.map(async p => {
+      try {
+        const resp = await fetch(p.foto_url);
+        const blob = await resp.blob();
+        const dataUrl = await new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(blob); });
+        return { ...p, dataUrl };
+      } catch(e) { return { ...p, dataUrl: null }; }
+    }));
+    const cols = 2;
+    const fotoW = (pw - m * 3) / 2;
+    const fotoH = fotoW * 0.75;
+    const gapY = 14;
+    let x = m; let y = 34; let colIdx = 0;
+    for (const foto of imagenesData) {
+      if (colIdx === cols) { colIdx = 0; x = m; y += fotoH + gapY + 8; }
+      if (y + fotoH + 12 > ph - 20) { doc.addPage(); y = 16; x = m; colIdx = 0; }
+      doc.setDrawColor(226, 232, 240); doc.setFillColor(245, 247, 252);
+      doc.roundedRect(x, y, fotoW, fotoH + 12, 2, 2, 'FD');
+      if (foto.dataUrl) { try { doc.addImage(foto.dataUrl, 'JPEG', x + 2, y + 2, fotoW - 4, fotoH - 4); } catch(e) {} }
+      else { doc.setFontSize(9); doc.setTextColor(150); doc.text('(Imagen no disponible)', x + fotoW/2, y + fotoH/2, { align: 'center' }); }
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(26, 38, 52);
+      doc.text(foto.nombre.substring(0, 45), x + 3, y + fotoH + 4);
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(74, 90, 110);
+      doc.text(`${foto.cantidad} ud${foto.cantidad===1?'':'s'} · L${foto.linea}`, x + 3, y + fotoH + 9);
+      x += fotoW + m; colIdx++;
+    }
+  }
   doc.save(`Recepcion_${r.codigo}.pdf`);
-  mostrarToast('✅ PDF descargado');
+  mostrarToast('✅ PDF descargado con fotos');
 }
 async function descargarPDFSalida() {
   if (!ultimaSalida) return;
@@ -2627,6 +2705,8 @@ window.recCambiarArea = recCambiarArea;
 window.recElegirLinea = recElegirLinea;
 window.filtrarDropdownRecepcion = filtrarDropdownRecepcion;
 window.agregarAlCarritoRecepcion = agregarAlCarritoRecepcion;
+window.subirFotoRecepcion = subirFotoRecepcion;
+window.quitarFotoRecepcion = quitarFotoRecepcion;
 window.registrarRecepcion = registrarRecepcion;
 window.descargarPDFRecepcion = descargarPDFRecepcion;
 window.salCambiarDireccion = salCambiarDireccion;
